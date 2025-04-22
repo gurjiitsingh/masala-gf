@@ -1,0 +1,132 @@
+@import "tailwindcss";
+
+.input-style1 {
+  @apply border border-slate-300 rounded focus:outline-none py-[.5rem] px-1 text-slate-700 text-[.8rem];
+}
+.input-style {
+  @apply w-full border-slate-300 border px-1 py-[.1rem] rounded-lg  outline-none text-slate-800 text-[1rem];
+}        
+.label-style{
+  @apply text-gray-500  text-xs;
+}
+.textarea-style {
+  @apply w-full border border-slate-300 px-4 py-1 rounded-lg  outline-none text-slate-700;
+}        
+.input-image-style{
+@apply text-sm border border-slate-300 rounded
+}
+.seach-form{
+  @apply text-sm border border-slate-300 rounded-full p-1
+}
+.mp{
+  @apply px-32 py-32;
+}
+.primary{
+  @apply bg-[#FADB5E];
+}
+.light-bg{
+  @apply bg-slate-100;
+}
+.dim{
+  @apply bg-blue-400;
+}
+.form-btn-color{
+  @apply bg-amber-400
+}
+/* #F2F0EC; */
+/* bg-gradient-to-bl from-[#ffe4e6]  to-[#ccfbf1]  */
+:root {
+  --background: #fff;
+  --foreground: #171717;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+
+/* HEOR */
+
+.img-rotate-10 {
+  @apply md:rotate-[10deg];
+}
+
+@media (max-width: 1020px) {
+  .padd-h {
+    @apply px-3;
+  }
+}
+.padd-h {
+  @apply px-[1.2rem];
+}
+
+
+
+/* @media (max-width: 1020px) {
+  .modul-img {
+    @apply mt-[-50%] order-1 translate-x-[-2rem] translate-y-[-10%];
+  }
+}
+@media (max-width: 1020px) {
+  .hero-module_hero__k4wsZ.imgPos-left .modul-img,
+  .hero-module_hero__k4wsZ.imgPos-right .modul-img {
+    @apply shrink-0 static translate-x-[-4rem] w-[calc(100%_+_8rem)];
+  }
+} */
+.modul-img {
+  @apply md:translate-x-32 md:translate-y-16 md:left-2/4  md:top-0;
+}
+.modul-img {
+  @apply shrink-0 absolute;
+}
+ .modul-info,
+ .modul-img {
+  @apply order-2;
+}
+
+.slick-arrow{
+  background-color: #aaa !important;
+  border-radius: 100%;
+  padding:auto;
+  z-index: 9999;
+  height: 40px !important;
+  width: 40px !important;
+  opacity: .5;
+  z-index: 1 !important;
+} 
+.slick-prev{
+margin-right: -300px;
+}
+
+ .slick-next{
+margin-left: -400px !important;
+
+}
+
+.checkout{
+  z-index: 0 !important;
+  background-color: #aaa;
+  border-radius: 20px;
+  padding: 30px;
+}
+
+button:disabled {
+  background-color: #ccc;
+  color: #666;
+  cursor: not-allowed;
+}
