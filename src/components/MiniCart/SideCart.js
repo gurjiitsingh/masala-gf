@@ -48,7 +48,7 @@ export const SideCart = () => {
     // emailFormToggle()
   }
   return (
-    <div className="z-50">
+    <div translate="no" className="z-50">
       <SessionProvider>
         {!openEmailForm && (
           <AnimatePresence mode="wait" initial={false}>

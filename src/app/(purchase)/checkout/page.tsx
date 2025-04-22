@@ -15,7 +15,7 @@ const checkout = () => {
   return (<SessionProvider>
     <Suspense>
     {/* <div className="bg-gradient-to-bl from-[#f9f9f9]  to-[#f2f1eb]  flex flex-col mt-2"> */}
-    <div className="bg-white  flex flex-col mt-2">
+    <div translate="no" className="bg-white  flex flex-col mt-2">
       <div className="container mx-auto flex flex-col md:flex-row gap-6 p-2">
         {/* <div className="flex flex-col w-full lg:w-[65%]"> */}
         <Address />

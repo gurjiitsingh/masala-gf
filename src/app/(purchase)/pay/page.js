@@ -38,11 +38,13 @@ const initialOptions = {
 
 function ProviderWrapper() {
   return (
+    <div translate="no">
     <PayPalScriptProvider options={initialOptions}>
      <Suspense>
       <Checkout />
       </Suspense>
     </PayPalScriptProvider>
+    </div>
    
   );
 }

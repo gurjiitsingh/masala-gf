@@ -33,7 +33,7 @@ export const BargerMenu = () => {
               ref={ref}
               aria-label="Menu"
             >
-              <div className="flex w-full items-center justify-end  border-b-2 border-zinc-50">
+              <div translate="no" className="flex w-full items-center justify-end  border-b-2 border-zinc-50">
                
                 <button
                   onClick={bargerMenuToggle}

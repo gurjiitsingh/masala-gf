@@ -1,11 +1,14 @@
 import type { Metadata } from "next";
 import "../globals.css";
 import Comcomp from "@/components/Comcomp";
-import Cart from "@/components/CartBottom/CartBottom";
+
 
 export const metadata: Metadata = {
   title: "Masala GF",
   description: "Masala GF food web app",
+  other: {
+    'google': 'notranslate',  
+  },
 };
 
 export default function RootLayout({
@@ -16,7 +19,9 @@ export default function RootLayout({
   return (
     <html lang="de">
       <body>
+        <div translate="no">
         <Comcomp>{children}</Comcomp>
+        </div>
       </body>
     </html>
   );
