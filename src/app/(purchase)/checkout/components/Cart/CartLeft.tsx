@@ -72,22 +72,46 @@ export default function CartLeft() {
     endTotalG,
     totalDiscountG,
   } = useCartContext();
-  const pickupDiscountPersent = 20;
+  const pickupDiscountPersent = 0;
+
+  // useEffect(() => {
+  //   if (cartData && cartData.length > 0) {
+
+  //      let total = 0;
+  //     cartData.forEach((item: cartProductType) => {
+  //       return (total += item.quantity! * +item.price);
+  //     });
+  //     setitemTotal(parseFloat(total.toFixed(2)));
+
+  //     const itemTotalS = total.toFixed(2).toString();
+  //     const calculatedComma = itemTotalS.split(".").join(",");
+  //     setitemTotalComa(calculatedComma);
+  //   }
+  // }, [cartData]);
+
 
   useEffect(() => {
     if (cartData && cartData.length > 0) {
-
-       let total = 0;
+      let total = 0;
+  
       cartData.forEach((item: cartProductType) => {
-        return (total += item.quantity! * +item.price);
+        const quantity = Number(item.quantity) || 0;
+        const price = parseFloat(item.price as any) || 0;
+        total += quantity * price;
       });
-      setitemTotal(parseFloat(total.toFixed(2)));
-
-      const itemTotalS = total.toFixed(2).toString();
+  
+      const roundedTotal = parseFloat(total.toFixed(2));
+      setitemTotal(roundedTotal);
+  
+      const itemTotalS = roundedTotal.toFixed(2).toString();
       const calculatedComma = itemTotalS.split(".").join(",");
       setitemTotalComa(calculatedComma);
     }
   }, [cartData]);
+
+
+
+
 
   //console.log("cal total------", itemTotal);
 

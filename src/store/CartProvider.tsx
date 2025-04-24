@@ -35,37 +35,44 @@ export const CartProvider: React.FC<Props> = ({
  
   useEffect(() => {
 
-    if (typeof window !== 'undefined') {
-      if (window.localStorage.getItem("END_TOTAL") !== null) {
-        const end_total =  window.localStorage.getItem("END_TOTAL") as string;
-          const end_total1 = JSON.parse(end_total);
-          setEndTotalL(+end_total1)
+     if (typeof window !== "undefined") {
+        //  Load END_TOTAL safely
+        const endTotalRaw = window.localStorage.getItem("END_TOTAL");
+        if (endTotalRaw !== null) {
+          const parsed = JSON.parse(endTotalRaw);
+          if (!isNaN(parsed)) {
+            setEndTotalL(+parsed);
+          }
         }
+   
       }
-
    
+  //  Create cart ID if missing
+  if (window.localStorage.getItem("cart_product_data_id") === null) {
+    const cartItemDateId = Date.now().toString();
+    window.localStorage.setItem("cart_product_data_id", cartItemDateId);
+  }
 
-    if (window.localStorage.getItem("cart_product_data_id") == null) {
-      const cartItemDateId = Date.now().toString();
-      window.localStorage.setItem("cart_product_data_id", cartItemDateId);
-    }
-   
-    if (isUpdated) {
+
+     if (isUpdated) {
+      //  Save cart only when updated
       window.localStorage.setItem("cart_product_data", JSON.stringify(cartData));
     } else {
-      const cart_data_localstorage: any =
-      window.localStorage.getItem("cart_product_data");
+      //  Load and clean cart from localStorage
+      const rawCart = window.localStorage.getItem("cart_product_data");
+      const parsedCart: cartProductType[] = JSON.parse(rawCart || "[]");
 
-      const data = JSON.parse(cart_data_localstorage);
-      setCartData([]);
-      if (data) {
-        data.map((item: cartProductType) => {
-          setCartData((prevState) => {
-            return [...prevState, { ...item }];
-          });
-        });
-      }
+      const cleaned = parsedCart.filter((item) => {
+        const quantity = Number(item.quantity);
+        const price = parseFloat(item.price as any);
+        return !isNaN(quantity) && !isNaN(price) && quantity >= 0 && price >= 0;
+      });
+
+      setCartData(cleaned);
     }
+
+
+
     setIsUpdated(false);
     cartTotal();
     //console.log("useEffe 0", cartData)
@@ -73,76 +80,83 @@ export const CartProvider: React.FC<Props> = ({
 
   useEffect(() => {
   
-    const cart_data_localstorage: any =
-    window.localStorage.getItem("cart_product_data");
-
+     const cart_data_localstorage: any = window.localStorage.getItem("cart_product_data");
     const data = JSON.parse(cart_data_localstorage);
     setCartData([]);
-
+    
     if (data) {
-      data.map((item: cartProductType) => {
-        setCartData((prevState) => {
-          return [...prevState, { ...item }];
-        });
+      const cleaned = data.filter((item: cartProductType) => {
+        const quantity = Number(item.quantity);
+        const price = parseFloat(item.price as any);
+        return !isNaN(quantity) && !isNaN(price) && quantity >= 0 && price >= 0;
       });
+    
+      setCartData(cleaned);
     }
 
-    setIsUpdated(false);
-    cartTotal();
+
+
   }, []);
+
+ 
 
   function cartTotal() {
     let total = 0;
+  
     if (cartData.length > 0) {
-      cartData.forEach((element) => {
-      //  console.log("qt , price------------",element.quantity,typeof(element.quantity),element.price,typeof(element.price))
-        total =
-          total +
-        // parseInt(element.quantity!) * parseFloat(element.price).toFixed(2);
-        element.quantity! * +element.price;
+      cartData.forEach((element, idx) => {
+        const quantity = Number(element.quantity);
+        const price = parseFloat(element.price as any);
+  
+        // Validation: skip bad items
+        if (isNaN(quantity) || isNaN(price)) {
+          console.warn(` Skipping bad cart item at index ${idx}:`, element);
+          return;
+        }
+  
+        total += quantity * price;
       });
     }
-
-   // console.log("total--------------",total)
-
-    setProductTotalCost(total);
+  
+    setProductTotalCost(parseFloat(total.toFixed(2)));
     setIsUpdated(true);
   }
 
-  function addProductToCart(newProduct: cartProductType ) {
 
- //   console.log("float price---------", newProduct.price)
 
-    const isItemInCart = cartData.find(
-      (cartItem) => cartItem.id === newProduct?.id
-    ); // check if the item is already in the cart
-//console.log("new product in context store---------", newProduct?.quantity)
+  function addProductToCart(newProduct: cartProductType) {
+    //  Validate incoming product data
+    if (
+      isNaN(Number(newProduct.quantity)) ||
+      isNaN(parseFloat(newProduct.price as any))
+    ) {
+      console.warn("Invalid product data, skipping:", newProduct);
+      return;
+    }
+  
+    const isItemInCart = cartData.find((cartItem) => cartItem.id === newProduct?.id);
+  
     if (isItemInCart) {
       setCartData(
-        cartData.map(
-          (
-            cartItem // if the item is already in the cart, increase the quantity of the item
-          ) =>
-            cartItem.id === newProduct?.id
-              ? { ...cartItem, quantity: cartItem.quantity! + newProduct.quantity! }
-              : cartItem // otherwise, return the cart item
+        cartData.map((cartItem) =>
+          cartItem.id === newProduct?.id
+            ? { ...cartItem, quantity: cartItem.quantity! + newProduct.quantity! }
+            : cartItem
         )
       );
     } else {
-      if (typeof window !== 'undefined') {
-      setCartData([
-        ...cartData,
-        {
-          ...newProduct!,
-          quantity: newProduct.quantity!,
-        //  purchaseSession: localStorage.getItem("cart_product_data_id"),
-          // status: "draft",
-        },
-      ]); // if the item is not in the cart, add the item to the cart
+      if (typeof window !== "undefined") {
+        setCartData([
+          ...cartData,
+          {
+            ...newProduct,
+            quantity: newProduct.quantity!,
+          },
+        ]);
+      }
     }
-    }
-    // setIsUpdated(true);
   }
+  
 
   function decCartProduct(decProduct: cartProductType) {
     //this funciton dec product almost to 1
@@ -201,45 +215,42 @@ export const CartProvider: React.FC<Props> = ({
 
     setIsUpdated(true);
   }
-  function addProduct(newProduct:cartProductType) {
-    // console.log("new add product", newProduct)
-    // const product = {
-    //   id:"kljljl",
-    //   name:"test"
-    // }
-    //     setCartData((prev)=>{
-    //       console.log(prev, product)
-    //       return [...prev, product]
-    //     })
-
-    const isItemInCart = cartData.find(
-      (cartItem) => cartItem.id === newProduct.id
-    ); // check if the item is already in the cart
-
+  
+  
+  function addProduct(newProduct: cartProductType) {
+    //  Validate incoming product data
+    if (
+      isNaN(Number(newProduct.quantity)) ||
+      isNaN(parseFloat(newProduct.price as any))
+    ) {
+      console.warn("Invalid product data, skipping:", newProduct);
+      return;
+    }
+  
+    const isItemInCart = cartData.find((cartItem) => cartItem.id === newProduct.id);
+  
     if (isItemInCart) {
       setCartData(
-        cartData.map(
-          (
-            cartItem // if the item is already in the cart, increase the quantity of the item
-          ) =>
-            cartItem.id === newProduct.id
-              ? { ...cartItem, quantity: cartItem.quantity! + 1 }
-              : cartItem // otherwise, return the cart item
+        cartData.map((cartItem) =>
+          cartItem.id === newProduct.id
+            ? { ...cartItem, quantity: cartItem.quantity! + 1 }
+            : cartItem
         )
       );
     } else {
-      if (typeof window !== 'undefined') {
-      setCartData([
-        ...cartData,
-        {
-          ...newProduct,
-          quantity: 1,
-         // purchaseSession: localStorage.getItem("cart_product_data_id"),
-         // status: "draft",
-        },
-      ]); // if the item is not in the cart, add the item to the cart
-    }}
+      if (typeof window !== "undefined") {
+        setCartData([
+          ...cartData,
+          {
+            ...newProduct,
+            quantity: 1,
+          },
+        ]);
+      }
+    }
   }
+
+
   // const getCartTotal = () => {
   //   return cartData.reduce(
   //     (total, item) => total + (+item.price) * item.quantity!,
