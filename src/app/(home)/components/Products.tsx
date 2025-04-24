@@ -17,60 +17,50 @@ import {
    const [products, setProduct] = useState<ProductType[]>([]);
    const [allProducts, setAllProduct] = useState<ProductType[]>([]);
    const [allAddOns, setAllAddOns] = useState<addOnType[]>([]);
+ 
    useEffect(() => {
-     async function fetchAddOn() {
-       const result = await fetchAddOnProducts();
-     setAllAddOns(result);
-     }
-     fetchAddOn();
-     // console.log("productCategoryIdG -------------", productCategoryIdG)
-     if (productCategoryIdG === "") {
-       async function fetchproductData() {
+     async function fetchInitialData() {
+       try {
+         const addOns = await fetchAddOnProducts();
+         setAllAddOns(addOns);
+   
          const productData = await fetchProducts();
-         productData.sort((a, b) => a.sortOrder - b.sortOrder);
+         productData.sort((a: ProductType, b: ProductType) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
          setAllProduct(productData);
-        // setProduct(productData);
- 
- 
-         const filtertedProduct = productData.filter(
-           (item) => item.categoryId === '2vvuGl0pgbvvyEPc7o83'
-         );
-         filtertedProduct.sort(
-           (a: ProductType, b: ProductType) => a.sortOrder! - b.sortOrder!
-         );
- 
-         setProduct(filtertedProduct);
- 
+   
+         if (!productCategoryIdG) {
+           const filtered = productData.filter(
+             (item) => item.categoryId === "cyswMDLgMXJ1sLj9ukzU"
+           );
+           setProduct(filtered);
+         }
+       } catch (err) {
+         console.error("Error fetching product data:", err);
        }
-       fetchproductData();
- 
- 
- 
- 
-     } else {
-       async function fetchproductData() {
-         // const productData = await fetchProductByCategoryId(productCategoryIdG);
-         const filtertedProduct = allProducts.filter(
-           (item) => item.categoryId === productCategoryIdG
-         );
-         filtertedProduct.sort(
-           (a: ProductType, b: ProductType) => a.sortOrder! - b.sortOrder!
-         );
- 
-         setProduct(filtertedProduct);
-       }
-       fetchproductData();
      }
- //console.log("productCategoryIdG-------------",productCategoryIdG)
+     fetchInitialData();
+   }, []);
+   
+   // Runs every time category changes or products are available
+   useEffect(() => {
+     if (productCategoryIdG !== "" && allProducts.length > 0) {
+       const filtered = allProducts.filter(
+         (item) => item.categoryId === productCategoryIdG
+       );
+       filtered.sort((a: ProductType, b: ProductType) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
+       setProduct(filtered);
+     }
+   }, [productCategoryIdG, allProducts]); // depends on both
  
-   }, [productCategoryIdG]);
-   function handleSearchForm(e:string){
+ 
+   function handleSearchForm(e:string){ 
      
      //console.log("search text-----------", e)
      const searchedProduct = allProducts.filter(item =>
      item.name.toLowerCase().includes(e.toLowerCase())
    );
    setProduct(searchedProduct);
+   
    }
    return (
      <div className="flex flex-col md:flex-row md:flex-wrap gap-1 md:gap-2 w-full">
@@ -79,8 +69,7 @@ import {
        {products.map((product, i) => {
          return <PageProductDetailComponent 
          key={product.id ?? `${product.name}-${i}`} 
-         allAddOns={allAddOns} 
-         product={product} />;
+         allAddOns={allAddOns} product={product} />;
        })}
        </div>
      </div>

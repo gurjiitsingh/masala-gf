@@ -1,158 +1,101 @@
 "use client";
-// import Link from "next/link";
-import Slider from "react-slick";
 
+import { useEffect, useState, useMemo } from "react";
+import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { useEffect, useState } from "react";
 import { fetchCategories } from "@/app/action/category/dbOperations";
-// import Image from "next/image";
-// import { categoryType } from "@/lib/types/categoryType";
 import { UseSiteContext } from "@/SiteContext/SiteContext";
 
 export default function CategorySlider() {
-  let w = 300;
-  if (typeof window !== "undefined") {
-    w = window.innerWidth;
-  }
-  const [width, setWidth] = useState(w);
-  let STS = 1;
+  const [width, setWidth] = useState(() =>
+    typeof window !== "undefined" ? window.innerWidth : 300
+  );
+  const [categoryData, setCategoryData] = useState([]);
+  const { productCategoryIdG, setProductCategoryIdG } = UseSiteContext();
 
-  STS = 2;
+  useEffect(() => {
+    const handleResize = () => setWidth(window.innerWidth);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
-  if (width > 400) {
-    STS = 3;
-  }
-  if (width > 500) {
-    STS = 4;
-  }
-  if (width > 600) {
-    STS = 5;
-  }
-  if (width > 700) {
-    STS = 6;
-  }
-  if (width > 800) {
-    STS = 7;
-  }
-  if (width > 900) {
-    STS = 8;
-  }
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const categories = await fetchCategories();
+        categories.sort((a, b) => Number(a.sortOrder) - Number(b.sortOrder));
+        const featured = categories.filter(
+          (category) => category.isFeatured !== "no"
+        );
+        setCategoryData(featured);
+      } catch (err) {
+        console.error("Error fetching categories:", err);
+      }
+    };
+    fetchData();
+  }, []);
 
-  if (width > 1000) {
-    STS = 9;
-  }
-  if (width > 1100) {
-    STS = 10;
-  }
-  if (width > 1200) {
-    STS = 11;
-  }
-  if (width > 1300) {
-    STS = 12;
-  }
-  if (width > 1400) {
-    STS = 13;
-  }
-  if (width > 1500) {
-    STS = 14;
-  }
-  var settings = {
+  const slidesToShow = useMemo(() => {
+    const breakpoints = [
+      [1500, 14],
+      [1400, 13],
+      [1300, 12],
+      [1200, 11],
+      [1100, 10],
+      [1000, 9],
+      [900, 8],
+      [800, 7],
+      [700, 6],
+      [600, 5],
+      [500, 4],
+      [400, 3],
+    ];
+    for (const [breakpoint, count] of breakpoints) {
+      if (width > breakpoint) return count;
+    }
+    return 2;
+  }, [width]);
+
+  const sliderSettings = {
     dots: false,
     infinite: true,
     speed: 500,
-    slidesToShow: STS,
+    slidesToShow,
     slidesToScroll: 2,
   };
 
-  useEffect(() => {
-    const handleResize = () => {
-      setWidth(window.innerWidth);
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-
-  
-
-  const { productCategoryIdG, setProductCategoryIdG } = UseSiteContext();
-
-  const [categoryData, setCategoryData] = useState([]);
-  useEffect(() => {
-    async function fetchcate() {
-      try {
-        const categories = await fetchCategories();
-        categories.sort((a, b) => a.sortOrder - b.sortOrder);
-       // console.log("categories ------------", categories);
-        setCategoryData(categories.filter((category) => category.isFeatured !== 'no'));
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    fetchcate();
-  }, []);
-  
-
-
-//   useEffect(()=>{
-// if(categoryData.length>0){
-    
-
-//  // if(productCategoryIdG === '' || productCategoryIdG === undefined){
-//     let targetCategory = categoryData.find(item => item.sortOrder === "0");
-//     setProductCategoryIdG(targetCategory.id)
-//  // }
-//   //  console.log(targetCategory);
-// }
-//   },[categoryData])
-
   return (
-    <div className="-mt-20 h-full w-[98%] px-2 gap-1 ">
-      <Slider {...settings}>
-        {categoryData?.map((category, i) => {
-          return (
-            <div key={i} className="mx-2">
-              <button
-                onClick={() => {
-                  setProductCategoryIdG(category.id);
-                }}
-              >
-                <div className="w-[100px]">
-                  <div className="flex flex-col  gap-1 ">
-                  {productCategoryIdG === category.id ?<div className="primary py-1 rounded-xl"> 
-                    <div className="h-fit w-fit rounded-lg  px-1 ">
+    <div className="-mt-20 h-full w-[98%] px-2 gap-1">
+      <Slider {...sliderSettings}>
+        {categoryData.map((category) => (
+          <div key={category.id} className="mx-2">
+            <button onClick={() => setProductCategoryIdG(category.id)}>
+              <div className="w-[100px]">
+                <div className="flex flex-col gap-1">
+                  <div
+                    className={`${
+                      productCategoryIdG === category.id ? "primary py-1 rounded-xl" : "py-1 rounded-xl"
+                    }`}
+                  >
+                    <div className="h-fit w-fit rounded-lg px-1">
                       <img
-                      //  className="w-[70px] rounded-lg"
-                       className="rounded-lg h-20 w-48 object-fill"
-                        src={category.image}
+                        className="rounded-lg h-20 w-48 object-fill"
+                        src={category.image || "/com.jpg"}
+                        alt={category.name || "Category"}
                       />
-                    </div>
-                  </div>:<div> 
-                  <div className="h-fit w-fit rounded-lg  px-1 ">
-                      <img
-                      //  className="w-[70px] rounded-lg"
-                       className="rounded-lg h-20 w-48 object-fill"
-                        src={category.image}
-                      />
-                    </div>
-                    </div>}
-                   
-                    <div className="flex flex-col justify-center w-[110px]  items-center">
-                      <h3 className="text-[.8rem] text-slate-600 px-0">
-                       
-                        {category.name}
-                      </h3>
                     </div>
                   </div>
+                  <div className="flex flex-col justify-center w-[110px] items-center">
+                    <h3 className="text-[.8rem] text-slate-600 px-0">
+                      {category.name}
+                    </h3>
+                  </div>
                 </div>
-              </button>
-            </div>
-          );
-        })}
+              </div>
+            </button>
+          </div>
+        ))}
       </Slider>
     </div>
   );
