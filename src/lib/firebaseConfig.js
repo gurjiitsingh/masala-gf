@@ -13,6 +13,7 @@ import { getFirestore } from "firebase/firestore";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+//gagurjiitsingh
 const firebaseConfig = {
      apiKey: "AIzaSyDaqxwPb9-rBzUKlTHtg_jzDgfvEq8TShw",
      authDomain: "next-js-course-9dd89.firebaseapp.com",

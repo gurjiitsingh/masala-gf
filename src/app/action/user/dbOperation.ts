@@ -1,7 +1,7 @@
 'use server'
 import { hashPassword } from "@/lib/auth";
 import { db } from "@/lib/firebaseConfig";
-import {  userTypeArr, TuserSchem, userType } from "@/lib/types/userType";
+import {   TuserSchem, userType } from "@/lib/types/userType";
 
 import { addDoc, collection, deleteDoc, doc, getDocs, query, where } from "@firebase/firestore";
 
@@ -73,6 +73,7 @@ export async function addUserDirect(formData: FormData) {
       recordId = userDocRef;
       return userDocRef;
       // Clear the form
+      console.log("User Added ------------", userDocRef)
     } catch (e) {
       console.error("Error adding document: ", e);
     }

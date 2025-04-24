@@ -20,7 +20,7 @@ import { TOrderMaster, orderMasterDataT } from "@/lib/types/orderMasterType";
 import { orderProductsT } from "@/lib/types/orderType";
 import { orderDataType, purchaseDataT } from "@/lib/types/cartDataType";
 import { ProductType } from "@/lib/types/productType";
-import { number } from "zod";
+
 
 export async function createNewOrderCustomerAddress(
   purchaseData: purchaseDataT
@@ -47,7 +47,8 @@ export async function createNewOrderCustomerAddress(
   formData.append("confirmPassword", password);
   // const result = await addUser(formData);
   const UserAddedId = (await addUserDirect(formData)) as string;
-
+  console.log("UserAdded by id------------", UserAddedId)
+  
   // Now check address or add new address
   const formDataAdd = new FormData();
   formDataAdd.append("firstName", purchaseData.address.firstName);

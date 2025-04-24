@@ -77,7 +77,7 @@ export default function CategorySlider() {
     };
   }, []);
 
-  <style></style>;
+  
 
   const { productCategoryIdG, setProductCategoryIdG } = UseSiteContext();
 
