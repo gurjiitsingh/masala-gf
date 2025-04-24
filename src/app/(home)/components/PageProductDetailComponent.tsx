@@ -26,12 +26,13 @@ export default function PageProductDetailComponent({
       const AddOnData = allAddOns.filter(
         (item: addOnType) => product.id === item.baseProductId
       );
-      AddOnData.sort(
-      //  (a: addOnType, b: addOnType) => a.sortOrder! - b.sortOrder!
-      (a: addOnType, b: addOnType) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0)
-      );
-      setAddOnData(AddOnData);
+      AddOnData.sort((a: addOnType, b: addOnType) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
+    setAddOnData(AddOnData);
     }
+
+   
+
+
   }, [product.id, allAddOns, product.flavors]);
 
 
@@ -75,6 +76,7 @@ export default function PageProductDetailComponent({
         
         {product.image && (
   <img src={product.image} alt={product.name} className="h-[65px]  md:h-[85px]" />
+  
 )}
 
 
@@ -90,10 +92,9 @@ export default function PageProductDetailComponent({
           </div>
 
           {/* <button onClick={() => alert(product.productDesc)}> */}
-          <button onClick={() => alert(product.productDesc ?? "Keine Beschreibung verfügbar")}>
-            <div className="text-sm text-slate-500 font-extralight text-left max-w-fit md:max-w-[400px] max-h-[22px] overflow-hidden">
-              {product.productDesc}
-            </div>
+         
+          <button onClick={() => alert(product.productDesc ?? "Keine Beschreibung verfügbar")} className="text-sm text-slate-500 font-extralight text-left max-w-fit md:max-w-[400px] max-h-[22px] overflow-hidden">
+          {product.productDesc}
           </button>
 
           {!product.flavors && (
