@@ -1,12 +1,16 @@
-"use client"
-import React from 'react'
+'use client'
+import ListView from './orders/components/ListView'
 
-const Page = () => {
+
+export default function Page(){
   return (
-    <div className='h-screen flex flex-col '>
+    <div className='h-screen flex flex-col px-1'>
+      <div className="flex justify-between">
      
-      TO DO: Dashboard and statistics</div>
+      </div>
+
+      <ListView />
+
+    </div>
   )
 }
-
-export default Page

@@ -1,116 +1,48 @@
 "use client";
+
 import Link from "next/link";
-import { signOut } from "next-auth/react"; //, useSession
-import { MdSpaceDashboard } from "../../../../node_modules/react-icons/md";
-import { MdOutlineProductionQuantityLimits } from "../../../../node_modules/react-icons/md";
-import { FaUserTie } from "../../../../node_modules/react-icons/fa";
-//import { GiStarsStack } from "../../../../node_modules/react-icons/gi";
-//import { IoLibrary } from "../../../../node_modules/react-icons/io5";
-import { BsBorderStyle } from "../../../../node_modules/react-icons/bs";
-//import { SiBrandfolder } from "../../../../node_modules/react-icons/si";
-import { TbCategoryPlus } from "../../../../node_modules/react-icons/tb";
-//import { usePathname } from 'next/navigation';
-import { IoIosLogOut } from "../../../../node_modules/react-icons/io";
+import { signOut } from "next-auth/react";
 import { GoHome } from "react-icons/go";
-import { UseSiteContext } from "@/SiteContext/SiteContext";
+import { MdSpaceDashboard, MdOutlineProductionQuantityLimits } from "react-icons/md";
+import { FaUserTie } from "react-icons/fa";
+import { BsBorderStyle } from "react-icons/bs";
+import { TbCategoryPlus } from "react-icons/tb";
+import { IoIosLogOut } from "react-icons/io";
 import { IoClose } from "react-icons/io5";
-//import { Button } from '@/components/ui/button';
-//import { IconType } from "react-icons";
+
+import { UseSiteContext } from "@/SiteContext/SiteContext";
 import { usePathname } from "next/navigation";
-//import { useState } from "react";
+import { JSX, useEffect, useState } from "react";
+
 type Titem = {
   name: string;
   link: string;
-  icon: any;
+  icon: JSX.Element;
 };
-const menuList = [
-  {
-    name: "Home",
-    link: "/",
-    icon: <GoHome />,
-  },
-  {
-    name: "Dashboard",
-    link: "/admin",
-    icon: <MdSpaceDashboard />,
-  },
-  {
-    name:"Categories",
-    link:"/admin/categories",
-    icon:<TbCategoryPlus />
-  },
-  {
-    name: "Products",
-    link: "/admin/productsbase",
-    icon: <MdOutlineProductionQuantityLimits />,
-  },
-  {
-    name: "Variants",
-    link: "/admin/flavorsProductG",
-    icon: <MdOutlineProductionQuantityLimits />,
-  },
-  // {
-  //   name: "Sauces",
-  //   link: "/admin/productsauces",
-  //   icon: <TbCategoryPlus />,
-  // },
-  {
-    name: "Coupon",
-    link: "/admin/coupon",
-    icon: <TbCategoryPlus />,
-  },
-  {
-    name: "Delivery",
-    link: "/admin/delivery",
-    icon: <TbCategoryPlus />,
-  },
 
-  
-  // {
-  //   name:"Brands",
-  //   link:"/admin/brands",
-  //   icon:<SiBrandfolder />
-  // },
-  {
-    name: "Orders",
-    link: "/admin/orders",
-    icon: <BsBorderStyle />,
-  },
-  {
-    name: "Users",
-    link: "/admin/users",
-    icon: <FaUserTie />,
-  },
-  // {
-  //   name:"Reviews",
-  //   link:"/admin/reviews",
-  //   icon: <GiStarsStack />
-  // },
-  // {
-  //   name:"Collections",
-  //   link:"/admin/collections",
-  //   icon: <IoLibrary />
-  // },
-  // {
-  //   name:"Setting",
-  //   link:"/admin/setting",
-  //   icon: <IoLibrary />
-  // }
-] as Titem[];
+const menuList: Titem[] = [
+  { name: "Home", link: "/", icon: <GoHome /> },
+  { name: "Orders", link: "/admin", icon: <MdSpaceDashboard /> },
+  { name: "Categories", link: "/admin/categories", icon: <TbCategoryPlus /> },
+  { name: "Products", link: "/admin/productsbase", icon: <MdOutlineProductionQuantityLimits /> },
+  { name: "Variants", link: "/admin/flavorsProductG", icon: <BsBorderStyle /> },
+  { name: "Coupon", link: "/admin/coupon", icon: <TbCategoryPlus /> },
+  { name: "Delivery", link: "/admin/delivery", icon: <TbCategoryPlus /> },
+  // { name: "Orders", link: "/admin/orders", icon: <BsBorderStyle /> },
+  { name: "Users", link: "/admin/users", icon: <FaUserTie /> },
+];
 
 const Sidebar = () => {
   const { setAdminSideBarToggleG } = UseSiteContext();
-  
 
   return (
     <>
-      <div className="flex items-center  pt-2 justify-between    lg:hidden">
+      {/* Close button for mobile */}
+      <div className="flex items-center pt-2 justify-between lg:hidden">
         <div></div>
         <div>
           <button
-            onClick={() => {
-              setAdminSideBarToggleG(false);
-            }}
+            onClick={() => setAdminSideBarToggleG(false)}
             className="p-1 border-zinc-800 rounded-xl"
             aria-label="close sidebar"
           >
@@ -118,19 +50,22 @@ const Sidebar = () => {
           </button>
         </div>
       </div>
-      <div className=" pt-12 h-screen w-[290px] border-r flex flex-col py-4 px-2  justify-start overflow-hidden">
+
+      {/* Sidebar content */}
+      <div className="pt-12 h-screen w-[290px] border-r flex flex-col py-4 px-2 justify-start overflow-hidden">
         <ul className="flex flex-col gap-2 overflow-y-auto">
-          {menuList?.map((list) => {
-            return <Tab key={list.name} item={list} />;
-          })}
+          {menuList.map((item) => (
+            <Tab key={item.name} item={item} />
+          ))}
         </ul>
-        <div className="flex  items-center my-3 justify-between w-full border-amber-500 rounded-2xl p-2">
-        <IoIosLogOut />
+
+        <div className="flex items-center my-3 justify-between w-full border-amber-500 rounded-2xl p-2">
+          <IoIosLogOut />
           <button
             onClick={() => signOut()}
-            className="flex gap-2 items-center px-4 py-1 rounded-lg ease-soft translate-all duration-300 font-semibold text-[.9rem]"
+            className="flex gap-2 items-center px-4 py-1 rounded-lg font-semibold text-[.9rem]"
           >
-            Logout 
+            Logout
           </button>
         </div>
       </div>
@@ -138,33 +73,28 @@ const Sidebar = () => {
   );
 };
 
-function Tab(item: { item: Titem }) {
-  
-  //const [isSelected, setIsSelected ] = useState(false);
-  //console.log("in tab ----",item.item.link)
-  let isSelected = false;
-  const path = usePathname();
-  //console.log("path ----",path)
-  
-  if(item.item.link === path){
-   // setIsSelected(true);
-  // console.log("path--------",path)
-   isSelected = true;
-  }
-  
+function Tab({ item }: { item: Titem }) {
+  const [isMounted, setIsMounted] = useState(false);
+  const pathname = usePathname();
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  if (!isMounted) return null;
+
+  const isSelected = item.link === pathname;
+
   return (
-    <>
-     
-      <Link href={item.item?.link}>
-        <li
-          className={`w-full bg-amber-400 flex gap-2 items-center justify-between px-4 py-1 rounded-lg ease-soft translate-all duration-300 font-semibold text-[.9rem] 
-      ${isSelected ? "bg-amber-900 text-white" : "text-slate-700"}`}
-        >
-      <div>{item?.item.icon}</div><div> {item?.item.name}</div>    
-         
-        </li>
-      </Link>
-    </>
+    <Link href={item.link}>
+      <li
+        className={`w-full flex gap-2 items-center justify-between px-4 py-1 rounded-lg font-semibold text-[.9rem] 
+        ${isSelected ? "bg-amber-900 text-white" : "bg-amber-400 text-slate-700"}`}
+      >
+        <div>{item.icon}</div>
+        <div>{item.name}</div>
+      </li>
+    </Link>
   );
 }
 
