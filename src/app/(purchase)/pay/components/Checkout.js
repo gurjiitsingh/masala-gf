@@ -69,11 +69,9 @@ export default function Checkout(){
   
     return (<div className="flex container mx-auto px-[30%] items-center justify-center my-[20%] ">
       <div className="checkout">
-      {isPending && <p>Loading PayPal...</p>}
-
-{isRejected && <p>Failed to load PayPal. Please refresh or try again later.</p>}
-
-{isResolved && (
+        {(isPending || typeof window === 'undefined' || !window.paypal) ? (
+          <p>LOADING...</p>
+        ) : (
           <>
         
             <PayPalButtons

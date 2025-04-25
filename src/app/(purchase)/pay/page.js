@@ -11,11 +11,13 @@ const initialOptions = {
 
 function ProviderWrapper() {
   return (
+   
     <PayPalScriptProvider options={initialOptions}>
        <Suspense>
       <Checkout />
       </Suspense>
     </PayPalScriptProvider>
+   
   );
 }
 
