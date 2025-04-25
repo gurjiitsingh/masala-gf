@@ -251,40 +251,29 @@ export default function CartLeft() {
 
   async function proceedToOrder() {
     setIsDisabled(true);
-    let canCompleteOrder = true;
-    let allReadyAlerted = false;
-
-    // console.log("paymentType------------", paymentType)
-    // console.log("deliveryType------------", deliveryType)
-    // console.log("deliveryDis minSpend------------", deliveryDis)
-    // console.log("newOrderCondition ------------", newOrderCondition)
-
-    if (paymentType === "" || paymentType === undefined) {
-      canCompleteOrder = false;
-
-      setIsDisabled(false);
-      alert("Select Payment type");
-      allReadyAlerted = true;
-    }
-
-    if (deliveryType === "delivery" && deliveryDis === undefined) {
-      setIsDisabled(false);
-      canCompleteOrder = false;
-
-      if (!allReadyAlerted) {
-        alert(
-          "Wir können an diese Adresse nicht liefern. Bitte wählen Sie Abholung und erhalten Sie 10 % Rabatt"
-        );
+      try {
+      let canCompleteOrder = true;
+      let allReadyAlerted = false;
+  
+      if (paymentType === "" || paymentType === undefined) {
+        canCompleteOrder = false;
+        alert("Select Payment type");
         allReadyAlerted = true;
+        return;
       }
-    }
-
-
-    if (couponDisc?.minSpend) {
-      if (itemTotal < couponDisc.minSpend!){
-       
-
-        setIsDisabled(false);
+  
+      if (deliveryType === "delivery" && deliveryDis === undefined) {
+        canCompleteOrder = false;
+        if (!allReadyAlerted) {
+          alert(
+            "Wir können an diese Adresse nicht liefern. Bitte wählen Sie Abholung und erhalten Sie 10 % Rabatt"
+          );
+          allReadyAlerted = true;
+        }
+        return;
+      }
+  
+      if (couponDisc?.minSpend && itemTotal < couponDisc.minSpend) {
         canCompleteOrder = false;
         if (!allReadyAlerted) {
           alert(
@@ -292,97 +281,60 @@ export default function CartLeft() {
           );
           allReadyAlerted = true;
         }
+        return;
       }
-    }
-
-    let AddressId = "";
-    let order_user_Id = "";
-    let customer_name = "";
-
-    if (typeof window !== "undefined") {
-     
-      try {
-        AddressId = JSON.parse(localStorage.getItem("customer_address_Id") || "null") || "";
-      } catch (e) {
-        console.log(e);
-        AddressId = "";
-      }
-
-      order_user_Id = JSON.parse(localStorage.getItem("order_user_Id") || "");
-      customer_name = JSON.parse(localStorage.getItem("customer_name") || "");
-
-      // console.log("address id, useraddress id,  customer name ",AddressId,order_user_Id, customer_name)
-    }
-
   
-    if (!newOrderCondition && deliveryType !== "pickup") {
-      setIsDisabled(false);
-      canCompleteOrder = false;
-      if (!allReadyAlerted) {
-        const minSpendMessage = `Minimum order amount for delivery is €${deliveryDis?.minSpend}`;
-        alert(minSpendMessage);
+      if (!newOrderCondition && deliveryType !== "pickup") {
+        canCompleteOrder = false;
+        if (!allReadyAlerted) {
+          alert(`Minimum order amount for delivery is €${deliveryDis?.minSpend}`);
+          allReadyAlerted = true;
+        }
+        return;
       }
-    }
-
-    // if (deliveryType === "pickup" || deliveryDis !== undefined) {
-    if (canCompleteOrder) {
-      // let flatDiscount = 0;
-      // if (couponDisc?.discountType === "flat" && couponDisc?.price) {
-      //   flatDiscount = couponDisc?.price as number;
-      // }
-
-    //   const itemTotalSafe = Number(itemTotal) || 0;
-    //   const deliveryCostSafe = Number(deliveryCost) || 0;
-    //   const couponDiscountCalSafe = Number(calCouponDiscount) || 0;
-    //   const flatCouponDiscountSafe = Number(flatCouponDiscount) || 0;
-    //   const couponDiscountPercentSafe = Number(couponDiscountPercentL) || 0;
-    //   const pickUpDiscountPercentSafe = Number(pickUpDiscountPercentL) || 0;
-    //  const calculatedPickUpDiscount = Number(calculatedPickUpDiscountL) || 0;
-
-   
-
+  
+      if (!canCompleteOrder) return;
+  
+      const AddressId = JSON.parse(localStorage.getItem("customer_address_Id") || "null") || "";
+      const order_user_Id = JSON.parse(localStorage.getItem("order_user_Id") || "");
+      const customer_name = JSON.parse(localStorage.getItem("customer_name") || "");
+  
       const purchaseData = {
-        userId: order_user_Id, //order_user_Id, //session?.user?.id,
+        userId: order_user_Id,
         customerName: customer_name,
         cartData,
-        endTotalG: endTotalG,
+        endTotalG,
         totalDiscountG,
-        
         addressId: AddressId,
         paymentType,
-
-        itemTotal:itemTotal,
+        itemTotal,
         deliveryCost,
         calculatedPickUpDiscountL,
-
-        flatDiscount:flatCouponDiscount,
+        flatDiscount: flatCouponDiscount,
         calCouponDiscount,
-
         couponDiscountPercentL,
         pickUpDiscountPercentL,
-        
       } as orderDataType;
-      let orderMasterId = "";
+  
       if (cartData.length !== 0) {
-        orderMasterId = await createNewOrder(purchaseData);
-        // console.log("master id----------",  orderMasterId)
+        const orderMasterId = await createNewOrder(purchaseData);
+  
+        if (paymentType === "stripe") {
+          router.push(`/stripe?orderMasterId=${orderMasterId}`);
+        } else if (paymentType === "paypal") {
+          router.push(`/pay?orderMasterId=${orderMasterId}`);
+        } else if (paymentType === "cod") {
+          router.push(`/complete?paymentType=Barzahlung&orderMasterId=${orderMasterId}`);
+        }
       }
-      setIsDisabled(false);
+    } catch (error) {
+      
+      console.error("Order submission error:", error);
 
-      if (paymentType === "stripe") {
-        router.push(`/stripe?orderMasterId=${orderMasterId}`);
-      }
-      if (paymentType === "paypal") {
-        router.push(`/pay?orderMasterId=${orderMasterId}`);
-      }
-      //console.log("going to complete--------")
-      if (paymentType === "cod") {
-        // console.log("going to complete")
-        router.push(
-          `/complete?paymentType=Barzahlung&orderMasterId=${orderMasterId}`
-        );
-        //  router.push(`/checkout?email=${data.email}&deliverytype=${deliveryType}`)
-      }
+    } finally {
+   
+      setIsDisabled(false); //  Always re-enable the button
+
     }
   }
 
