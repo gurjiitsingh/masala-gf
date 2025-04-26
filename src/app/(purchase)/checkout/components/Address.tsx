@@ -25,17 +25,17 @@ const Address = () => {
 
   const {
     //deliveryDis,
-    paymentType,
+
     setdeliveryDis,
     chageDeliveryType,
     deliveryType,
     customerEmail,
-    setPaymentType,
+    setCustomerAddressIsComplete,
+    customerAddressIsComplete,
     emailFormToggle,
   } = UseSiteContext();
 
   const { data: session } = useSession();
-  //const [paymentType, setPaymentType] = useState<string>();
 
   useEffect(() => {
     if (customerEmail !== undefined) {
@@ -44,64 +44,23 @@ const Address = () => {
     if (deliveryType === null) {
       chageDeliveryType("pickup");
     }
-
-    // if (session?.user?.id !== undefined) {
-    //   getAddressByID();
-    // }
-    // setValue("email", customerEmail);
-    // console.log("this is befor email set---------------4",customerEmail)
   }, [session, customerEmail]);
 
-  const [disablePaypalBtn, setDisablePaypalBtn] = useState(false);
-  const [disableCodBtn, setDisableCodBtn] = useState(false);
-  const [disableStripeBtn, setDisableStripeBtn] = useState(false);
-
   useEffect(() => {
-    //console.log("payment Type ------------", paymentType);
-    // setPaymentType("")
-    setDisableStripeBtn(false);
-    setDisablePaypalBtn(false);
-    setDisableCodBtn(false);
+    setCustomerAddressIsComplete(false);
     setValue("password", "123456");
     setValue("city", "Lower Saxony");
   }, []);
 
-  useEffect(() => {
-    if (paymentType === "stripe") {
-      setDisableStripeBtn(true);
-      setDisableCodBtn(false);
-      setDisablePaypalBtn(false);
-    }
-    if (paymentType === "paypal") {
-      setDisableStripeBtn(false);
-      setDisablePaypalBtn(true);
-      setDisableCodBtn(false);
-    }
-    if (paymentType === "cod") {
-      setDisableStripeBtn(false);
-      setDisablePaypalBtn(false);
-      setDisableCodBtn(true);
-    }
-    if (paymentType === "") {
-      setDisableStripeBtn(false);
-      setDisableCodBtn(false);
-      setDisablePaypalBtn(false);
-    }
-  }, [paymentType]);
-
   async function handleZipcodeChange(e: React.ChangeEvent<HTMLInputElement>) {
     const zipname: string = e.target.value;
-    setPaymentType("");
     if (zipname.length > 4) {
       const result = await fetchdeliveryByZip(zipname);
       setdeliveryDis(result);
     }
   }
-  function changeHandler() {
-    setPaymentType("");
-  }
+
   function changeEmailHandler() {
-    setPaymentType("");
     emailFormToggle(true);
   }
 
@@ -116,10 +75,13 @@ const Address = () => {
   } = useForm<TaddressSchemaCheckout>({
     resolver: zodResolver(addressSchimaCheckout),
   });
-  // console.log("in address --------------");
+  function changeHandler() {
+    //code is removed
+    // can be used in future
+  }
 
   async function onSubmit(data: TaddressSchemaCheckout) {
-    // console.log("customer address -----------", data);
+ 
 
     const formData = new FormData();
     formData.append("firstName", data.firstName);
@@ -134,16 +96,18 @@ const Address = () => {
     formData.append("state", data.state!);
     formData.append("zipCode", data.zipCode!);
 
-    let canCompleteOrder = true;
+    let addressIsComplete = true;
 
     if (deliveryType === "delivery" && data.zipCode === "") {
-      canCompleteOrder = false;
+      addressIsComplete = false;
       alert(
-        "Bitte geben Sie die Postleitzahl für die Lieferung ein oder wählen Sie die Abholung und erhalten Sie 10% Rabatt"
+        "Bitte geben Sie die Postleitzahl für die Lieferung ein oder wählen Sie Abholung"
       );
+      //Please enter the postcode for delivery or choose pickup
     }
 
-    if (canCompleteOrder) {
+    if (addressIsComplete) {
+      setCustomerAddressIsComplete(true);
       const customAddress = {
         firstName: data.firstName,
         lastName: data.lastName,
@@ -187,10 +151,10 @@ const Address = () => {
   }
 
   return (
-    <div className="w-full lg:w-[70%] md:border border-slate-400 md:rounded-2xl md:p-5">
-      <div className="flex flex-col">
-        <div className="flex flex-col gap-2 mb-4">
-          <h2 className="text-xl font-semibold text-slate-600  py-3 uppercase">
+    <div className="w-full  md:border border-slate-400 md:rounded-2xl p-5">
+      <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-2">
+          <h2 className="text-xl font-semibold text-slate-600  uppercase">
             {/* Shipping address */}
             Adresse
             {/* -- {session?.user?.id} --- {session?.user?.name} */}
@@ -202,7 +166,7 @@ const Address = () => {
         <form onSubmit={handleSubmit(onSubmit)}>
           <input {...register("userId")} hidden />
           {/* <input {...register("orderDetail")} hidden /> */}
-          <div className="flex w-full flex-col gap-2  my-15 ">
+          <div className="flex w-full flex-col gap-2  ">
             <div className="flex flex-col gap-1">
               <label className="label-style">
                 Email<span className="text-red-500">*</span>{" "}
@@ -222,7 +186,6 @@ const Address = () => {
                 )}
               </span>
             </div>
-
             <div className="flex flex-col gap-1">
               <label className="label-style">
                 Mob no.<span className="text-red-500">*</span>{" "}
@@ -255,7 +218,6 @@ const Address = () => {
                 </span>
               </div>
             )} */}
-
             <div className="w-full flex flex-row gap-2">
               <div className="flex flex-col gap-1">
                 <label className="label-style">
@@ -299,7 +261,6 @@ const Address = () => {
                 </span>
               </div>
             </div>
-
             <div className="flex flex-col gap-1 w-full">
               <label className="label-style">
                 Straße<span className="text-red-500">*</span>{" "}
@@ -320,7 +281,6 @@ const Address = () => {
                 )}
               </span>
             </div>
-
             <div className="flex flex-col gap-1 w-full">
               <label className="label-style">
                 {/* Address line 2 */}
@@ -353,7 +313,6 @@ const Address = () => {
                 {errors.city?.message && <span>{errors.city?.message}</span>}
               </span>
             </div> */}
-
             {/* <div className="flex flex-col gap-1">
               <label className="label-style">
                 State<span className="text-red-500">*</span>{" "}
@@ -363,7 +322,6 @@ const Address = () => {
                 {errors.state?.message && <span>{errors.state?.message}</span>}
               </span>
             </div> */}
-
             <div className="flex flex-col gap-1">
               <label className="label-style">
                 Postleitzahl<span className="text-red-500">*</span>{" "}
@@ -384,7 +342,6 @@ const Address = () => {
                 )}
               </span>
             </div>
-
             {/* <div className="flex  justify-start gap-8 border rounded-full w-full py-2 px-2 items-center">
               <div className="px-2 py-2 bg-slate-700 rounded-full flex justify-center items-center">
                 <input
@@ -402,70 +359,24 @@ const Address = () => {
               </div>
               <div>Cash on delivery</div>
             </div> */}
+            <div className="flex justify-start items-center gap-2">
+              
+              <div className="w-fit">
+                <button className="w-fit px-2 py-1 text-center bg-amber-400 text-blue-900 font-bold rounded-xl text-[1.2rem] z-50">
+               
+                  <span className=" text-blue-900">Use</span>
+                  <span className=" text-sky-500">Address</span>
+                </button>
+              </div>
 
-            <h3 className=" text-xl font-semibold text-slate-600  pt-3 pb-1 uppercase">
-              {/* Select payment type */}
-              Zahlungsart auswählen
-            </h3>
-
-            <div className="flex flex-col gap-2">
- 
-
-            <label className="flex items-center gap-3 cursor-pointer">
-      <input
-        type="radio"
-        value="stripe"
-        {...register("payment")}
-        className="accent-amber-400"
-        onChange={(e) => {
-          setPaymentType(e.target.value);
-          handleSubmit(onSubmit)(); 
-
-          // const submitHandler = handleSubmit(onSubmit); // returns a function
-          // submitHandler(); // now we call it
-
-        }}
-      />
-      <span className="text-blue-900 font-semibold">Stripe</span>
-    </label>
-
-    <label className="flex items-center gap-3 cursor-pointer">
-      <input
-        type="radio"
-        value="paypal"
-        {...register("payment")}
-        className="accent-amber-400"
-        onChange={(e) => {
-          setPaymentType(e.target.value);
-          handleSubmit(onSubmit)();  
-        }}
-      />
-      <span>
-        <span className="text-blue-900 font-semibold">Pay</span>
-        <span className="text-sky-500 font-semibold">Pal</span>
-      </span>
-    </label>
-
-    <label className="flex items-center gap-3 cursor-pointer">
-      <input
-        type="radio"
-        value="cod"
-        {...register("payment")}
-        className="accent-amber-400"
-        onChange={(e) => {
-          setPaymentType(e.target.value);
-          handleSubmit(onSubmit)();  
-        }}
-      />
-      <span className="text-slate-700 font-semibold">Cash on Delivery</span>
-    </label>
-</div>
-
-{/* <button className="px-2 py-1 bg-amber-300 rounded-2xl">Proceed</button> */}
+              <div className="h-5 flex justify-center">
+                { customerAddressIsComplete && (
+                  <FaCheck className="text-green-300 " size={24} />
+                )}
+              </div>
+            </div>
             
           </div>
-
-     
         </form>
       </div>
     </div>

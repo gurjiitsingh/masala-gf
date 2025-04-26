@@ -69,7 +69,7 @@ export default function Checkout(){
   
     return (<div className="flex container mx-auto px-[30%] items-center justify-center my-[20%] ">
       <div className="checkout">
-        {isPending  ? (
+        {(isPending || typeof window === 'undefined' || !window.paypal) ? (
           <p>LOADING...</p>
         ) : (
           <>

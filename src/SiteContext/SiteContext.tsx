@@ -31,6 +31,8 @@ type SiteContextType = {
   setAdminSideBarToggleG: (e: boolean) => void;
   setCustomerEmailG: (e: string) => void;
   customerEmail: string;
+  setCustomerAddressIsComplete: (e: boolean) => void;
+  customerAddressIsComplete: boolean;
   productCategoryIdG: string;
   setProductCategoryIdG: (e: string) => void;
   paymentType:string;
@@ -102,7 +104,8 @@ const SiteContext = createContext<SiteContextType>({
     return e;
   },
   customerEmail: "",
-
+  setCustomerAddressIsComplete: (e) => {return e},
+  customerAddressIsComplete:false,
   productCategoryIdG: "",
   setProductCategoryIdG: (e) => {
     return e;

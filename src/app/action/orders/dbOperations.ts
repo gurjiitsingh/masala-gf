@@ -69,70 +69,7 @@ export async function createNewOrderCustomerAddress(
   const customerName = firstName + " " + lastName;
 
   return { addressAddedId, UserAddedId, customerName };
-  //const now = new Date();
-  // const now_india = now.toLocaleString("en-IN", {
-  //   dateStyle: "medium",
-  //   timeStyle: "medium",
-  //   timeZone: "Asia/Kolkata",
-  // });
-
-  //"de-DE"
-  // const now_german = new Date().toLocaleString("en-DE", {
-  //   dateStyle: "medium",
-  //   timeStyle: "medium",
-  //   timeZone: "Europe/Berlin",
-  // });
-
-  // const order = await fetchOrdersMaster()
-
-  //  const collectionRef = collection(db, 'orderMaster')
-
-  //  const targetQuery = query(collectionRef, orderBy("srno", "desc"), limit(1));
-  //  const querySnapshot = await getDocs(targetQuery)
-
-  //  const q = query(collectionRef);
-  //  const querySnapshot = await getDocs(q);
-  //let new_srno =1;
-  // const orderData = [] as orderMasterDataT[];
-  //   querySnapshot.forEach((doc) => {
-  //      const  data = doc.data() as orderMasterDataT;
-  //     //   console.log("last order ----------", data)
-  //        orderData.push(data)
-  //      });
-
-  //  if(orderData[0]?.srno !== undefined){
-  //    new_srno =orderData[0].srno + 1;
-  //  }
-  //  console.log("sr No ----------", new_srno)
-
-  // const timeId = new Date().toISOString();
-  // const orderMasterData = {
-  //   // also add auto increment to order,
-  //   customerName,
-  //   userId: UserAddedId,
-  //   addressId: addressAddedId,
-  //   total:total,
-  //   status:"pending",
-  //   totalDiscountG,
-  //   time: now_german,
-  //   srno:new_srno,
-
-  // } as orderMasterDataT;
-
-  //const orderMasterId = await addOrderToMaster(orderMasterData) as string;
-
-  // add product to productOrder
-
-  // unique id ->   purchaseSession: '1737704030168',
-  // const purchaseProducts = purchaseData.cartData as ProductType[];
-
-  // purchaseProducts.forEach((element) => {
-  //   addProductDraft(element, UserAddedId, orderMasterId);
-  // });
-
-  //  const toBeDeleted = cartData[0].purchaseSession;
-  //  console.log(toBeDeleted)
-  //  await deleteDoc(doc(db, "orderProducts", toBeDeleted));
+  
 }
 
 export async function createNewOrder(purchaseData: orderDataType) {

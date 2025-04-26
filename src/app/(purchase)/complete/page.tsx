@@ -7,10 +7,11 @@ import OrderComplete from "./componets/OrderComplete";
 const Page = () => {
   
  
-  return (
+  return (<div translate="no">
    <Suspense>
     <OrderComplete />
    </Suspense>
+   </div>
   );
 };
 

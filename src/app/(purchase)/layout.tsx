@@ -4,8 +4,8 @@ import Comcomp from "@/components/Comcomp";
 
 
 export const metadata: Metadata = {
-  title: "Masala GF",
-  description: "Masala GF food web app",
+  title: "Masala taste of India, Braunschweig-Broitzem",
+  description: "Masala taste of India, Indian food",
   other: {
     'google': 'notranslate',  
   },
@@ -17,7 +17,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="de">
+    <html lang="de" translate="no">
       <body>
         <div translate="no">
         <Comcomp>{children}</Comcomp>

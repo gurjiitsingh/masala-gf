@@ -16,7 +16,6 @@ import { createNewOrder } from "@/app/action/orders/dbOperations";
 import { useRouter } from "next/navigation";
 //import { FaCheckCircle } from 'react-icons/fa';
 
-
 // function calculateNetPayable(
 //   total: number,
 //   delivery: number,
@@ -27,7 +26,6 @@ import { useRouter } from "next/navigation";
 //   return +(total + delivery - pickup - coupon - flat).toFixed(2);
 // }
 
-
 export default function CartLeft() {
   const {
     couponDisc,
@@ -37,11 +35,12 @@ export default function CartLeft() {
     paymentType,
     newOrderCondition,
     setNewOrderCondition,
+    customerAddressIsComplete,
     //deliveryCost,
     setDeliveryCost,
   } = UseSiteContext();
 
-  //console.log("newOrderCondition-------------", newOrderCondition)
+  
 
   const router = useRouter();
 
@@ -61,9 +60,11 @@ export default function CartLeft() {
   const [flatCouponDiscount, setFlatCouponDisscount] = useState(0);
   const [couponDiscountPercentL, setcouponDiscountPercentL] = useState(0);
 
-
   const [disableDeliveryBtn, setDisableDeliveryBtn] = useState(false);
   const [disablePickUpBtn, setDisablePickUpBtn] = useState(false);
+
+  const [orderAmountIsLowForDelivery, seOrderAmountIsLowForDelivery] =
+    useState(false);
 
   const {
     cartData,
@@ -89,60 +90,44 @@ export default function CartLeft() {
   //   }
   // }, [cartData]);
 
-
   useEffect(() => {
     if (cartData && cartData.length > 0) {
       let total = 0;
-  
+
       cartData.forEach((item: cartProductType) => {
         const quantity = Number(item.quantity) || 0;
         const price = parseFloat(item.price as any) || 0;
         total += quantity * price;
       });
-  
+
       const roundedTotal = parseFloat(total.toFixed(2));
       setitemTotal(roundedTotal);
-  
+
       const itemTotalS = roundedTotal.toFixed(2).toString();
       const calculatedComma = itemTotalS.split(".").join(",");
       setitemTotalComa(calculatedComma);
     }
   }, [cartData]);
 
-
-
-
-
   //console.log("cal total------", itemTotal);
 
   useEffect(() => {
-   
     if (itemTotal > 0) {
       const total = itemTotal;
       if (deliveryType === "pickup") {
-        let pickupDiscount = +total * pickupDiscountPersent/100;
+        let pickupDiscount = (+total * pickupDiscountPersent) / 100;
         pickupDiscount = +pickupDiscount.toFixed(2);
-      
-      setCalculatedPickUpDiscount(+pickupDiscount)
-      setdeliveryCostL(0);
+
+        setCalculatedPickUpDiscount(+pickupDiscount);
+        setdeliveryCostL(0);
         setPickUpDiscountPercent(pickupDiscountPersent);
-       
       }
 
       if (deliveryType === "delivery") {
         if (deliveryDis?.price !== undefined) {
           setdeliveryCostL(+deliveryDis?.price);
           setPickUpDiscountPercent(0);
-          setCalculatedPickUpDiscount(0)
-        }
-      }
-    }
-    if (deliveryType === "delivery") {
-      if (deliveryDis?.minSpend !== undefined) {
-         if (deliveryDis?.minSpend >= itemTotal) {
-          setNewOrderCondition(false);
-        } else {
-          setNewOrderCondition(true);
+          setCalculatedPickUpDiscount(0);
         }
       }
     }
@@ -154,20 +139,20 @@ export default function CartLeft() {
         // console.log("coupondisc, minspend, itemTotal-----------",couponDisc.price,couponDisc.minSpend, itemTotal);
         if (couponDisc.minSpend! <= itemTotal) {
           if (couponDisc.discountType === "flat") {
-         
             const price = +couponDisc?.price;
             setCalCouponDisscount(0);
             setFlatCouponDisscount(price);
-            setcouponDiscountPercentL(parseFloat(((price / itemTotal) * 100).toFixed(2)));
-            
+            setcouponDiscountPercentL(
+              parseFloat(((price / itemTotal) * 100).toFixed(2))
+            );
           } else {
-
             const percent = +couponDisc?.price;
-            const totalDis = parseFloat(((itemTotal * percent) / 100).toFixed(2));
+            const totalDis = parseFloat(
+              ((itemTotal * percent) / 100).toFixed(2)
+            );
             setCalCouponDisscount(totalDis);
             setFlatCouponDisscount(0);
             setcouponDiscountPercentL(percent);
-
           }
         } else {
           alert(
@@ -176,7 +161,7 @@ export default function CartLeft() {
         }
       } else {
         setCalCouponDisscount(0);
-        setcouponDiscountPercentL(0)
+        setcouponDiscountPercentL(0);
       }
     }
   }, [couponDisc, itemTotal]);
@@ -188,23 +173,34 @@ export default function CartLeft() {
     const flatCouponDiscountSafe = Number(flatCouponDiscount) || 0;
     const couponDiscountPercentSafe = Number(couponDiscountPercentL) || 0;
     const pickUpDiscountPercentSafe = Number(pickUpDiscountPercentL) || 0;
-   const calculatedPickUpDiscount = Number(calculatedPickUpDiscountL) || 0;
+    const calculatedPickUpDiscount = Number(calculatedPickUpDiscountL) || 0;
 
- 
-    const netPay = (itemTotalSafe + deliveryCostSafe - calculatedPickUpDiscount - couponDiscountCalSafe - flatCouponDiscountSafe  ).toFixed(2);
-    const netDiscount = (couponDiscountPercentSafe + pickUpDiscountPercentSafe).toFixed(2);
-  
+    const netPay = (
+      itemTotalSafe +
+      deliveryCostSafe -
+      calculatedPickUpDiscount -
+      couponDiscountCalSafe -
+      flatCouponDiscountSafe
+    ).toFixed(2);
+    const netDiscount = (
+      couponDiscountPercentSafe + pickUpDiscountPercentSafe
+    ).toFixed(2);
+
     const payableTotalSComma = netPay.toString().replace(".", ",");
 
-
-    
     setDeliveryCost(deliveryCostSafe);
     setEndTotalComma(payableTotalSComma);
     setEndTotalG(parseFloat(netPay));
     setTotalDiscountG(parseFloat(netDiscount));
-  }, [deliveryCost, calCouponDiscount, itemTotal, flatCouponDiscount, couponDiscountPercentL, pickUpDiscountPercentL, calculatedPickUpDiscountL]);
-
- 
+  }, [
+    deliveryCost,
+    calCouponDiscount,
+    itemTotal,
+    flatCouponDiscount,
+    couponDiscountPercentL,
+    pickUpDiscountPercentL,
+    calculatedPickUpDiscountL,
+  ]);
 
   useEffect(() => {
     if (deliveryType === "pickup") {
@@ -222,19 +218,16 @@ export default function CartLeft() {
       setDisableDeliveryBtn(false);
       // console.log("deliveryType---------",deliveryType)
     }
-
-   
   }, [deliveryType]);
-  console.log("isDisabled---------------", isDisabled);
- 
+  // console.log("isDisabled---------------", isDisabled);
 
   useEffect(() => {
     if (deliveryType === "delivery") {
       if (deliveryDis?.minSpend !== undefined) {
         if (deliveryDis?.minSpend >= itemTotal) {
-          setNewOrderCondition(false);
+          seOrderAmountIsLowForDelivery(true);
         } else {
-          setNewOrderCondition(true);
+          seOrderAmountIsLowForDelivery(false);
         }
       } else {
         setdeliveryCostL(0);
@@ -244,26 +237,33 @@ export default function CartLeft() {
         //   console.log("dilevery type ---",deliveryType,deliveryDis?.price)
         setdeliveryCostL(+deliveryDis?.price);
       }
-    }else{
-      setdeliveryCostL(0);  
+    } else {
+      setdeliveryCostL(0);
     }
   }, [deliveryType, deliveryDis?.minSpend]);
 
   async function proceedToOrder() {
     setIsDisabled(true);
-      try {
-      let canCompleteOrder = true;
+    try {
+      let canCompleteOrder = false;
       let allReadyAlerted = false;
-  
+      //  alert(`Hello, ${deliveryType}`)
+
       if (paymentType === "" || paymentType === undefined) {
-        canCompleteOrder = false;
+        canCompleteOrder = true;
         alert("Select Payment type");
         allReadyAlerted = true;
         return;
       }
-  
+
+      if(!customerAddressIsComplete){
+        alert("Select Address");
+        allReadyAlerted = true;
+        return;
+      }
+
       if (deliveryType === "delivery" && deliveryDis === undefined) {
-        canCompleteOrder = false;
+        canCompleteOrder = true;
         if (!allReadyAlerted) {
           alert(
             "Wir können an diese Adresse nicht liefern. Bitte wählen Sie Abholung und erhalten Sie 10 % Rabatt"
@@ -272,9 +272,9 @@ export default function CartLeft() {
         }
         return;
       }
-  
+
       if (couponDisc?.minSpend && itemTotal < couponDisc.minSpend) {
-        canCompleteOrder = false;
+        canCompleteOrder = true;
         if (!allReadyAlerted) {
           alert(
             `Minimun purchase amount to get discount is € ${couponDisc?.minSpend} , Remove coupon or add more item to cart`
@@ -283,22 +283,34 @@ export default function CartLeft() {
         }
         return;
       }
-  
-      if (!newOrderCondition && deliveryType !== "pickup") {
-        canCompleteOrder = false;
+
+      if (orderAmountIsLowForDelivery && deliveryType !== "pickup") {
+        canCompleteOrder = true;
         if (!allReadyAlerted) {
-          alert(`Minimum order amount for delivery is €${deliveryDis?.minSpend}`);
+          alert(
+            `Minimum order amount for delivery is € ${deliveryDis?.minSpend}`
+          );
           allReadyAlerted = true;
         }
         return;
       }
-  
-      if (!canCompleteOrder) return;
-  
-      const AddressId = JSON.parse(localStorage.getItem("customer_address_Id") || "null") || "";
-      const order_user_Id = JSON.parse(localStorage.getItem("order_user_Id") || "");
-      const customer_name = JSON.parse(localStorage.getItem("customer_name") || "");
-  
+
+      if (canCompleteOrder) {
+        //  alert(`cancelorder, is canceling order because ${canCompleteOrder}`)
+        return;
+      } else {
+        //  alert(`cancelorder ${canCompleteOrder} , so it not cancle order`)
+      }
+
+      const AddressId =
+        JSON.parse(localStorage.getItem("customer_address_Id") || "null") || "";
+      const order_user_Id = JSON.parse(
+        localStorage.getItem("order_user_Id") || ""
+      );
+      const customer_name = JSON.parse(
+        localStorage.getItem("customer_name") || ""
+      );
+
       const purchaseData = {
         userId: order_user_Id,
         customerName: customer_name,
@@ -315,26 +327,27 @@ export default function CartLeft() {
         couponDiscountPercentL,
         pickUpDiscountPercentL,
       } as orderDataType;
-  
+
       if (cartData.length !== 0) {
+        //  alert(`cart length is more than 0,order started, ${cartData.length}`)
         const orderMasterId = await createNewOrder(purchaseData);
-  
+
         if (paymentType === "stripe") {
           router.push(`/stripe?orderMasterId=${orderMasterId}`);
         } else if (paymentType === "paypal") {
           router.push(`/pay?orderMasterId=${orderMasterId}`);
         } else if (paymentType === "cod") {
-          router.push(`/complete?paymentType=Barzahlung&orderMasterId=${orderMasterId}`);
+          router.push(
+            `/complete?paymentType=Barzahlung&orderMasterId=${orderMasterId}`
+          );
         }
+      } else {
+        alert(`Cart is empty, add some foods`);
       }
     } catch (error) {
-      
       console.error("Order submission error:", error);
-
     } finally {
-   
       setIsDisabled(false); //  Always re-enable the button
-
     }
   }
 
@@ -373,49 +386,50 @@ export default function CartLeft() {
               Zwischensumme
             </div>
             <div className="flex gap-1">
-             {itemTotalComa && <span>&#8364;</span>} <span>{itemTotalComa}</span>
+              {itemTotalComa && <span>&#8364;</span>}{" "}
+              <span>{itemTotalComa}</span>
             </div>
           </div>
 
           <div className="font-semibold border-b border-slate-200 py-3 w-full flex  justify-start gap-4">
-           <div className="flex flex-col gap-2">
-            <div className="h-5 flex justify-center">
+            <div className="flex flex-col gap-2">
+              <div className="h-5 flex justify-center">
                 {deliveryType === "pickup" && (
-                              <FaCheck className="text-green-300 " size={24} />
-                            )}
-            </div>
-            <div className="w-fit">
-              <button
-                disabled={disablePickUpBtn}
-                onClick={() => chageDeliveryType("pickup")}
-                className="flex gap-2  items-center text-sm text-slate-600 bg-green-200 border border-slate-200 rounded-2xl px-3 font-semibold py-1 w-full text-left "
-              >
-                <span>Abholen </span>
-                {/* <span>
+                  <FaCheck className="text-green-300 " size={24} />
+                )}
+              </div>
+              <div className="w-fit">
+                <button
+                  disabled={disablePickUpBtn}
+                  onClick={() => chageDeliveryType("pickup")}
+                  className="flex gap-2  items-center text-sm text-slate-600 bg-green-200 border border-slate-200 rounded-2xl px-3 font-semibold py-1 w-full text-left "
+                >
+                  <span>Abholen </span>
+                  {/* <span>
                   <FaChevronDown />
                 </span> */}
-              </button>
+                </button>
               </div>
             </div>
             <div className="flex flex-col gap-2">
-            <div className="h-5 flex justify-center">
+              <div className="h-5 flex justify-center">
                 {deliveryType === "delivery" && (
-                              <FaCheck className="text-green-300 " size={24} />
-                            )}
-            </div>
+                  <FaCheck className="text-green-300 " size={24} />
+                )}
+              </div>
 
-            <div className="w-fit">
-              <button
-                disabled={disableDeliveryBtn}
-                onClick={() => chageDeliveryType("delivery")}
-                className="flex gap-2 items-center text-sm text-slate-600 bg-green-200 border border-slate-50 rounded-2xl px-3 font-semibold py-1 w-full text-left "
-              >
-                <span>Lieferung </span>
-                {/* <span>
+              <div className="w-fit">
+                <button
+                  disabled={disableDeliveryBtn}
+                  onClick={() => chageDeliveryType("delivery")}
+                  className="flex gap-2 items-center text-sm text-slate-600 bg-green-200 border border-slate-50 rounded-2xl px-3 font-semibold py-1 w-full text-left "
+                >
+                  <span>Lieferung </span>
+                  {/* <span>
                   <FaChevronDown />
                 </span> */}
-              </button>
-            </div>
+                </button>
+              </div>
             </div>
           </div>
 
@@ -423,8 +437,7 @@ export default function CartLeft() {
 
           <Pickup
             total={itemTotal}
-            pickupDiscountPersent = {pickUpDiscountPercentL}
-           
+            pickupDiscountPersent={pickUpDiscountPercentL}
           />
 
           <CouponDisc total={itemTotal} />
@@ -449,7 +462,8 @@ export default function CartLeft() {
               Gesamt
             </div>
             <div className="flex gap-1">
-             {endTotalComma && <span>&#8364;</span>}  <span>{endTotalComma}</span>
+              {endTotalComma && <span>&#8364;</span>}{" "}
+              <span>{endTotalComma}</span>
             </div>
           </div>
 
@@ -478,7 +492,7 @@ export default function CartLeft() {
         {/* disabled={true} */}
         <button
           disabled={isDisabled}
-          className="w-[200px] py-1 text-center bg-amber-400  font-bold rounded-xl text-[1.2rem]"
+          className="w-[200px] py-1 text-center bg-amber-400  font-bold rounded-xl text-[1.2rem] z-50"
           onClick={() => {
             proceedToOrder();
           }}
@@ -489,8 +503,6 @@ export default function CartLeft() {
       </div>
     </div>
   );
-
-
 
   // useEffect(() => { console.log("empty dependeny array--------")},[])
 

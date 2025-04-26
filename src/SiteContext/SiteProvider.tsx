@@ -31,6 +31,7 @@ export const SiteProvider: React.FC<Props> = ({
   const [openBargerMenu, setOpenBargerMenu] = useState<boolean>(false);
   const [openEmailForm, setEmailFormToggle] = useState<boolean>(false);
   const [customerEmail, setCustomerEmailL] = useState<string>("");
+  const [customerAddressIsComplete, setCustomerAddressIsCompleteL ] = useState(false)
   const [deliveryType, setDeliveryType] = useState<string>("pickup");
   const [couponDisc, setCouponDiscU] = useState<couponType | undefined>();
   const [deliveryDis, setdeliveryDisU] = useState<deliveryType | undefined>();
@@ -93,6 +94,9 @@ export const SiteProvider: React.FC<Props> = ({
     window.localStorage.setItem("customer_email", JSON.stringify(e));
     setCustomerEmailL(e);
   }
+  function setCustomerAddressIsComplete(e: boolean){
+    setCustomerAddressIsCompleteL(e);
+  }
 
   function setAdminSideBarToggleG(e:boolean) {
     setAdminSideBarToggleL(e);
@@ -142,6 +146,8 @@ function setPaymentType(s:string){
         setAdminSideBarToggleG,
         setCustomerEmailG,
         customerEmail,
+        setCustomerAddressIsComplete,
+        customerAddressIsComplete,
         setProductCategoryIdG,
         productCategoryIdG,
       }}
