@@ -4,7 +4,7 @@ import { createContext, useContext } from "react";
 
 
 import { addressT } from "@/lib/types/addressType";
-import { newOrderConditionType, cartProductType } from "@/lib/types/cartDataType";
+import { cartProductType } from "@/lib/types/cartDataType";
 interface CartContextType {
   counter: number;
   productTotalCost: number;
