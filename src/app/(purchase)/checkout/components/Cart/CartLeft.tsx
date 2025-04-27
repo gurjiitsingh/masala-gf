@@ -33,8 +33,6 @@ export default function CartLeft() {
     chageDeliveryType,
     deliveryType,
     paymentType,
-    newOrderCondition,
-    setNewOrderCondition,
     customerAddressIsComplete,
     //deliveryCost,
     setDeliveryCost,
