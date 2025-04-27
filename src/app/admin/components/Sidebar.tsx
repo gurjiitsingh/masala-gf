@@ -7,7 +7,7 @@ import { MdSpaceDashboard, MdOutlineProductionQuantityLimits } from "react-icons
 import { FaUserTie } from "react-icons/fa";
 import { BsBorderStyle } from "react-icons/bs";
 import { TbCategoryPlus } from "react-icons/tb";
-import { IoIosLogOut } from "react-icons/io";
+import { IoIosLogOut, IoMdSettings } from "react-icons/io";
 import { IoClose } from "react-icons/io5";
 
 import { UseSiteContext } from "@/SiteContext/SiteContext";
@@ -30,6 +30,7 @@ const menuList: Titem[] = [
   { name: "Delivery", link: "/admin/delivery", icon: <TbCategoryPlus /> },
   // { name: "Orders", link: "/admin/orders", icon: <BsBorderStyle /> },
   { name: "Users", link: "/admin/users", icon: <FaUserTie /> },
+  { name:"Setting",link:"/admin/setting",icon: <IoMdSettings />},
 ];
 
 const Sidebar = () => {

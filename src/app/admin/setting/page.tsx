@@ -1,11 +1,18 @@
+'use client'
 
+import ListView from './components/ListView'
+import Link from "next/link"
 
-const Page = () => {
+export default function page(){
   return (
-    <div className='w-[100%] h-screen flex flex-col bg-slate-100'>
-     
-      TO DO: here we give a link to make user to admin</div>
+    <div className='h-screen flex flex-col '>
+      <div className="flex justify-start gap-3 p-1">
+      <Link href='/admin/setting/editform'><button className="bg-[#313131] text-sm text-white px-4 py-2 rounded-lg">Modify Value</button></Link>
+      <Link href='/admin/setting/form'><button className="bg-[#313131] text-sm text-white px-4 py-2 rounded-lg">Create</button></Link>
+      </div>
+
+      {/* <ListView /> */}
+
+    </div>
   )
 }
-
-export default Page
