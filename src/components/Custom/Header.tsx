@@ -54,8 +54,8 @@ const Header = () => {
           className="size-lg px-3 block lg:hidden"
           aria-label="toggle burger menu"
         >
-          <FaBars className="hidden md:block" size={40} />
-          <FaBars className="md:hidden" size={32} />
+          {/* <FaBars className="hidden md:block" size={40} /> */}
+          <FaBars className="" size={32} />
         </button>
       </div>
       </div>

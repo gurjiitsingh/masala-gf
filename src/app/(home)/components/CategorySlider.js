@@ -8,14 +8,27 @@ import { fetchCategories } from "@/app/action/category/dbOperations";
 import { UseSiteContext } from "@/SiteContext/SiteContext";
 
 export default function CategorySlider() {
-  const [width, setWidth] = useState(() =>
-    typeof window !== "undefined" ? window.innerWidth : 300
-  );
+
+  const [width, setWidth] = useState(0); // Start with 0, safe for SSR
+  // const [width, setWidth] = useState(() =>
+  //   typeof window !== "undefined" ? window.innerWidth : 300
+  // );
+
+
   const [categoryData, setCategoryData] = useState([]);
   const { productCategoryIdG, setProductCategoryIdG } = UseSiteContext();
 
+  // useEffect(() => {
+  //   const handleResize = () => setWidth(window.innerWidth);
+  //   window.addEventListener("resize", handleResize);
+  //   return () => window.removeEventListener("resize", handleResize);
+  // }, []);
+
+
   useEffect(() => {
+    // Only access window inside useEffect
     const handleResize = () => setWidth(window.innerWidth);
+    handleResize(); // set initial width
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
@@ -67,7 +80,7 @@ export default function CategorySlider() {
 
   return (
     <div className="-mt-20 h-full w-[98%] px-2 gap-1">
-      <Slider {...sliderSettings}>
+   {categoryData.length > 0 && (   <Slider {...sliderSettings}>
         {categoryData.map((category) => (
           <div key={category.id} className="mx-2">
             <button onClick={() => setProductCategoryIdG(category.id)}>
@@ -96,7 +109,7 @@ export default function CategorySlider() {
             </button>
           </div>
         ))}
-      </Slider>
+      </Slider>)}
     </div>
   );
 }

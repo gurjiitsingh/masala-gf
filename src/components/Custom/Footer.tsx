@@ -146,10 +146,15 @@ export default function Footer() {
           <p className="text-md text-slate-100">
             Powered by <a href="http://www.gstadeveloper.com">GstaDeveloper.com</a>
           </p>
-          <p className="text-md text-slate-100">
+          {/* <p className="text-md text-slate-100">
             Copyright © <span className="year">2025</span> All Rights Reserved
             by <b>Masala Taste of india</b>
-          </p>
+          </p> */}
+
+<p className="text-md text-slate-100">
+  Copyright © {new Date().getFullYear()} All Rights Reserved
+  by <b>Masala Taste of India</b>
+</p>
         </div>
       </div>
     

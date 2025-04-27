@@ -6,6 +6,7 @@ export default function Hero() {
 
 <img
             src='/hero-6.png'
+            alt="masala taste of india restaurent"
             className="w-full rounded-2xl"
           />
 
