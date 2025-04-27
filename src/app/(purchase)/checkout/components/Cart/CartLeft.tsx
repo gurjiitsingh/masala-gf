@@ -71,8 +71,8 @@ export default function CartLeft() {
     endTotalG,
     totalDiscountG,
   } = useCartContext();
-  const pickupDiscountPersentS = process.env.NEXT_PUBLIC_PICKUP_DISCOUNT as string;
-  const pickupDiscountPersent = parseInt(pickupDiscountPersentS);
+
+  const pickupDiscountPersent = parseInt(process.env.NEXT_PUBLIC_PICKUP_DISCOUNT ?? '0', 10);
   // useEffect(() => {
   //   if (cartData && cartData.length > 0) {
 
