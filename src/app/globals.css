@@ -50,6 +50,13 @@
   }
 } */
 
+/* @media (prefers-color-scheme: dark) {
+  body {
+    background-color: white !important;
+    color: black !important;
+  }
+} */
+
 body {
   color: var(--foreground);
   background: var(--background);
