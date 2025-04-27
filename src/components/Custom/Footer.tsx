@@ -4,11 +4,11 @@ import React from "react";
 
 export default function Footer() {
   return (
-    <footer className=" dark:bg-gray-100 dark:text-blue-800 bg-[#FADB5E] pt-12 mt-12 -mb-20">
+    <footer className="   bg-[#FADB5E] pt-12 mt-12 -mb-20">
       <div className="container mx-auto  ">
         <div className="flex flex-col md:flex-row justify-between gap-8 md:gap-1">
           <div className="flex items-center gap-1 w-full h-fit border border-amber-50 p-1 mx-1 rounded-2xl bg-amber-200">
-            <div className="flex items-center  justify-start  rounded-full dark:bg-blue-600">
+            <div className="flex items-center  justify-start  rounded-full ">
               <Link href="/">
                 <img className="h-12 md:h-12" src="/logo.webp" alt="Logo" />
               </Link>
@@ -21,7 +21,7 @@ export default function Footer() {
           </div>
 
           <div className="flex flex-col gap-2 w-full px-2">
-            <h3 className="tracking-wide text-xl font-bold uppercase dark:text-gray-700">
+            <h3 className="tracking-wide text-xl font-bold uppercase ">
               Links
             </h3>
             <ul className="flex flex-col gap-3">
@@ -52,7 +52,7 @@ export default function Footer() {
             </ul>
           </div>
           <div className="flex flex-col gap-2 w-full px-2">
-            <h3 className="tracking-wide text-xl font-bold uppercase dark:text-gray-700">
+            <h3 className="tracking-wide text-xl font-bold uppercase ">
               Company
             </h3>
             <ul className="space-y-1">
@@ -69,7 +69,7 @@ export default function Footer() {
             </ul>
           </div>
           {/* <div className="space-y-3">
-            <h3 className="uppercase dark:text-gray-900">Developers</h3>
+            <h3 className="uppercase ">Developers</h3>
             <ul className="space-y-1">
               <li>
                 <a rel="noopener noreferrer" href="#">
@@ -89,7 +89,7 @@ export default function Footer() {
             </ul>
           </div> */}
           <div className="flex flex-col gap-2 w-full px-2">
-            <div className="tracking-wide text-xl font-bold uppercase dark:text-gray-700">
+            <div className="tracking-wide text-xl font-bold uppercase ">
               Social media
             </div>
             <div className="flex justify-start space-x-3">
