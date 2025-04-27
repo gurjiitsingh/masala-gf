@@ -266,8 +266,9 @@ export default function CartLeft() {
         canCompleteOrder = true;
         if (!allReadyAlerted) {
           alert(
-            "Wir können an diese Adresse nicht liefern. Bitte wählen Sie Abholung und erhalten Sie 10 % Rabatt"
+            "Wir können nicht an diese Adresse liefern. Bitte wählen Sie Abholung."
           );
+          //We cannot deliver to this address. Please select pickup.
           allReadyAlerted = true;
         }
         return;
@@ -442,20 +443,7 @@ export default function CartLeft() {
 
           <CouponDisc total={itemTotal} />
 
-          {/* <div className="font-semibold border-b border-slate-200 py-3 w-full ">
-            <h3 className="text-sm font-semibold py-3 w-full text-left">
-              {" "}
-              Local Pickup (Restaurant)
-            </h3>
-          </div> */}
-
-          {/* <div className="border-b border-slate-200 py-3 w-full ">
-            <h3 className="text-sm font-semibold pt-3 pb-1 w-full text-left">
-             
-              Flat Rate
-            </h3>
-            <p className="text-sm  pb-3 w-full text-left"> $4</p>
-          </div> */}
+         
 
           <div className="font-semibold border-b border-slate-200 py-3 w-full flex justify-between items-center">
             <div className="text-md font-semibold py-3 w-full text-left">

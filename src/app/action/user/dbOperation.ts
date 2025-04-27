@@ -7,13 +7,11 @@ import { addDoc, collection, deleteDoc, doc, getDocs, query, where } from "@fire
 
 
 export async function addUserDirect(formData: FormData) {
-  const lastName = formData.get("lastName");
-  const firstName = formData.get("firstName");
-  let username = formData.get("username")
-    ? formData.get("username")
-    : undefined;
-  const email = formData.get("email");
-  const password = formData.get("password");
+ const email = formData.get("email") as string;
+const password = formData.get("password") as string;
+const firstName = formData.get("firstName") as string;
+const lastName = formData.get("lastName") as string;
+let username = (formData.get("username") || undefined) as string | undefined;
   //const confirmPassword = formData.get("confirmPassword");
   // const recievedData = {
   //   email,
@@ -42,7 +40,7 @@ export async function addUserDirect(formData: FormData) {
 
     const date = new Date();
     // toLocaleString, default format for language de
-    console.log(date.toLocaleString('de',{timeZone:'Europe/Berlin', timeZoneName: 'long'}));
+   // console.log(date.toLocaleString('de',{timeZone:'Europe/Berlin', timeZoneName: 'long'}));
     // DateTimeFormat.format with specific options
     const f = new Intl.DateTimeFormat('de', {
       year: 'numeric',
@@ -63,7 +61,7 @@ export async function addUserDirect(formData: FormData) {
         email,
         hashedPassword,
         role: "user",
-        isVerfied: true,
+        isVerified: true,
         isAdmin: false,
         time,
       };
@@ -73,7 +71,6 @@ export async function addUserDirect(formData: FormData) {
       recordId = userDocRef;
       return userDocRef;
       // Clear the form
-      console.log("User Added ------------", userDocRef)
     } catch (e) {
       console.error("Error adding document: ", e);
     }

@@ -16,7 +16,7 @@ import { UseSiteContext } from "@/SiteContext/SiteContext";
 
 const ProccedWithEmail = () => {
   //const { cartData } = useContext(CartContext);
-  const { emailFormToggle, setCustomerEmailG, chageDeliveryType } =
+  const { emailFormToggle, setCustomerEmailG, setCustomerAddressIsComplete } =
     UseSiteContext();
   // const {  sideBarToggle } = UseSiteContext();
   const { data: session } = useSession();
@@ -44,15 +44,16 @@ const ProccedWithEmail = () => {
   }
 
   async function onSubmit(data: TemailZ) {
-    const formData = new FormData();
-    formData.append("email", data.email);
+    // const formData = new FormData();
+    // formData.append("email", data.email);
+    setCustomerAddressIsComplete(false)
     emailFormToggle(false);
     setCustomerEmailG(data.email);
     router.push(`/checkout`);
   }
 
   return (
-    <div className="z-50 absolute bottom-0 top-0 left-0 right-0 flex items-center justify-center backdrop-blur-lg  p-12">
+    <div className="z-50 fixed inset-0 flex items-center justify-center backdrop-blur-lg p-4">
       <div className="w-full md:w-[50%] lg:w-[30%]   rounded-2xl mx-auto flex flex-col items-center justify-center bg-slate-100 border border-slate-300">
         <div className="flex flex-col  w-full px-2 p-2">
           <div className="flex justify-end w-full">
@@ -68,8 +69,8 @@ const ProccedWithEmail = () => {
             </div>
           </div>
           <div className="flex flex-col">
-            <h2 className="text-5 text-slate-500 font-semibold ">
-              Email for checkout
+            <h2 className="text-lg text-slate-500 font-semibold ">
+              Email
             </h2>
           </div>
           <form onSubmit={handleSubmit(onSubmit)}>
@@ -87,23 +88,14 @@ const ProccedWithEmail = () => {
                   })}
                   className="input-style"
                 />
-                <span className="text-[0.8rem] font-medium text-destructive">
-                  {errors.email?.message && (
-                    <span>{errors.email?.message}</span>
-                  )}
-                </span>
+              {errors.email?.message && (
+  <span className="text-[0.8rem] font-medium text-destructive">
+    {errors.email.message}
+  </span>
+)}
               </div>
 
-              {/* <div className="flex flex-col gap-1">
-              <label className="label-style">
-                Mob no.<span className="text-red-500">*</span>{" "}
-              </label>
-              <input {...register("mobNo")} className="input-style" />
-              <span className="text-[0.8rem] font-medium text-destructive">
-                {errors.mobNo?.message && <span>{errors.mobNo?.message}</span>}
-              </span>
-            </div> */}
-
+            
               <Button
                 className="w-[200px] py-1 text-center bg-yellow-500 rounded-2xl text-[.8rem]"
                 type="submit"
