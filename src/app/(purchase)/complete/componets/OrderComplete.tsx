@@ -1,6 +1,6 @@
 import CartContext from "@/store/CartContext";
 import { createNewOrderFile } from "@/app/action/newOrderFile/newfile";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useRef } from "react";
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { updateOrderMaster } from "@/app/action/orders/dbOperations";
@@ -11,12 +11,7 @@ export default function OrderComplete() {
   const PaymentType = searchParams.get("paymentType");
   const Paymentstatus = searchParams.get("status");
   const orderId = searchParams.get("orderMasterId");
-  // console.log(
-  //   "paymentType, Paymentstatus, orderId ---------",
-  //   PaymentType,
-  //   Paymentstatus,
-  //   orderId
-  // );
+ 
   const router = useRouter();
   // const { data: session } = useSession();
   const { deliveryCost } = UseSiteContext();
@@ -29,27 +24,27 @@ export default function OrderComplete() {
     async function updateOrderStatus(status:string) {
       await updateOrderMaster(id, status);
     }
-  useEffect(() => {
-    if (
-      PaymentType === "Barzahlung") {
-      // console.log("cod or paypal payment completed");
-      createOrder();
+
+    async function sendOrderConfirmationEmail(email:string) {
+      const response = await fetch('/api/order-confirmation-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json', 
+        },
+        body: JSON.stringify({
+          to: email,
+          subject: 'New Order Confirmation',
+          items: cartData,
+        }),
+      });
+      console.log(response)
     }
-    if (PaymentType === "paypal" && Paymentstatus === "success") {
-      // console.log(
-      //   "paypal payment completed ----------------",
-      //   PaymentType,
-      //   Paymentstatus
-      // );
-      createOrder();
-      updateOrderStatus("Completed");
-    }
-    if (PaymentType === "paypal" && Paymentstatus === "fail") {
-      updateOrderStatus("Payment failed");
-    }
-  }, []);
+ 
+   // const hasRun = useRef(false);
 
   async function createOrder() {
+
+    try {
     let address;
     if (typeof window !== "undefined") {
       address = localStorage.getItem("customer_address");
@@ -65,6 +60,14 @@ export default function OrderComplete() {
         deliveryCost
       );
 
+if(address !== undefined && address !== null){
+const Address = JSON.parse(address);
+const email = Address.email as string;
+//if (hasRun.current) return;
+//hasRun.current = true;
+   await sendOrderConfirmationEmail(email);
+}
+
       if (result === "success") {
         if (typeof window !== "undefined") {
           window.localStorage.removeItem("cart_product_data");
@@ -73,7 +76,38 @@ export default function OrderComplete() {
         }
       }
     }
+  } catch (error) {
+    console.error('Error in order completion:', error);
+    // Optional: show error to user
   }
+  }
+
+
+
+  useEffect(() => {
+
+    createOrder();
+   // if (PaymentType === "Barzahlung") { }
+    if (PaymentType === "paypal" && Paymentstatus === "success") {
+      updateOrderStatus("Completed");
+    }
+    if (PaymentType === "paypal" && Paymentstatus === "fail") {
+      updateOrderStatus("Payment failed");
+    }
+    if (PaymentType === "stripe" && Paymentstatus === "success") {
+      updateOrderStatus("Completed");
+    }
+    if (PaymentType === "sptripe" && Paymentstatus === "fail") {
+      updateOrderStatus("Payment failed");
+    }
+  }, []);
+
+
+
+
+
+ 
+
 
   return (
     <div className="container bg-slate-100 mp flex rounded-2xl my-9 flex-col w-[90%] lg:w-[50%] mx-auto">
