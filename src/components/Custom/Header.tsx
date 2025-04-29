@@ -38,7 +38,7 @@ const Header = () => {
       <div className="container mx-auto flex items-center justify-between gap-3">
       <div className="flex gap-2 items-center"><Link href="/">
         <img className="h-12 md:h-12" src="/logo.webp" alt="Logo" />
-        </Link>
+        </Link> 
         <Navbar />
         {/* {showNav ? <Navbar /> : <></>} */}
       </div>

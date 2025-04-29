@@ -1,55 +1,66 @@
 "use client";
 
-import { UseSiteContext } from "@/SiteContext/SiteContext"; // Adjust the import path as necessary
+import { useState } from "react";
+import { UseSiteContext } from "@/SiteContext/SiteContext";
 
 const PaymentSelector = () => {
   const { setPaymentType } = UseSiteContext();
+  const [selected, setSelected] = useState<string>("");
+
+  const handleSelect = (value: string) => {
+    setSelected(value);
+    setPaymentType(value);
+  };
 
   return (
-    <div className="flex flex-col p-5 rounded-2xl border border-slate-300">
-      <h3 className="text-xl font-semibold text-slate-600 pt-3 pb-1 uppercase">
+    <div className="flex flex-col p-5 rounded-2xl border border-slate-300 bg-white">
+      <h3 className="text-xl font-semibold text-slate-600 pt-3 pb-4 uppercase">
         Zahlungsart auswählen
       </h3>
 
-      <form>
-        <div className="flex flex-col gap-2">
-          <label className="flex items-center gap-3 cursor-pointer">
-            <input
-              type="radio"
-              value="stripe"
-              name="payment" // To make sure they are grouped together as radio buttons
-              className="accent-amber-400"
-              onChange={(e) => setPaymentType(e.target.value)} // Update context state when a payment method is selected
-            />
-            <span className="text-blue-900 font-semibold">Stripe</span>
-          </label>
-
-          <label className="flex items-center gap-3 cursor-pointer">
-            <input
-              type="radio"
-              value="paypal"
-              name="payment"
-              className="accent-amber-400"
-              onChange={(e) => setPaymentType(e.target.value)} // Update context state when a payment method is selected
-            />
-            <span>
-              <span className="text-blue-900 font-semibold">Pay</span>
-              <span className="text-sky-500 font-semibold">Pal</span>
-            </span>
-          </label>
-
-          <label className="flex items-center gap-3 cursor-pointer">
-            <input
-              type="radio"
-              value="cod"
-              name="payment"
-              className="accent-amber-400"
-              onChange={(e) => setPaymentType(e.target.value)} // Update context state when a payment method is selected
-            />
-            <span className="text-slate-700 font-semibold">Cash on Delivery</span>
-          </label>
+      <div className="flex flex-col gap-4">
+        {/* Stripe */}
+        <div
+          className={`flex items-center gap-4 p-4 rounded-xl border cursor-pointer transition
+          ${selected === "stripe" ? "border-amber-400 bg-amber-50" : "border-slate-300 hover:border-amber-300"}`}
+          onClick={() => handleSelect("stripe")}
+        >
+          <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center
+            ${selected === "stripe" ? "border-amber-400" : "border-gray-400"}`}>
+            {selected === "stripe" && <div className="w-2.5 h-2.5 bg-amber-400 rounded-full"></div>}
+          </div>
+          <span className="text-blue-900 font-semibold">Stripe</span>
         </div>
-      </form>
+
+        {/* PayPal */}
+        <div
+          className={`flex items-center gap-4 p-4 rounded-xl border cursor-pointer transition
+          ${selected === "paypal" ? "border-amber-400 bg-amber-50" : "border-slate-300 hover:border-amber-300"}`}
+          onClick={() => handleSelect("paypal")}
+        >
+          <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center
+            ${selected === "paypal" ? "border-amber-400" : "border-gray-400"}`}>
+            {selected === "paypal" && <div className="w-2.5 h-2.5 bg-amber-400 rounded-full"></div>}
+          </div>
+          <span>
+            <span className="text-blue-900 font-semibold">Pay</span>
+            <span className="text-sky-500 font-semibold">Pal</span>
+          </span>
+        </div>
+
+        {/* Cash on Delivery */}
+        <div
+          className={`flex items-center gap-4 p-4 rounded-xl border cursor-pointer transition
+          ${selected === "cod" ? "border-amber-400 bg-amber-50" : "border-slate-300 hover:border-amber-300"}`}
+          onClick={() => handleSelect("cod")}
+        >
+          <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center
+            ${selected === "cod" ? "border-amber-400" : "border-gray-400"}`}>
+            {selected === "cod" && <div className="w-2.5 h-2.5 bg-amber-400 rounded-full"></div>}
+          </div>
+          <span className="text-slate-700 font-semibold">Cash on Delivery</span>
+        </div>
+      </div>
     </div>
   );
 };

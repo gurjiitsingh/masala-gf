@@ -5,7 +5,12 @@
 }
 .input-style {
   @apply w-full border-slate-300 border px-1 py-[.1rem] rounded-lg  outline-none text-slate-800 text-[1rem];
-}        
+}   
+.input-style2 {
+  @apply border border-gray-300 rounded-lg px-4 py-1 focus:outline-none focus:ring-2 focus:ring-[#64870d];
+} 
+
+
 .label-style{
   @apply text-gray-500  text-xs;
 }

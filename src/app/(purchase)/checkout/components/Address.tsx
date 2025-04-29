@@ -151,7 +151,7 @@ const Address = () => {
   }
 
   return (
-    <div className="w-full  md:border border-slate-400 md:rounded-2xl p-5">
+    <div className="w-full  md:border border-slate-300 md:rounded-2xl p-5">
       <div className="flex flex-col gap-3">
         <div className="flex flex-col gap-2">
           <h2 className="text-xl font-semibold text-slate-600  uppercase">
