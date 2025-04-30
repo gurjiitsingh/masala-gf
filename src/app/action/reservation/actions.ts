@@ -2,21 +2,21 @@
 
 
 import { z } from "zod";
-import { reservationSchema } from "../../../../types/ReservationFormData";
+import { ReservationFormDataType, reservationSchema } from "../../../../types/ReservationFormData";
 //const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
 const BASE_URL =  'http://localhost:3000';
 export async function submitReservation(formData: FormData) {
   // Validate using Zod
   console.log("formData-------------", formData)
-  const data = {
-    firstName: formData.get("firstName"),
-    lastName: formData.get("lastName"),
-    email: formData.get("email"),
-    phone: formData.get("phone"),
-    numberOfPersons: formData.get("numberOfPersons"),
-    reservationDate: formData.get("reservationDate"),
-    reservationTime: formData.get("reservationTime"),
-    message: formData.get("message"),
+  const data: ReservationFormDataType = {
+    firstName: formData.get("firstName") as string,
+    lastName: formData.get("lastName") as string,
+    email: formData.get("email") as string,
+    phone: formData.get("phone") as string,
+    numberOfPersons: formData.get("numberOfPersons") as string,
+    reservationDate: formData.get("reservationDate") as string,
+    reservationTime: formData.get("reservationTime") as string,
+    message: formData.get("message") as string || undefined,
   };
 
   const parsed = reservationSchema.safeParse(data);
@@ -58,7 +58,7 @@ async function sendReservationConfirmationEmail(reservationData: {
     message?: string;
   }) {
 
-console.log("reservationData--------------2", reservationData)
+
 const response = await fetch(`${BASE_URL}/api/book-table-email`, {
       method: 'POST',
       headers: {
