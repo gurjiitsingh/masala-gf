@@ -38,13 +38,7 @@ export default function Footer() {
                 <Link href="/contact">Kontakt</Link>
               </li>
               <li className="border-b border-slate-400 pb-1">
-                <a
-                  href="https://ukonline.gstadeveloper.com/table-reservation"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Tisch reservation
-                </a>
+                <Link href="/reservation">Tisch reservation</Link>
               </li>
               <li className="pb-1">
                 <Link href="/allergene">Allergene</Link>

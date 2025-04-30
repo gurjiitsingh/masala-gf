@@ -10,6 +10,7 @@ import { HiOutlineChatBubbleBottomCenterText } from 'react-icons/hi2';
 //import { FiSettings, FiShoppingCart } from 'react-icons/fi';
 import { UseSiteContext } from '@/SiteContext/SiteContext';
 import { IoClose } from "react-icons/io5";
+import { TbBrandBooking } from 'react-icons/tb';
 export const BargerMenu = () => {
   const { openBargerMenu, bargerMenuToggle } = UseSiteContext();
   const ref = useRef(null)
@@ -76,7 +77,7 @@ const items = [
   { title: 'Heim', Icon: BiHomeSmile, href: '/' },
   { title: 'Über Uns', Icon: BiUser,href:'/about' },
   { title: 'Kontakt', Icon: HiOutlineChatBubbleBottomCenterText, href: '/contact' },
- 
+  { title: 'Tisch reservation', Icon: TbBrandBooking, href: '/reservation' },
 ]
 
 const framerMenuBackground = {

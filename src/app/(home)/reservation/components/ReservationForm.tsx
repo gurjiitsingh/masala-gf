@@ -3,10 +3,16 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ReservationFormDataType, reservationSchema } from "../../../../../types/ReservationFormData";
-import { submitReservation } from "@/app/action/reservation/actions";
+import { Router } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+
 //import { reservationSchema, ReservationFormData } from "@/lib/reservationSchema";
 
 export default function ReservationForm() {
+
+  const router = useRouter(); // for redirecting
+  const [formError, setFormError] = useState<string | null>(null); // for showing error
   const {
     register,
     handleSubmit,
@@ -15,33 +21,45 @@ export default function ReservationForm() {
     resolver: zodResolver(reservationSchema),
   });
 
-  const onSubmit = async (data: ReservationFormDataType) => {
-    console.log(data);
-    // You can call your Server Action or API here
-
-    const formData = new FormData();
-
-    formData.append("firstName", data.firstName); // value from input or state
-    formData.append("lastName", data.lastName);
-    formData.append("email", data.email);
-    formData.append("phone", data.phone);
-    formData.append("numberOfPersons", data.numberOfPersons);
-    formData.append("reservationDate", data.reservationDate);
-    formData.append("reservationTime", data.reservationTime);
-    formData.append("message", data.message || ""); // optional message field
-    
-    // Now call your server action or function
-    await submitReservation(formData);
-
-
   
+  const onSubmit = async (data: ReservationFormDataType) => {
+    try {
+      const response = await fetch("/api/submit-reservation", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        router.push("/reservation/reservation-success"); // redirect to success page
+      } else {
+        setFormError(result.error || "Something went wrong. Please try again.");
+      }
+    } catch (error) {
+      console.error("Submission Error:", error);
+      setFormError("A network error occurred. Please try again.");
+    }
   };
+
+
+
 
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
       className="flex-1 flex flex-col gap-y-5 p-6 bg-gray-50 rounded-xl"
     >
+
+      {/* Top-level form error */}
+      {formError && (
+        <div className="bg-red-100 text-red-700 p-3 rounded font-medium shadow text-center">
+          {formError}
+        </div>
+      )}
       {/* Title */}
       <h1 className="text-3xl font-bold text-[#64870d] bg-[#fadb5e] p-4 rounded-xl text-center shadow">
         Reserve Your Table
@@ -87,17 +105,19 @@ export default function ReservationForm() {
         <div className="flex flex-col gap-2 my-2">
           {/* Number of Persons */}
           <div className="flex flex-col gap-1">
-            <label className="font-semibold">Number of Persons</label>
-            <select {...register("numberOfPersons")} className="input-style2">
-              <option value="">Select...</option>
-              <option value="1 Person">1 Person</option>
-              <option value="2 Persons">2 Persons</option>
-              <option value="3 Persons">3 Persons</option>
-              <option value="4 Persons">4 Persons</option>
-              <option value="5+ Persons">5+ Persons</option>
-            </select>
-            {errors.numberOfPersons && <span className="text-red-500 text-sm">{errors.numberOfPersons.message}</span>}
-          </div>
+  <label className="font-semibold">Number of Persons</label>
+  <select {...register("numberOfPersons")} className="input-style2">
+    <option value="">Select...</option>
+    {Array.from({ length: 20 }, (_, i) => (
+      <option key={i + 1} value={`${i + 1} ${i + 1 === 1 ? 'Person' : 'Persons'}`}>
+        {i + 1} {i + 1 === 1 ? 'Person' : 'Persons'}
+      </option>
+    ))}
+  </select>
+  {errors.numberOfPersons && (
+    <span className="text-red-500 text-sm">{errors.numberOfPersons.message}</span>
+  )}
+</div>
 
           {/* Reservation Date */}
           <div className="flex flex-col gap-1">

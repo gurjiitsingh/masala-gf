@@ -5,6 +5,7 @@ const menuList = [
   { name: "Heim", link: "/" },
   { name: "Über Uns", link: "/about" },
   { name: "Kontakt", link: "/contact" },
+    { name: 'Tisch reservation', link: '/reservation' },
  
  
 ];
