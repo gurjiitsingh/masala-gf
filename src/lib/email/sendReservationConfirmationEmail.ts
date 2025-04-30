@@ -18,7 +18,7 @@ export async function sendReservationConfirmationEmail(data: ReservationFormData
     });
 
     const html = `
-      <h3>New Reservation Details:</h3>
+      <h3>Reservation Details:</h3>
       <p><b>Name:</b> ${data.firstName} ${data.lastName}</p>
       <p><b>Email:</b> ${data.email}</p>
       <p><b>Phone:</b> ${data.phone}</p>
