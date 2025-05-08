@@ -11,8 +11,8 @@ import { generateCartHtml } from '@/lib/email/generateCartHtml';
 
 
 export async function POST(req:NextRequest) {
-  const { to, subject, items } = await req.json();
-  const emailBody = generateCartHtml(items);
+  const { to, subject, items,endTotalG } = await req.json();
+  const emailBody = generateCartHtml(items, endTotalG);
 
   try {
     const mg = new mailgun(formData);
@@ -35,7 +35,7 @@ export async function POST(req:NextRequest) {
       html: emailBody,
     });
 
-     // Email to business/info
+  //   Email to business/info
      const internalMail = await client.messages.create(DOMAIN, {
       from: 'info@masala-gf.shop',
       to: 'info@masala-gf.de',

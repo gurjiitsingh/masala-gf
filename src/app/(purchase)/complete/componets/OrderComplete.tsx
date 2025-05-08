@@ -35,6 +35,7 @@ export default function OrderComplete() {
           to: email,
           subject: 'New Order Confirmation',
           items: cartData,
+          endTotalG,
         }),
       });
       console.log(response)
