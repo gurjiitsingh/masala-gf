@@ -38,8 +38,6 @@ export default function CartLeft() {
     setDeliveryCost,
   } = UseSiteContext();
 
-  
-
   const router = useRouter();
 
   const [addCoupon, setAddCoupon] = useState<boolean>(false);
@@ -64,6 +62,9 @@ export default function CartLeft() {
   const [orderAmountIsLowForDelivery, seOrderAmountIsLowForDelivery] =
     useState(false);
 
+    const [noOffers, setNoOffers] = useState(false);
+    const [showAlert, setShowAlert] = useState(false);
+
   const {
     cartData,
     setEndTotalG,
@@ -72,7 +73,10 @@ export default function CartLeft() {
     totalDiscountG,
   } = useCartContext();
 
-  const pickupDiscountPersent = parseInt(process.env.NEXT_PUBLIC_PICKUP_DISCOUNT ?? '0', 10);
+  const pickupDiscountPersent = parseInt(
+    process.env.NEXT_PUBLIC_PICKUP_DISCOUNT ?? "0",
+    10
+  );
   // useEffect(() => {
   //   if (cartData && cartData.length > 0) {
 
@@ -254,7 +258,7 @@ export default function CartLeft() {
         return;
       }
 
-      if(!customerAddressIsComplete){
+      if (!customerAddressIsComplete) {
         alert("Select Address");
         allReadyAlerted = true;
         return;
@@ -310,9 +314,14 @@ export default function CartLeft() {
         localStorage.getItem("customer_name") || ""
       );
 
+      const customer_email = JSON.parse(
+        localStorage.getItem("customer_email") || ""
+      );
+
       const purchaseData = {
         userId: order_user_Id,
         customerName: customer_name,
+        email: customer_email,
         cartData,
         endTotalG,
         totalDiscountG,
@@ -325,6 +334,7 @@ export default function CartLeft() {
         calCouponDiscount,
         couponDiscountPercentL,
         pickUpDiscountPercentL,
+        noOffers,
       } as orderDataType;
 
       if (cartData.length !== 0) {
@@ -441,8 +451,6 @@ export default function CartLeft() {
 
           <CouponDisc total={itemTotal} />
 
-         
-
           <div className="font-semibold border-b border-slate-200 py-3 w-full flex justify-between items-center">
             <div className="text-md font-semibold py-3 w-full text-left">
               Gesamt
@@ -476,6 +484,55 @@ export default function CartLeft() {
           </Link>
         </div> */}
         {/* disabled={true} */}
+
+        {/* <div className="flex items-center space-x-2 text-sm text-gray-700">
+          <input
+            id="noOffersCheckbox"
+            type="checkbox"
+            checked={noOffers}
+            onChange={(e) => setNoOffers(e.target.checked)}
+            className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+          />
+          <label htmlFor="noOffersCheckbox">
+            Ich möchte keine E-Mails über neue Angebote und Rabatte erhalten.
+          </label>
+        </div> */}
+
+
+<div className="flex flex-col gap-2">
+  <div className="flex items-center space-x-2 text-sm text-gray-700">
+    <input
+      id="noOffersCheckbox"
+      type="checkbox"
+      checked={noOffers}
+      onChange={(e) => {
+        const checked = e.target.checked;
+        setNoOffers(checked);
+        setShowAlert(checked); // Show alert only when checked
+      }}
+      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+    />
+    <label htmlFor="noOffersCheckbox">
+      Ich möchte keine E-Mails über neue Angebote und Rabatte erhalten.
+    </label>
+  </div>
+
+  {showAlert && (
+    <div className="bg-yellow-100 text-yellow-800 p-3 rounded-md text-sm border border-yellow-300">
+      <p>
+        Sie haben gewählt, keine E-Mails über neue Angebote und Rabatte zu
+        erhalten. Wenn Sie E-Mails erhalten möchten, deaktivieren Sie das
+        Kontrollkästchen.
+      </p>
+      <p className="mt-1">
+        You have selected not to receive emails about new offers and discounts.
+        If you want to receive such emails, please uncheck the box.
+      </p>
+    </div>
+  )}
+</div>
+
+
         <button
           disabled={isDisabled}
           className="w-[200px] py-1 text-center bg-amber-400  font-bold rounded-xl text-[1.2rem] z-50"

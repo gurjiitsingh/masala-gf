@@ -14,12 +14,16 @@ import {
   updateDoc,
   where,
 } from "@firebase/firestore";
+import {  setDoc, serverTimestamp } from "firebase/firestore";
+
+import { Timestamp } from "firebase/firestore";
 import { addUserDirect } from "../user/dbOperation";
 import { addCustomerAddressDirect } from "../address/dbOperations";
 import { TOrderMaster, orderMasterDataT } from "@/lib/types/orderMasterType";
 import { orderProductsT } from "@/lib/types/orderType";
 import { orderDataType, purchaseDataT } from "@/lib/types/cartDataType";
 import { ProductType } from "@/lib/types/productType";
+
 
 
 export async function createNewOrderCustomerAddress(
@@ -114,6 +118,7 @@ export async function createNewOrder(purchaseData: orderDataType) {
   const addressId = purchaseData.addressId;
   const userAddedId = purchaseData.addressId;
   const customerName = purchaseData.customerName;
+  const email = purchaseData.email;
   const paymentType = purchaseData.paymentType;
 
   const itemTotal = purchaseData.itemTotal;
@@ -126,15 +131,19 @@ export async function createNewOrder(purchaseData: orderDataType) {
 
   const couponDiscountPercentL = purchaseData.couponDiscountPercentL;
   const pickUpDiscountPercentL = purchaseData.pickUpDiscountPercentL;
+  const noOffers  = purchaseData.noOffers;
 
   let status = "Payment Pending";
   if (paymentType === "cod") {
     status = "Completed";
   }
 
+console.log("noOfers----------", noOffers)
+
   const orderMasterData = {
     // also add auto increment to order,
     customerName: customerName,
+    //email,
     userId: userAddedId,
     addressId: addressId,
     itemTotal,
@@ -169,12 +178,73 @@ export async function createNewOrder(purchaseData: orderDataType) {
     addProductDraft(element, userAddedId, orderMasterId);
   });
 
+// save marketing data
+
+await marketingData ({
+  name: customerName,
+  userId: userAddedId,
+  email,
+  noOfferEmails: noOffers,
+});
+
   return orderMasterId;
 
   //  const toBeDeleted = cartData[0].purchaseSession;
   //  console.log(toBeDeleted)
   //  await deleteDoc(doc(db, "orderProducts", toBeDeleted));
 } //end of cart to orderProduct
+
+
+
+
+
+
+
+/**
+ * Save or update customer info in Firestore
+ * @param name - Customer's full name
+ * @param userId - Unique customer ID
+ * @param email - Customer email address
+ * @param marketingConsent - Boolean (true if allowed to send marketing)
+ */
+export async function marketingData({
+  name,
+  userId,
+  email,
+  noOfferEmails,
+}: {
+  name: string;
+  userId: string;
+  email: string;
+  noOfferEmails: boolean;
+}) {
+  console.log("this is inside marketing data")
+  // Use serverTimestamp for updatedAt
+  const now = new Date();
+
+  // Convert current German time to Firestore Timestamp
+  const germanDateStr = now.toLocaleString("en-DE", {
+    timeZone: "Europe/Berlin",
+  });
+
+  const germanDate = new Date(germanDateStr);
+
+  await setDoc(
+    doc(db, "marketingData", userId),
+    {
+      name,
+      email,
+      userId,
+      noOfferEmails,
+      lastOrderDate: Timestamp.fromDate(germanDate), // Easily comparable in Firestore
+      updatedAt: serverTimestamp(), // Always use server time for tracking updates
+    },
+    { merge: true } // Will update if document already exists
+  );
+}
+
+
+
 
 export async function updateOrderMaster(id: string, status: string) {
   try {

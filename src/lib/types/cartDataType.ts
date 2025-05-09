@@ -103,6 +103,7 @@ export type cartDataT = {
       export type orderDataType = {
         userId: string | undefined;
         customerName: string;
+        email:string;
         cartData: ProductType[];
         endTotalG:number;
         totalDiscountG:number;
@@ -116,5 +117,6 @@ export type cartDataT = {
         couponDiscountPercentL:number;
         pickUpDiscountPercentL:number;
         calculatedPickUpDiscountL:number;
+        noOffers:boolean;
         
       }
