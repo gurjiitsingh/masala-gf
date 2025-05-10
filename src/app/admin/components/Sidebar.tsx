@@ -24,6 +24,7 @@ const menuList: Titem[] = [
   { name: "Home", link: "/", icon: <GoHome /> },
   { name: "Orders", link: "/admin", icon: <MdSpaceDashboard /> },
   { name: "Categories", link: "/admin/categories", icon: <TbCategoryPlus /> },
+  { name: "Disable Pickup Discount", link: "/admin/pickupdiscount/disable-discount", icon: <TbCategoryPlus /> },
   { name: "Products", link: "/admin/productsbase", icon: <MdOutlineProductionQuantityLimits /> },
   { name: "Variants", link: "/admin/flavorsProductG", icon: <BsBorderStyle /> },
   { name: "Coupon", link: "/admin/coupon", icon: <TbCategoryPlus /> },
@@ -31,6 +32,8 @@ const menuList: Titem[] = [
   // { name: "Orders", link: "/admin/orders", icon: <BsBorderStyle /> },
   { name: "Users", link: "/admin/users", icon: <FaUserTie /> },
   { name:"Setting",link:"/admin/setting",icon: <IoMdSettings />},
+ 
+  
 ];
 
 const Sidebar = () => {
@@ -44,7 +47,7 @@ const Sidebar = () => {
         <div>
           <button
             onClick={() => setAdminSideBarToggleG(false)}
-            className="p-1 border-zinc-800 rounded-xl"
+            className="p-1  rounded-xl"
             aria-label="close sidebar"
           >
             <IoClose size={30} />
@@ -53,14 +56,14 @@ const Sidebar = () => {
       </div>
 
       {/* Sidebar content */}
-      <div className="pt-12 h-screen w-[290px] border-r flex flex-col py-4 px-2 justify-start overflow-hidden">
+      <div className="pt-12 h-screen w-[290px]  flex flex-col py-4 px-2 justify-start overflow-hidden">
         <ul className="flex flex-col gap-2 overflow-y-auto">
           {menuList.map((item) => (
             <Tab key={item.name} item={item} />
           ))}
         </ul>
 
-        <div className="flex items-center my-3 justify-between w-full border-amber-500 rounded-2xl p-2">
+        <div className="flex items-center my-3 justify-between w-full  rounded-2xl p-2">
           <IoIosLogOut />
           <button
             onClick={() => signOut()}

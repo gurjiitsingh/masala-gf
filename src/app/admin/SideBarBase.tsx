@@ -16,15 +16,15 @@ export default function SideBarBase() {
   }, [path]);
 
   return (
-    <div className="border-0">
+    <div className="">
 
-      <div className="hidden border-0 lg:block">
+      <div className="hidden  lg:block">
         <Sidebar />
       </div>
 
       <div
         ref={sidebarRef}
-        className={`fixed border-0 lg:hidden z-30 bg-white
+        className={`fixed  lg:hidden z-30 bg-white
                ${adminSideBarToggle ? "translate-x-0 " : "-translate-x-[290px]"}
                `}
       >

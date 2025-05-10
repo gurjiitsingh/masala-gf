@@ -24,14 +24,14 @@ export default function RootLayout({
       <body>
         <SiteProvider>
         <ButtonProvider>
-          <main className="relative flex border-0">
+          <main className="relative flex text-slate-600">
             <SideBarBase />
 
-            <div className="w-full flex flex-col border-0">
+            <div className="w-full flex flex-col ">
               <div className="">
                 <Header />
               </div>
-              <div className="w-full flex flex-col p-5 mt-12 bg-slate-100 h-screen border-0">
+              <div className="w-full flex flex-col p-5 mt-12 bg-slate-100 h-screen ">
                 {children}
               </div>
             </div>

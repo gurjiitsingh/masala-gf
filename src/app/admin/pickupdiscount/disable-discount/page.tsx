@@ -37,17 +37,17 @@ const CategoryTogglePage = () => {
   };
 
   return (
-    <div className="p-5">
-      <h1 className="text-xl font-bold mb-4">Manage Pickup Discount Settings</h1>
+    <div className="p-5 text-slate-500">
+      <h1 className="text-xl font-bold mb-4">Disable Pickup Discount</h1>
 
       {loading ? (
         <p>Loading categories...</p>
       ) : (
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-2">
           {categoryData.map((cat, index) => (
             <div
               key={cat.id}
-              className="flex items-center justify-between bg-white p-4 rounded shadow border"
+              className="flex items-center justify-between bg-white p-2 rounded-xl shadow "
             >
               <span>{cat.name}</span>
               <label className="flex items-center gap-2">
