@@ -43,16 +43,22 @@ export const SiteProvider: React.FC<Props> = ({
   const [paymentType, setPaymentTypeL] = useState<string>("");
   const [deliveryCost, setDeliveryCostL] = useState<number>(0);
 
-  const [disablePickupCatDiscountIds, setDisablePickupCatDiscountIdsL] = useState<string[] | null>(null);
+//const [disablePickupCatDiscountIds, setDisablePickupCatDiscountIdsL] = useState<string[] | null>(null);
+const [disablePickupCatDiscountIds, setDisablePickupCatDiscountIdsL] = useState<string[]>([]);
 
 useEffect(() => {
   const stored = localStorage.getItem('disablePickupCatDiscountIds');
-  if (stored) {
-    setDisablePickupCatDiscountIdsL(JSON.parse(stored));
-  } else {
+  try {
+    const parsed = stored ? JSON.parse(stored) : [];
+    if (Array.isArray(parsed)) {
+      setDisablePickupCatDiscountIdsL(parsed);
+    } else {
+      setDisablePickupCatDiscountIdsL([]);
+    }
+  } catch {
     setDisablePickupCatDiscountIdsL([]);
   }
-}, []);
+}, [])
 
   useEffect(() => {
     const deliveryType = window.localStorage.getItem("delivery_type") as string;

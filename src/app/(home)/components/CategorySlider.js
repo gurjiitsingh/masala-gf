@@ -8,22 +8,23 @@ import { fetchCategories } from "@/app/action/category/dbOperations";
 import { UseSiteContext } from "@/SiteContext/SiteContext";
 
 export default function CategorySlider() {
-
   const [width, setWidth] = useState(0); // Start with 0, safe for SSR
   // const [width, setWidth] = useState(() =>
   //   typeof window !== "undefined" ? window.innerWidth : 300
   // );
 
-
   const [categoryData, setCategoryData] = useState([]);
-  const { productCategoryIdG, setProductCategoryIdG,  setDisablePickupCatDiscountIds } = UseSiteContext();
+  const {
+    productCategoryIdG,
+    setProductCategoryIdG,
+    setDisablePickupCatDiscountIds,
+  } = UseSiteContext();
 
   // useEffect(() => {
   //   const handleResize = () => setWidth(window.innerWidth);
   //   window.addEventListener("resize", handleResize);
   //   return () => window.removeEventListener("resize", handleResize);
   // }, []);
-
 
   useEffect(() => {
     // Only access window inside useEffect
@@ -43,15 +44,11 @@ export default function CategorySlider() {
         );
         setCategoryData(featured);
 
-       const disablePickupCategoryIds = categories
-        .filter((category) => category.disablePickupDiscount === true)
-        .map((category) => category.id);
+        const disablePickupCategoryIds = categories
+          .filter((category) => category.disablePickupDiscount === true)
+          .map((category) => category.id);
 
-       // console.log("disablede cat-----------", disablePickupCategoryIds)
-
-     setDisablePickupCatDiscountIds(disablePickupCategoryIds); 
-
-
+          setDisablePickupCatDiscountIds(disablePickupCategoryIds);
       } catch (err) {
         console.error("Error fetching categories:", err);
       }
@@ -90,36 +87,40 @@ export default function CategorySlider() {
 
   return (
     <div className="-mt-20 h-full w-[98%] px-2 gap-1">
-   {categoryData.length > 0 && (   <Slider {...sliderSettings}>
-        {categoryData.map((category) => (
-          <div key={category.id} className="mx-2">
-            <button onClick={() => setProductCategoryIdG(category.id)}>
-              <div className="w-[100px]">
-                <div className="flex flex-col gap-1">
-                  <div
-                    className={`${
-                      productCategoryIdG === category.id ? "primary py-1 rounded-xl" : "py-1 rounded-xl"
-                    }`}
-                  >
-                    <div className="h-fit w-fit rounded-lg px-1">
-                      <img
-                        className="rounded-lg h-20 w-48 object-fill"
-                        src={category.image || "/com.jpg"}
-                        alt={category.name || "Category"}
-                      />
+      {categoryData.length > 0 && (
+        <Slider {...sliderSettings}>
+          {categoryData.map((category) => (
+            <div key={category.id} className="mx-2">
+              <button onClick={() => setProductCategoryIdG(category.id)}>
+                <div className="w-[100px]">
+                  <div className="flex flex-col gap-1">
+                    <div
+                      className={`${
+                        productCategoryIdG === category.id
+                          ? "primary py-1 rounded-xl"
+                          : "py-1 rounded-xl"
+                      }`}
+                    >
+                      <div className="h-fit w-fit rounded-lg px-1">
+                        <img
+                          className="rounded-lg h-20 w-48 object-fill"
+                          src={category.image || "/com.jpg"}
+                          alt={category.name || "Category"}
+                        />
+                      </div>
+                    </div>
+                    <div className="flex flex-col justify-center w-[110px] items-center">
+                      <h3 className="text-[.8rem] text-slate-600 px-0">
+                        {category.name}
+                      </h3>
                     </div>
                   </div>
-                  <div className="flex flex-col justify-center w-[110px] items-center">
-                    <h3 className="text-[.8rem] text-slate-600 px-0">
-                      {category.name}
-                    </h3>
-                  </div>
                 </div>
-              </div>
-            </button>
-          </div>
-        ))}
-      </Slider>)}
+              </button>
+            </div>
+          ))}
+        </Slider>
+      )}
     </div>
   );
 }

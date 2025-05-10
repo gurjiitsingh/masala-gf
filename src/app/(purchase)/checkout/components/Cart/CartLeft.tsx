@@ -114,17 +114,17 @@ export default function CartLeft() {
     // only sum of specified categories
 
     if (cartData && cartData.length > 0) {
-      const pickupDiscountDisabledCategories =
-        disablePickupCatDiscountIds ?? [];
+      // const pickupDiscountDisabledCategories =
+      //   disablePickupCatDiscountIds ?? [];
       let filteredTotal = 0;
 
-      if (pickupDiscountDisabledCategories?.length) {
+      if (disablePickupCatDiscountIds?.length) {
         cartData.forEach((item: cartProductType) => {
           const quantity = Number(item.quantity) || 0;
           const price = parseFloat(item.price as any) || 0;
           const itemTotal = quantity * price;
 
-          if (pickupDiscountDisabledCategories.includes(item.categoryId)) {
+          if (disablePickupCatDiscountIds.includes(item.categoryId)) {
             filteredTotal += itemTotal;
           }
         });
