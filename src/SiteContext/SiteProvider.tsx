@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import { deliveryType } from "@/lib/types/deliveryType";
 import { couponType } from "@/lib/types/couponType";
 
-
 interface Props {
   children: React.ReactNode;
 }
@@ -31,7 +30,8 @@ export const SiteProvider: React.FC<Props> = ({
   const [openBargerMenu, setOpenBargerMenu] = useState<boolean>(false);
   const [openEmailForm, setEmailFormToggle] = useState<boolean>(false);
   const [customerEmail, setCustomerEmailL] = useState<string>("");
-  const [customerAddressIsComplete, setCustomerAddressIsCompleteL ] = useState(false)
+  const [customerAddressIsComplete, setCustomerAddressIsCompleteL] =
+    useState(false);
   const [deliveryType, setDeliveryType] = useState<string>("pickup");
   const [couponDisc, setCouponDiscU] = useState<couponType | undefined>();
   const [deliveryDis, setdeliveryDisU] = useState<deliveryType | undefined>();
@@ -39,17 +39,30 @@ export const SiteProvider: React.FC<Props> = ({
   const [baseProductId, setBaseProductIdL] = useState<string>("");
   const [adminSideBarToggle, setAdminSideBarToggleL] = useState<boolean>(false);
   const [productCategoryIdG, setProductCategoryIdL] = useState<string>("");
- const [newOrderCondition, setNewOrderConditionL  ] = useState<boolean>(false);
- const [paymentType, setPaymentTypeL ] = useState<string>("");
- const [ deliveryCost, setDeliveryCostL ] = useState<number>(0);
- 
+  const [newOrderCondition, setNewOrderConditionL] = useState<boolean>(false);
+  const [paymentType, setPaymentTypeL] = useState<string>("");
+  const [deliveryCost, setDeliveryCostL] = useState<number>(0);
+
+  const [disablePickupCatDiscountIds, setDisablePickupCatDiscountIdsL] = useState<string[] | null>(null);
+
+useEffect(() => {
+  const stored = localStorage.getItem('disablePickupCatDiscountIds');
+  if (stored) {
+    setDisablePickupCatDiscountIdsL(JSON.parse(stored));
+  } else {
+    setDisablePickupCatDiscountIdsL([]);
+  }
+}, []);
+
   useEffect(() => {
     const deliveryType = window.localStorage.getItem("delivery_type") as string;
     if (deliveryType !== undefined) {
       const deliveryTypeS = JSON.parse(deliveryType) as string;
       setDeliveryType(deliveryTypeS);
     }
-    const customerEmail = window.localStorage.getItem("customer_email") as string;
+    const customerEmail = window.localStorage.getItem(
+      "customer_email"
+    ) as string;
     if (customerEmail !== undefined) {
       const customerEmailS = JSON.parse(customerEmail) as string;
       setCustomerEmailL(customerEmailS);
@@ -94,34 +107,37 @@ export const SiteProvider: React.FC<Props> = ({
     window.localStorage.setItem("customer_email", JSON.stringify(e));
     setCustomerEmailL(e);
   }
-  function setCustomerAddressIsComplete(e: boolean){
+  function setCustomerAddressIsComplete(e: boolean) {
     setCustomerAddressIsCompleteL(e);
   }
 
-  function setAdminSideBarToggleG(e:boolean) {
+  function setAdminSideBarToggleG(e: boolean) {
     setAdminSideBarToggleL(e);
   }
 
-  function setProductCategoryIdG(id:string) {
+  function setProductCategoryIdG(id: string) {
     setProductCategoryIdL(id);
   }
-  function setNewOrderCondition(s:boolean){
-    setNewOrderConditionL(s)
-   }
-
-function setPaymentType(s:string){
-  setPaymentTypeL(s)
+  function setNewOrderCondition(s: boolean) {
+    setNewOrderConditionL(s);
   }
 
-  function setDeliveryCost(e:number){
-    setDeliveryCostL(e)
+  function setPaymentType(s: string) {
+    setPaymentTypeL(s);
   }
 
+  function setDeliveryCost(e: number) {
+    setDeliveryCostL(e);
+  }
+  function setDisablePickupCatDiscountIds(CatIds: string[]) {
+    setDisablePickupCatDiscountIdsL(CatIds);
+    localStorage.setItem('disablePickupCatDiscountIds', JSON.stringify(CatIds));
+  }
   return (
     <SiteContext.Provider
       value={{
         paymentType,
-  setPaymentType,
+        setPaymentType,
         newOrderCondition,
         setNewOrderCondition,
         open,
@@ -133,7 +149,7 @@ function setPaymentType(s:string){
         deliveryType,
         chageDeliveryType,
         deliveryCost,
-  setDeliveryCost,
+        setDeliveryCost,
         couponDisc,
         setCouponDisc,
         deliveryDis,
@@ -150,6 +166,8 @@ function setPaymentType(s:string){
         customerAddressIsComplete,
         setProductCategoryIdG,
         productCategoryIdG,
+        disablePickupCatDiscountIds,
+        setDisablePickupCatDiscountIds,
       }}
     >
       {children}

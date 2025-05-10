@@ -36,6 +36,7 @@ export default function CartLeft() {
     customerAddressIsComplete,
     //deliveryCost,
     setDeliveryCost,
+    disablePickupCatDiscountIds,
   } = UseSiteContext();
 
   const router = useRouter();
@@ -62,8 +63,9 @@ export default function CartLeft() {
   const [orderAmountIsLowForDelivery, seOrderAmountIsLowForDelivery] =
     useState(false);
 
-    const [noOffers, setNoOffers] = useState(false);
-    const [showAlert, setShowAlert] = useState(false);
+  const [noOffers, setNoOffers] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
+  const [filteredCategoryDiscount, setFilteredCategoryDiscount] = useState(0);
 
   const {
     cartData,
@@ -109,6 +111,46 @@ export default function CartLeft() {
       const calculatedComma = itemTotalS.split(".").join(",");
       setitemTotalComa(calculatedComma);
     }
+    // only sum of specified categories
+
+    if (cartData && cartData.length > 0) {
+      const pickupDiscountDisabledCategories =
+        disablePickupCatDiscountIds ?? [];
+      let filteredTotal = 0;
+
+      if (pickupDiscountDisabledCategories?.length) {
+        cartData.forEach((item: cartProductType) => {
+          const quantity = Number(item.quantity) || 0;
+          const price = parseFloat(item.price as any) || 0;
+          const itemTotal = quantity * price;
+
+          if (pickupDiscountDisabledCategories.includes(item.categoryId)) {
+            filteredTotal += itemTotal;
+          }
+        });
+      }
+
+      const roundedFilteredTotal = parseFloat(filteredTotal.toFixed(2));
+
+      const pickupDiscountAmount = calculateDiscount(
+        roundedFilteredTotal,
+        pickupDiscountPersent
+      );
+      setFilteredCategoryDiscount(pickupDiscountAmount);
+    }
+
+    function calculateDiscount(
+      total: number,
+      percent: number | string | undefined | null
+    ): number {
+      const safeTotal = typeof total === "number" ? total : 0;
+      const safePercent = Number(percent);
+
+      if (isNaN(safePercent) || safePercent <= 0) return 0;
+
+      const discount = (safeTotal * safePercent) / 100;
+      return parseFloat(discount.toFixed(2));
+    }
   }, [cartData]);
 
   //console.log("cal total------", itemTotal);
@@ -117,10 +159,12 @@ export default function CartLeft() {
     if (itemTotal > 0) {
       const total = itemTotal;
       if (deliveryType === "pickup") {
-        let pickupDiscount = (+total * pickupDiscountPersent) / 100;
-        pickupDiscount = +pickupDiscount.toFixed(2);
+        const pickupDiscount = (+total * pickupDiscountPersent) / 100;
+        const pickupDiscount_RemovedCate = (
+          Number(pickupDiscount) - filteredCategoryDiscount
+        ).toFixed(2);
 
-        setCalculatedPickUpDiscount(+pickupDiscount);
+        setCalculatedPickUpDiscount(+pickupDiscount_RemovedCate);
         setdeliveryCostL(0);
         setPickUpDiscountPercent(pickupDiscountPersent);
       }
@@ -445,8 +489,8 @@ export default function CartLeft() {
           <DeliveryCost />
 
           <Pickup
-            total={itemTotal}
             pickupDiscountPersent={pickUpDiscountPercentL}
+            calculatedPickUpDiscount={calculatedPickUpDiscountL}
           />
 
           <CouponDisc total={itemTotal} />
@@ -498,40 +542,39 @@ export default function CartLeft() {
           </label>
         </div> */}
 
+        <div className="flex flex-col gap-2">
+          <div className="flex items-center space-x-2 text-sm text-gray-700">
+            <input
+              id="noOffersCheckbox"
+              type="checkbox"
+              checked={noOffers}
+              onChange={(e) => {
+                const checked = e.target.checked;
+                setNoOffers(checked);
+                setShowAlert(checked); // Show alert only when checked
+              }}
+              className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+            />
+            <label htmlFor="noOffersCheckbox">
+              Ich möchte keine E-Mails über neue Angebote und Rabatte erhalten.
+            </label>
+          </div>
 
-<div className="flex flex-col gap-2">
-  <div className="flex items-center space-x-2 text-sm text-gray-700">
-    <input
-      id="noOffersCheckbox"
-      type="checkbox"
-      checked={noOffers}
-      onChange={(e) => {
-        const checked = e.target.checked;
-        setNoOffers(checked);
-        setShowAlert(checked); // Show alert only when checked
-      }}
-      className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-    />
-    <label htmlFor="noOffersCheckbox">
-      Ich möchte keine E-Mails über neue Angebote und Rabatte erhalten.
-    </label>
-  </div>
-
-  {showAlert && (
-    <div className="bg-yellow-100 text-yellow-800 p-3 rounded-md text-sm border border-yellow-300">
-      <p>
-        Sie haben gewählt, keine E-Mails über neue Angebote und Rabatte zu
-        erhalten. Wenn Sie E-Mails erhalten möchten, deaktivieren Sie das
-        Kontrollkästchen.
-      </p>
-      <p className="mt-1">
-        You have selected not to receive emails about new offers and discounts.
-        If you want to receive such emails, please uncheck the box.
-      </p>
-    </div>
-  )}
-</div>
-
+          {showAlert && (
+            <div className="bg-yellow-100 text-yellow-800 p-3 rounded-md text-sm border border-yellow-300">
+              <p>
+                Sie haben gewählt, keine E-Mails über neue Angebote und Rabatte
+                zu erhalten. Wenn Sie E-Mails erhalten möchten, deaktivieren Sie
+                das Kontrollkästchen.
+              </p>
+              <p className="mt-1">
+                You have selected not to receive emails about new offers and
+                discounts. If you want to receive such emails, please uncheck
+                the box.
+              </p>
+            </div>
+          )}
+        </div>
 
         <button
           disabled={isDisabled}

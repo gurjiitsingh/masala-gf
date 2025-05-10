@@ -1,7 +1,5 @@
 "use client";
 
-
-
 import { couponType } from "@/lib/types/couponType";
 import { deliveryType } from "@/lib/types/deliveryType";
 import { createContext, useContext } from "react";
@@ -12,7 +10,7 @@ type SiteContextType = {
   open: boolean;
   deliveryType: string;
   deliveryCost: number;
-  setDeliveryCost: (e:number) => void;
+  setDeliveryCost: (e: number) => void;
   sideBarToggle: (e: boolean) => void;
   openBargerMenu: boolean;
   bargerMenuToggle: (e: boolean) => void;
@@ -35,19 +33,25 @@ type SiteContextType = {
   customerAddressIsComplete: boolean;
   productCategoryIdG: string;
   setProductCategoryIdG: (e: string) => void;
-  paymentType:string;
-  setPaymentType:(e:string) => void;
+  paymentType: string;
+  setPaymentType: (e: string) => void;
+  disablePickupCatDiscountIds: string[];
+  setDisablePickupCatDiscountIds: (e: string[]) => void;
 };
 
 const SiteContext = createContext<SiteContextType>({
-  paymentType:"",
-  setPaymentType:(e:string) => {return e},
+  paymentType: "",
+  setPaymentType: (e: string) => {
+    return e;
+  },
   newOrderCondition: false,
   setNewOrderCondition: (e: boolean) => {
     return e;
   },
   deliveryCost: 0,
-  setDeliveryCost: (e) => {return e;},
+  setDeliveryCost: (e) => {
+    return e;
+  },
   open: false,
   deliveryType: "pickup",
   sideBarToggle: () => {},
@@ -60,16 +64,16 @@ const SiteContext = createContext<SiteContextType>({
   chageDeliveryType: (e) => {
     return e;
   },
-  couponDisc: { 
+  couponDisc: {
     couponDesc: "",
     isFeatured: false,
     minSpend: 0,
     name: "",
     price: 0,
     productCat: "",
-    isActivated:false,
-     startDate:"",
-      date:""
+    isActivated: false,
+    startDate: "",
+    date: "",
   },
 
   setCouponDisc: (e) => {
@@ -104,12 +108,20 @@ const SiteContext = createContext<SiteContextType>({
     return e;
   },
   customerEmail: "",
-  setCustomerAddressIsComplete: (e) => {return e},
-  customerAddressIsComplete:false,
+  setCustomerAddressIsComplete: (e) => {
+    return e;
+  },
+  customerAddressIsComplete: false,
   productCategoryIdG: "",
   setProductCategoryIdG: (e) => {
     return e;
   },
+
+   disablePickupCatDiscountIds: [],
+  setDisablePickupCatDiscountIds: (e:string[]) => {return e},
+
+
+ 
 });
 
 export const UseSiteContext = () => {

@@ -9,6 +9,7 @@ export type categoryType = {
   image?: string | undefined;
   isFeatured?: boolean | undefined;
   sortOrder?: number | undefined;
+  disablePickupDiscount?: boolean | undefined;
 };
 
 export type categoryTypeArr = {

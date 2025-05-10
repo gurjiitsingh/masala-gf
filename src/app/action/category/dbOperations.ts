@@ -233,3 +233,30 @@ export async function fetchCategoryById(id: string): Promise<categoryType> {
   //   });
   //   return data;
 }
+
+
+
+
+/**
+ * Updates or creates the 'disablePickupDiscount' field for a category in Firestore.
+ * @param categoryId The ID of the category document
+ * @param disablePickupDiscount Boolean value to set
+ */
+export async function updateCategoryFlag(
+  categoryId: string,
+  disablePickupDiscount: boolean
+): Promise<void> {
+  const categoryRef = doc(db, "category", categoryId);
+  const snapshot = await getDoc(categoryRef);
+
+  if (snapshot.exists()) {
+    // Update existing document
+    await setDoc(categoryRef, { disablePickupDiscount }, { merge: true });
+  } else {
+    // Create document with default values if needed
+    await setDoc(categoryRef, {
+      name: "Unnamed Category", // Optional fallback
+      disablePickupDiscount,
+    });
+  }
+}
