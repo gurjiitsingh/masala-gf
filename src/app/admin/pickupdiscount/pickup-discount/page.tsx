@@ -8,27 +8,16 @@ type PickupDiscountForm = {
  
   pickup_discount:number;
 };
+//export default function PickupDiscountForm({ onSave }: { onSave: (value: number) => void }) {
 
-export default function PickupDiscountForm({ onSave }: { onSave: (value: number) => void }) {
+export default function PickupDiscountForm() {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<PickupDiscountForm>();
 
-//   const onSubmit = (data: PickupDiscountForm) => {
-//     onSave(data.pickup_discount); // Call parent function to save/update the value
-//   };
 
-//   const onSubmit = async (data: PickupDiscountForm) => {
-//     try {
-//       await setPickupDiscount(data.discount);
-//       alert(`Pickup discount set to ${data.discount}%`);
-//      // reset();
-//     } catch (error: any) {
-//       alert("Error: " + error.message);
-//     }
-//   };
 
 const onSubmit = async (data: PickupDiscountForm) => {
    try {

@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { deliveryType } from "@/lib/types/deliveryType";
 import { couponType } from "@/lib/types/couponType";
 import { getAllSettings } from "@/app/action/setting/dbOperations";
+import { SettingsDataType } from "@/lib/types/settings";
 
 
 interface Props {
@@ -44,7 +45,7 @@ export const SiteProvider: React.FC<Props> = ({
   const [newOrderCondition, setNewOrderConditionL] = useState<boolean>(false);
   const [paymentType, setPaymentTypeL] = useState<string>("");
   const [deliveryCost, setDeliveryCostL] = useState<number>(0);
-const [settings, setSettings] = useState<settingsDataType>({});
+const [settings, setSettings] = useState<SettingsDataType>({});
 //const [disablePickupCatDiscountIds, setDisablePickupCatDiscountIdsL] = useState<string[] | null>(null);
 const [disablePickupCatDiscountIds, setDisablePickupCatDiscountIdsL] = useState<string[]>([]);
 
