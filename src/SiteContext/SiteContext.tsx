@@ -3,6 +3,8 @@
 import { couponType } from "@/lib/types/couponType";
 import { deliveryType } from "@/lib/types/deliveryType";
 import { createContext, useContext } from "react";
+import { SettingsDataType } from "@/lib/types/settings";
+
 
 type SiteContextType = {
   newOrderCondition: boolean;
@@ -37,6 +39,7 @@ type SiteContextType = {
   setPaymentType: (e: string) => void;
   disablePickupCatDiscountIds: string[];
   setDisablePickupCatDiscountIds: (e: string[]) => void;
+  settings:SettingsDataType;
 };
 
 const SiteContext = createContext<SiteContextType>({
@@ -120,7 +123,7 @@ const SiteContext = createContext<SiteContextType>({
    disablePickupCatDiscountIds: [],
   setDisablePickupCatDiscountIds: (e:string[]) => {return e},
 
-
+settings:{}
  
 });
 

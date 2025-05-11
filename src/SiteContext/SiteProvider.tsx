@@ -4,6 +4,8 @@ import SiteContext from "./SiteContext";
 import { useEffect, useState } from "react";
 import { deliveryType } from "@/lib/types/deliveryType";
 import { couponType } from "@/lib/types/couponType";
+import { getAllSettings } from "@/app/action/setting/dbOperations";
+
 
 interface Props {
   children: React.ReactNode;
@@ -42,9 +44,14 @@ export const SiteProvider: React.FC<Props> = ({
   const [newOrderCondition, setNewOrderConditionL] = useState<boolean>(false);
   const [paymentType, setPaymentTypeL] = useState<string>("");
   const [deliveryCost, setDeliveryCostL] = useState<number>(0);
-
+const [settings, setSettings] = useState<settingsDataType>({});
 //const [disablePickupCatDiscountIds, setDisablePickupCatDiscountIdsL] = useState<string[] | null>(null);
 const [disablePickupCatDiscountIds, setDisablePickupCatDiscountIdsL] = useState<string[]>([]);
+
+
+ useEffect(() => {
+    getAllSettings().then(setSettings).catch(console.error);
+  }, []);
 
 useEffect(() => {
   const stored = localStorage.getItem('disablePickupCatDiscountIds');
@@ -174,6 +181,7 @@ useEffect(() => {
         productCategoryIdG,
         disablePickupCatDiscountIds,
         setDisablePickupCatDiscountIds,
+        settings,
       }}
     >
       {children}

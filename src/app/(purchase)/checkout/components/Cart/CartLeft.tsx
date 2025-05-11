@@ -14,17 +14,7 @@ import CouponDisc from "./CouponDisc";
 import { cartProductType, orderDataType } from "@/lib/types/cartDataType";
 import { createNewOrder } from "@/app/action/orders/dbOperations";
 import { useRouter } from "next/navigation";
-//import { FaCheckCircle } from 'react-icons/fa';
 
-// function calculateNetPayable(
-//   total: number,
-//   delivery: number,
-//   pickup: number,
-//   coupon: number,
-//   flat: number
-// ): number {
-//   return +(total + delivery - pickup - coupon - flat).toFixed(2);
-// }
 
 export default function CartLeft() {
   const {
@@ -37,6 +27,7 @@ export default function CartLeft() {
     //deliveryCost,
     setDeliveryCost,
     disablePickupCatDiscountIds,
+    settings
   } = UseSiteContext();
 
   const router = useRouter();
@@ -75,24 +66,20 @@ export default function CartLeft() {
     totalDiscountG,
   } = useCartContext();
 
-  const pickupDiscountPersent = parseInt(
-    process.env.NEXT_PUBLIC_PICKUP_DISCOUNT ?? "0",
-    10
-  );
-  // useEffect(() => {
-  //   if (cartData && cartData.length > 0) {
+  // const pickupDiscountPersent = parseInt(
+  //   process.env.NEXT_PUBLIC_PICKUP_DISCOUNT ?? "0",
+  //   10
+  // );
+  
 
-  //      let total = 0;
-  //     cartData.forEach((item: cartProductType) => {
-  //       return (total += item.quantity! * +item.price);
-  //     });
-  //     setitemTotal(parseFloat(total.toFixed(2)));
+   const [pickupDiscountPersent, setPickupDiscountPersent] = useState(0);
 
-  //     const itemTotalS = total.toFixed(2).toString();
-  //     const calculatedComma = itemTotalS.split(".").join(",");
-  //     setitemTotalComa(calculatedComma);
-  //   }
-  // }, [cartData]);
+// When settings.pickup_discount updates, update state
+useEffect(() => {
+  if (settings?.pickup_discount !== undefined) {
+    setPickupDiscountPersent(Number(settings.pickup_discount));
+  }
+}, [settings?.pickup_discount]);
 
   useEffect(() => {
     if (cartData && cartData.length > 0) {
@@ -153,7 +140,7 @@ export default function CartLeft() {
     }
   }, [cartData]);
 
-  //console.log("cal total------", itemTotal);
+ 
 
   useEffect(() => {
     if (itemTotal > 0) {
@@ -177,7 +164,7 @@ export default function CartLeft() {
         }
       }
     }
-  }, [deliveryType, itemTotal, deliveryDis]);
+  }, [deliveryType, itemTotal, deliveryDis,pickupDiscountPersent]);
 
   useEffect(() => {
     if (itemTotal > 0) {
@@ -505,42 +492,13 @@ export default function CartLeft() {
             </div>
           </div>
 
-          {/* <FaCheckCircle className="text-red-500" size={40} />
-              <span className="text-[.7rem] text-blue-500">
-                Part of your order qualifies for FREE Delivery. Choose FREE
-                Delivery option at checkout.
-              </span> */}
+       
         </div>
-        {/* <div className="text-[1.1rem]">
-          <span className="text-xl">Subtotal ({cartData.length} items) </span>{" "}
-          :${total}
-        </div> */}
-        {/* <div className="flex items-center justify-center">
-          <Link
-            href={{
-              pathname: "/checkout",
-              //  query:{ userId: session?.user?.id}
-            }}
-          >
-            <div className="w-[200px] py-1 text-center bg-yellow-500 rounded-2xl text-[.8rem]">
-              Procces to buy
-            </div>
-          </Link>
-        </div> */}
-        {/* disabled={true} */}
+       
+       
+       
 
-        {/* <div className="flex items-center space-x-2 text-sm text-gray-700">
-          <input
-            id="noOffersCheckbox"
-            type="checkbox"
-            checked={noOffers}
-            onChange={(e) => setNoOffers(e.target.checked)}
-            className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-          />
-          <label htmlFor="noOffersCheckbox">
-            Ich möchte keine E-Mails über neue Angebote und Rabatte erhalten.
-          </label>
-        </div> */}
+      
 
         <div className="flex flex-col gap-2">
           <div className="flex items-center space-x-2 text-sm text-gray-700">
@@ -590,9 +548,5 @@ export default function CartLeft() {
     </div>
   );
 
-  // useEffect(() => { console.log("empty dependeny array--------")},[])
 
-  // useEffect(() => { console.log("dependeny -------- deliveryType")},[deliveryType])
-  // useEffect(() => { console.log("dependeny -------- paymentType")},[paymentType])
-  // useEffect(() => { console.log("dependeny -------- paymentType,deliveryType")},[paymentType,deliveryType])
-}
+  }

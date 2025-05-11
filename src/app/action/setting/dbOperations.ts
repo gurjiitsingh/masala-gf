@@ -12,6 +12,7 @@ import {
   setDoc,
 } from "@firebase/firestore";
 import { editSettingSchema, settingSchema, settingSchemaType } from "@/lib/types/settingType";
+import { SettingsDataType, SettingValue } from "@/lib/types/settings";
 
 
 //type TsettingSchemaArray = TsettingSchema[]
@@ -205,15 +206,11 @@ export const setPickupDiscount = async (value: number) => {
   }
 };
 
-type SettingValue = string | number;
 
-export type SettingsData = {
-  [key: string]: SettingValue;
-};
 
-export async function getAllSettings(): Promise<SettingsData> {
+export async function getAllSettings(): Promise<SettingsDataType> {
   const snapshot = await getDocs(collection(db, "settings"));
-  const allSettings: SettingsData = {};
+  const allSettings: SettingsDataType = {};
 
   snapshot.forEach((doc) => {
     const data = doc.data();
