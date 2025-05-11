@@ -1,10 +1,10 @@
 import React, { Suspense } from 'react'
-import PageComp from './pagecomp'
+import DisplayCategoryForm from './componets/DisplayCategoryForm'
 
 export default function page() {
   return (
   <Suspense>
-    <PageComp />
+    <DisplayCategoryForm />
   </Suspense>
   )
 }

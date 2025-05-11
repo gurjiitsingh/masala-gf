@@ -206,6 +206,33 @@ export const setPickupDiscount = async (value: number) => {
   }
 };
 
+export const setDisplayCategory = async ( value: string) => {
+
+   if (typeof value !== "string") {
+    throw new Error("Invalid  value");
+  }
+
+  try {
+    const ref = doc(db, "settings", "display_category");
+    await setDoc(ref, { value }); // Ensure you're sending { value: number }
+    console.log("display category updated:", value);
+  } catch (error) {
+    console.error("Error updating category:", error);
+    throw error;
+  }
+  // if (!id || !name) {
+  //   throw new Error("Both category id and name are required");
+  // }
+  // try {
+  //   const ref = doc(db, "settings", "display_category");
+  //   await setDoc(ref, { id, name }); // Save both id and name
+  //   console.log("Display category updated:", { id, name });
+  // } catch (error) {
+  //   console.error("Error updating display category:", error);
+  //   throw error;
+  // }
+};
+
 
 
 export async function getAllSettings(): Promise<SettingsDataType> {

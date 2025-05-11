@@ -53,6 +53,9 @@ const [disablePickupCatDiscountIds, setDisablePickupCatDiscountIdsL] = useState<
  useEffect(() => {
     getAllSettings().then(setSettings).catch(console.error);
   }, []);
+  // useEffect(()=>{
+  //   console.log("settings---------",settings)
+  // },[settings])
 
 useEffect(() => {
   const stored = localStorage.getItem('disablePickupCatDiscountIds');
