@@ -31,7 +31,7 @@ const ListView = () => {
       try {
       
       const categories = await fetchCategories()
-       // console.log("---------", categories)
+       console.log("---------", categories)
        categories.sort((a, b) => a.sortOrder! - b.sortOrder!);
         setCategoryData(categories);
       } catch (error) {

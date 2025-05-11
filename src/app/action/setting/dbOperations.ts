@@ -22,7 +22,7 @@ export const fetchSettings = async (): Promise<settingSchemaType[]> => {
   // const docdata = result.docs.map(x => x.data() as settingSchemaType)
   // return docdata;
 
-  const result = await getDocs(collection(db, "setting"));
+  const result = await getDocs(collection(db, "settings"));
   const data = [] as settingSchemaType[];
   result.forEach((doc) => {
     const pData = { id: doc.id, ...doc.data() } as settingSchemaType;
@@ -32,7 +32,7 @@ export const fetchSettings = async (): Promise<settingSchemaType[]> => {
 };
 
 export async function deletesetting(id: string, oldImgageUrl: string) {
-  const docRef = doc(db, "setting", id);
+  const docRef = doc(db, "settings", id);
   await deleteDoc(docRef);
   //return { errors: "Delete not implimented jet" };
   // if (result?.rowCount === 1) {
@@ -95,7 +95,7 @@ export async function addNewsetting(formData: FormData) {
    };
 
   try {
-    const docRef = await addDoc(collection(db, "setting"), data);
+    const docRef = await addDoc(collection(db, "settings"), data);
     console.log("Document written with ID: ", docRef.id);
     return {
       message: { sucess: "setting Created" },
@@ -149,7 +149,7 @@ export async function editsetting(formData: FormData) {
   
   // update database
   try {
-    const docRef = doc(db,"setting", id);
+    const docRef = doc(db,"settings", id);
    await setDoc(docRef, settingUpdateData);
 
   } catch (error) {
@@ -159,7 +159,7 @@ export async function editsetting(formData: FormData) {
 }
 
 export async function fetchsettingById(id: string): Promise<settingSchemaType> {
-  const docRef = doc(db, "setting", id);
+  const docRef = doc(db, "settings", id);
   const docSnap = await getDoc(docRef);
   if (docSnap.exists()) {
     //  console.log("Document data:", docSnap.data());
@@ -181,4 +181,46 @@ export async function fetchsettingById(id: string): Promise<settingSchemaType> {
   //     data = doc.data() as ProductTypeArr;
   //   });
   //   return data;
+}
+
+
+
+/**
+ * Adds or updates the pickup discount in Firestore
+ * @param value - Discount percentage (1 to 30)
+ */
+
+export const setPickupDiscount = async (value: number) => {
+  if (typeof value !== "number" || isNaN(value)) {
+    throw new Error("Invalid discount value");
+  }
+
+  try {
+    const ref = doc(db, "settings", "pickup_discount");
+    await setDoc(ref, { value }); // Ensure you're sending { value: number }
+    console.log("Pickup discount updated:", value);
+  } catch (error) {
+    console.error("Error updating pickup discount:", error);
+    throw error;
+  }
+};
+
+type SettingValue = string | number;
+
+export type SettingsData = {
+  [key: string]: SettingValue;
+};
+
+export async function getAllSettings(): Promise<SettingsData> {
+  const snapshot = await getDocs(collection(db, "settings"));
+  const allSettings: SettingsData = {};
+
+  snapshot.forEach((doc) => {
+    const data = doc.data();
+    if (data?.value !== undefined) {
+      allSettings[doc.id] = data.value as SettingValue;
+    }
+  });
+
+  return allSettings;
 }

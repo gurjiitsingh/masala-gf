@@ -8,6 +8,7 @@ import CartButton from "@/components/Custom/AddToCart/CartButton";
 import { cartProductType } from "@/lib/types/cartDataType";
 import { ProductType } from "@/lib/types/productType";
 import { addOnType } from "@/lib/types/addOnType";
+import { IoMdAdd } from "react-icons/io";
 
 export default function PageProductDetailComponent({
   product,
@@ -16,11 +17,11 @@ export default function PageProductDetailComponent({
   product: ProductType;
   allAddOns: addOnType[];
 }) {
+
+  
   const [addOnData, setAddOnData] = useState<addOnType[]>([]);
   const { productCategoryIdG } = UseSiteContext();
-  
-
-
+ 
   useEffect(() => {
     if (allAddOns.length !== 0 && product.flavors) {
       const AddOnData = allAddOns.filter(
@@ -29,38 +30,18 @@ export default function PageProductDetailComponent({
       AddOnData.sort((a: addOnType, b: addOnType) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
     setAddOnData(AddOnData);
     }
-
-   
-
-
   }, [product.id, allAddOns, product.flavors]);
-
-
-  
-
-
-
 
   //common code start
   //const priceRegular = product.price.toString().replace(/\./g, ",");
   const priceRegular = product.price?.toString().replace(/\./g, ",") ?? "0,00";
- 
- 
-  // let priceDiscounted;
-  // let priceTarget = product.price;
-  // if (product.discountPrice !== undefined && product.discountPrice > 0) {
-  //   priceTarget = product.discountPrice;
-  //   priceDiscounted = product.discountPrice.toString().replace(/\./g, ",");
-  // }
-
+  
   let priceDiscounted;
   let priceTarget = product.price ?? 0;
   if (product.discountPrice && product.discountPrice > 0) {
     priceTarget = product.discountPrice;
     priceDiscounted = product.discountPrice.toString().replace(/\./g, ",");
   }
-
-
 
   const cartProduct: cartProductType = {
     id: product.id,
@@ -71,6 +52,15 @@ export default function PageProductDetailComponent({
     categoryId: product.categoryId,
     productCat:product.productCat!,
   };
+
+  const isCartDisabled = (() => {    
+  if (product.categoryId !== '2vvuGl0pgbvvyEPc7o83') return false;
+  const berlinTime = new Date().toLocaleString("en-US", { timeZone: "Europe/Berlin" });
+  const berlinHour = new Date(berlinTime).getHours();
+  return !(berlinHour >= 11 && berlinHour < 16);
+})();
+
+
   //common code end
   return (
     <div className="w-full  lg:w-[48%]   bg-zinc-50 shadow-lg flex flex-row   rounded-2xl items-center">
@@ -115,15 +105,30 @@ export default function PageProductDetailComponent({
               )}
               {/* common code end */}
               <div>
-                <CartButton cartProduct={cartProduct} />
-                {/* <button
-                  className="px-1 py-1 bg-slate-400 shadow-emerald-400 shadow-2xl  rounded-full w-fit"
-                  onClick={() => {
-                    setShowProductDetailM(false);
-                  }}
-                >
-                  <IoMdAdd size={20} className="text-white " />
-                </button> */}
+ {/* {!isCartDisabled ? (
+    <CartButton cartProduct={cartProduct} />
+  ) : (
+    <span className="text-green-700 text-xs whitespace-nowrap">Nicht verfügbar 11–16 Uhr</span>
+  )} */}
+
+             {!isCartDisabled ? (
+  <CartButton cartProduct={cartProduct} />
+) : (
+  <div className="relative group">
+    <button
+      disabled
+      className="px-1 py-1 rounded-full bg-slate-500 cursor-not-allowed"
+    >
+      <IoMdAdd size={20} className="text-white" />
+    </button>
+     <div className="absolute bottom-full left-0 transform -translate-x-[100%] mb-2 w-max max-w-[200px] bg-gray-800 text-white text-xs p-2 rounded opacity-0 group-hover:opacity-100 transition-opacity z-50">
+      Mittagessen gibt’s nur von 11 bis 16 Uhr. Bitte etwas anderes wählen.
+    </div>
+  </div>
+)}
+             
+
+                
               </div>
             </div>
           )}
