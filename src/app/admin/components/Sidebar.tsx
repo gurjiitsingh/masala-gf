@@ -24,7 +24,7 @@ const menuList: Titem[] = [
   { name: "Home", link: "/", icon: <GoHome /> },
   { name: "Orders", link: "/admin", icon: <MdSpaceDashboard /> },
   { name: "Categories", link: "/admin/categories", icon: <TbCategoryPlus /> },
-  { name: "Disable Pickup Discount", link: "/admin/pickupdiscount/disable-discount", icon: <TbCategoryPlus /> },
+  { name: "Pickup Discount", link: "/admin/pickupdiscount/pickup-discount", icon: <TbCategoryPlus /> },
   { name: "Products", link: "/admin/productsbase", icon: <MdOutlineProductionQuantityLimits /> },
   { name: "Variants", link: "/admin/flavorsProductG", icon: <BsBorderStyle /> },
   { name: "Coupon", link: "/admin/coupon", icon: <TbCategoryPlus /> },
