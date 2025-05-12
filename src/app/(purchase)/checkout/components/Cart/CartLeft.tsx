@@ -138,7 +138,7 @@ useEffect(() => {
       const discount = (safeTotal * safePercent) / 100;
       return parseFloat(discount.toFixed(2));
     }
-  }, [cartData]);
+  }, [cartData,pickupDiscountPersent]);
 
  
 
@@ -164,7 +164,7 @@ useEffect(() => {
         }
       }
     }
-  }, [deliveryType, itemTotal, deliveryDis,pickupDiscountPersent]);
+  }, [deliveryType, itemTotal, deliveryDis,pickupDiscountPersent,filteredCategoryDiscount]);
 
   useEffect(() => {
     if (itemTotal > 0) {
