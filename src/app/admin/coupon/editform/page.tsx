@@ -1,14 +1,14 @@
 "use client";
 
 import { Suspense } from "react";
-import PageCom from "./PageCom";
+import EditForm from "./componets/EditForm";
 
 const Page = () => {
   
   return (
     <>
     <Suspense>
-      <PageCom />
+      <EditForm />
       </Suspense>
     </>
   );

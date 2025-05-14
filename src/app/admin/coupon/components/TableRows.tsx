@@ -37,7 +37,11 @@ console.log("copoun data------------",coupon)
   return (
     <TableRow key={coupon.id} className="whitespace-nowrap bg-slate-50 rounded-lg p-1 my-1">
       <TableCell>{coupon.name}</TableCell>
-      <TableCell>{coupon.discountType ==='flate'? <>flate &#8364;{coupon.price}</>:<>%{coupon.price}</>}</TableCell>
+     <TableCell>
+  {coupon.discountType === "flat"
+    ? `Flat €${coupon.price}`
+    : `Percent %${coupon.price}`}
+</TableCell>
       {/* <TableCell>
         <div className=" px-3 py-1 text-center ">
           {coupon?.image&&

@@ -13,6 +13,7 @@ import {
   getDocs,
   query,
   setDoc,
+  updateDoc,
   where,
 } from "@firebase/firestore"; //doc, getDoc,
 import { couponType, couponSchema } from "@/lib/types/couponType";
@@ -117,7 +118,31 @@ export async function deletecoupon(id: string): Promise<rt> {
   return { success: "Delete implimented" };
 }
 
-export async function editcoupon(formData: FormData) {
+export  async  function editcoupon(id: string, formData: FormData){
+  try {
+    const updatedData: any = {
+      name: formData.get("name"),
+      price: formData.get("price"),
+      offerType: formData.get("offerType"),
+      expiry: formData.get("expiry"),
+      discountType: formData.get("discountType"),
+      productCat: formData.get("productCat"),
+      couponDesc: formData.get("couponDesc"),
+      minSpend: formData.get("minSpend"),
+      isFeatured: formData.get("isFeatured") === "true",
+    };
+
+    const couponRef = doc(db, "coupon", id);
+    await updateDoc(couponRef, updatedData);
+
+    return { success: true };
+  } catch (error) {
+    console.error("Failed to update coupon:", error);
+    return { success: false, error: "Failed to update coupon." };
+  }
+};
+
+export async function editcoupon1(formData: FormData) {
   const id = formData.get("id") as string;
   const image = formData.get("image");
   // const oldImgageUrl = formData.get("oldImgageUrl") as string;
@@ -229,6 +254,7 @@ export async function fetchcouponById(id: string): Promise<couponType> {
 export async function fetchcouponByCode(
   condname: string
 ): Promise<couponType[]> {
+   
   const data = [] as couponType[];
   const q = query(collection(db, "coupon"), where("name", "==", condname));
   const querySnapshot = await getDocs(q);
@@ -237,5 +263,6 @@ export async function fetchcouponByCode(
     const datas = doc.data() as couponType;
     data.push(datas);
   });
+  
   return data;
 }
