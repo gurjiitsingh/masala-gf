@@ -10,6 +10,7 @@ import {
 import { Button } from "@/components/ui/button";
 // import Link from "next/link";
 import { MdDeleteForever } from "react-icons/md";
+import { PiExcludeSquareDuotone } from "react-icons/pi";
 // import { CiEdit } from "react-icons/ci";
 // import Image from "next/image";
 //import Image from "next/image";
@@ -92,6 +93,23 @@ console.log("copoun data------------",coupon)
         </p>
       </TableCell>
       <TableCell>{coupon.couponDesc}</TableCell>
+       <TableCell>
+          <Link
+            href={{
+             // pathname: `/admin/coupons/${coupon.id}`,
+             pathname: "/admin/coupon/exclude-categories",
+              query: {
+                id: coupon.id,
+               },
+            }
+          }
+          >
+            <Button size="sm" className="bg-red-500 px-1 py-0">
+             
+              <PiExcludeSquareDuotone size={20} className="text-white" />
+            </Button>
+</Link>
+       </TableCell>
     </TableRow>
   );
 };

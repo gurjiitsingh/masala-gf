@@ -57,6 +57,7 @@ export default function CartLeft() {
   const [noOffers, setNoOffers] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const [filteredCategoryDiscount, setFilteredCategoryDiscount] = useState(0);
+  const [ onlyItemsWithDisabledCouponCode, setOnlyItemsWithDisabledCouponCode ] = useState(false);
 
   const {
     cartData,
@@ -169,8 +170,34 @@ useEffect(() => {
   useEffect(() => {
     if (itemTotal > 0) {
       if (couponDisc?.price) {
-        // console.log("coupondisc, minspend, itemTotal-----------",couponDisc.price,couponDisc.minSpend, itemTotal);
+        //console.log("coupondisc-----------",couponDisc);
         if (couponDisc.minSpend! <= itemTotal) {
+        
+  // const excludedCategoryId = "eqU3erkGIAegmg073b8E";
+  // // Check if ALL cart items belong to the excluded category
+  // const allItemsExcluded = cartData.length > 0 && cartData.every(
+  //   (item) => item.categoryId === excludedCategoryId
+  // );
+
+
+// const excludedCategoryIds = ["eqU3erkGIAegmg073b8E", "abc123xyz", "cat456"]; // Add all excluded IDs here
+
+// // Check if there is at least one item that is NOT from an excluded category
+// const isCouponAllowed = cartData.some(item => !excludedCategoryIds.includes(item.categoryId));
+// const allItemsExcluded = cartData.length > 0 &&
+//   cartData.every((item) => excludedCategoryIds.includes(item.categoryId));
+// const allItemsExcluded = cartData.length > 0 && cartData.every(
+//   (item) => excludedCategoryIds.includes(item.categoryId)
+// );
+// const excludedCategoryId = "eqU3erkGIAegmg073b8E";
+// const allItemsExcluded = cartData.some(item => item.categoryId !== excludedCategoryId);
+
+const excludedCategoryIds = couponDisc?.excludedCategoryIds || [];
+const isCouponAllowed = cartData.some(item => !excludedCategoryIds.includes(item.categoryId));
+
+setOnlyItemsWithDisabledCouponCode(isCouponAllowed)
+    //  console.log("categories -----", isCouponAllowed)  
+     if(isCouponAllowed){
           if (couponDisc.discountType === "flat") {
             const price = +couponDisc?.price;
             setCalCouponDisscount(0);
@@ -187,6 +214,8 @@ useEffect(() => {
             setFlatCouponDisscount(0);
             setcouponDiscountPercentL(percent);
           }
+        }
+
         } else {
           alert(
             `Minmun purchase amount for discount is € ${couponDisc?.minSpend} , Remove coupon or add more item to cart`
@@ -480,7 +509,9 @@ useEffect(() => {
             calculatedPickUpDiscount={calculatedPickUpDiscountL}
           />
 
-          <CouponDisc total={itemTotal} />
+        {onlyItemsWithDisabledCouponCode &&  <CouponDisc total={itemTotal} />}
+
+
 
           <div className="font-semibold border-b border-slate-200 py-3 w-full flex justify-between items-center">
             <div className="text-md font-semibold py-3 w-full text-left">

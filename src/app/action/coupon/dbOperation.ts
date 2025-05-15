@@ -266,3 +266,21 @@ export async function fetchcouponByCode(
   
   return data;
 }
+
+
+
+export async function updateCouponExcludedCategories(couponId: string, categoryIds: string[]) {
+
+  console.log("categoryIds-------------", categoryIds)
+  const couponRef = doc(db, "coupon", couponId);
+  await updateDoc(couponRef, {
+    excludedCategoryIds: categoryIds,
+  });
+}
+
+
+export async function fetchSingleCoupon(id: string) {
+  const docRef = doc(db, "coupon", id);
+  const snapshot = await getDoc(docRef);
+  return snapshot.exists() ? snapshot.data() : null;
+}

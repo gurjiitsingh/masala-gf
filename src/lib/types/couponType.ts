@@ -45,6 +45,7 @@ export const couponSchema = z.object({
     .string().optional(),
    // .min(2, { message: "coupon description is required" }),
   minSpend: z.string().optional(),
+  excludedCategoryIds: z.array(z.string()).optional(),
   offerType: z.string().optional(),
   isFeatured: z.boolean().optional(),
   expiry: z.string().optional(),
@@ -63,6 +64,7 @@ export type couponType = {
   id?: string | undefined;
   couponDesc?: string | undefined;
   minSpend?: number | undefined;
+  excludedCategoryIds?: string[] | undefined;
   offerType?: string | undefined;
   isFeatured?: boolean | undefined;
   isActivated: boolean | undefined;

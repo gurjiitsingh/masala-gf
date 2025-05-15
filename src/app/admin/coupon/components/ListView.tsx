@@ -67,6 +67,7 @@ const ListView = () => {
                  <TableHead>Date</TableHead>
                 <TableHead className="hidden md:table-cell">Action</TableHead>
                 <TableHead>Desc</TableHead>
+                 <TableHead>Exclude food</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
