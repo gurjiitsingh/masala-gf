@@ -83,7 +83,7 @@ export default function ExcludeCategorySelector() {
       )}
 
       <Button
-        className="mt-4"
+        className="form-btn mt-4"
         disabled={saving || !couponId}
         onClick={handleSave}
       >
