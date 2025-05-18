@@ -14,7 +14,7 @@ export default function CouponDiscount() {
   const [couponSuccess, setCouponSuccess] = useState("");
 
   useEffect(() => {
-    console.log("couponDisc-----------", couponDisc)
+    console.log("couponDisc-----------", couponDisc?.couponDesc)
   }, [couponDisc]);
 
   const {
@@ -36,7 +36,7 @@ export default function CouponDiscount() {
     const result = await fetchcouponByCode(couponCode);
     //console.log("Discolount coupon data----------", result[0]);
     if (result.length !== 0) {
-      setCouponSuccess("");
+      setCouponSuccess("Gutschein angewendet");
     } else {
       setCouponSuccess("Falscher Gutschein");
     }
@@ -109,7 +109,8 @@ export default function CouponDiscount() {
             </div>
           </form>
         </div>
-        <div className="text-red-400 text-sm">  {couponSuccess}</div>
+        <div className="text-red-300 text-sm">  {couponSuccess}</div>
+         <div className="text-slate-400 text-sm">  {couponDisc?.couponDesc}</div>
       </div>
     </>
   );
