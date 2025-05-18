@@ -9,6 +9,7 @@ import { cartProductType } from "@/lib/types/cartDataType";
 import { ProductType } from "@/lib/types/productType";
 import { addOnType } from "@/lib/types/addOnType";
 import { IoMdAdd } from "react-icons/io";
+import toast from "react-hot-toast";
 
 export default function PageProductDetailComponent({
   product,
@@ -116,7 +117,10 @@ export default function PageProductDetailComponent({
 ) : (
   <div className="relative group">
     <button
-      disabled
+     onClick={() => {
+      toast("Mittagessen gibt’s nur von 11 bis 16 Uhr. Bitte etwas anderes wählen.");
+    }}
+  
       className="px-1 py-1 rounded-full bg-slate-500 cursor-not-allowed"
     >
       <IoMdAdd size={20} className="text-white" />
@@ -124,6 +128,7 @@ export default function PageProductDetailComponent({
      <div className="absolute bottom-full left-0 transform -translate-x-[100%] mb-2 w-max max-w-[200px] bg-gray-800 text-white text-xs p-2 rounded opacity-0 group-hover:opacity-100 transition-opacity z-50">
       Mittagessen gibt’s nur von 11 bis 16 Uhr. Bitte etwas anderes wählen.
     </div>
+  
   </div>
 )}
              
