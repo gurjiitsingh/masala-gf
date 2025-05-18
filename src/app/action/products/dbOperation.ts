@@ -127,40 +127,7 @@ type rt = {
 
 
 
-export async function deleteProduct1(id:string,oldImgageUrl:string) {
 
- const docRef = doc(db, "product", id);
- const result = await deleteDoc(docRef);                     
-
-   console.log("oldImgageUrl-------",oldImgageUrl)
-   
-   if (result?.rowCount === 1 && oldImgageUrl!=='/com.jpg') {
-
-    const imageUrlArray = oldImgageUrl.split("/");
-    console.log(imageUrlArray[imageUrlArray.length - 1]);
-    const imageName =
-      imageUrlArray[imageUrlArray.length - 2] +
-      "/" +
-      imageUrlArray[imageUrlArray.length - 1];
-
-    const image_public_id = imageName.split(".")[0];
-    console.log(image_public_id);
-    try {
-      const deleteResult = await deleteImage(image_public_id);
-      console.log("image delete data", deleteResult);
-    } catch (error) {
-      console.log(error);
-      return {errors:"Somthing went wrong, can not delete product picture"}
-    }
-
-       return {
-      message: "success",
-    };
-  // }else{
-  //   return {errors:"Somthing went wrong, can not delete product"}
-  // }
-  }
-}
 
 export async function deleteProduct(id: string, oldImageUrl: string) {
   const docRef = doc(db, "product", id);
