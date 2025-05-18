@@ -10,6 +10,7 @@ import CouponDisc from "./CouponDisc";
 import { cartProductType, orderDataType } from "@/lib/types/cartDataType";
 import { createNewOrder } from "@/app/action/orders/dbOperations";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 export default function CartLeft() {
   const {
@@ -154,7 +155,7 @@ export default function CartLeft() {
         }
       }
     } else if (couponDisc?.price) {
-      alert(
+      toast.error(
         `Minmun purchase amount for discount is € ${couponDisc.minSpend} , Remove coupon or add more item to cart`
       );
     } else {
@@ -219,17 +220,17 @@ export default function CartLeft() {
     try {
       let canCompleteOrder = false;
       let allReadyAlerted = false;
-      //  alert(`Hello, ${deliveryType}`)
+      //  toast.error(`Hello, ${deliveryType}`)
 
       if (paymentType === "" || paymentType === undefined) {
         canCompleteOrder = true;
-        alert("Select Payment type");
+        toast.error("Select Payment type");
         allReadyAlerted = true;
         return;
       }
 
       if (!customerAddressIsComplete) {
-        alert("Select Address");
+        toast.error("Select Address");
         allReadyAlerted = true;
         return;
       }
@@ -237,7 +238,7 @@ export default function CartLeft() {
       if (deliveryType === "delivery" && deliveryDis === undefined) {
         canCompleteOrder = true;
         if (!allReadyAlerted) {
-          alert(
+          toast.error(
             "Wir können nicht an diese Adresse liefern. Bitte wählen Sie Abholung."
           );
           //We cannot deliver to this address. Please select pickup.
@@ -249,7 +250,7 @@ export default function CartLeft() {
       if (couponDisc?.minSpend && itemTotal < couponDisc.minSpend) {
         canCompleteOrder = true;
         if (!allReadyAlerted) {
-          alert(
+          toast.error(
             `Minimun purchase amount to get discount is € ${couponDisc?.minSpend} , Remove coupon or add more item to cart`
           );
           allReadyAlerted = true;
@@ -260,7 +261,7 @@ export default function CartLeft() {
       if (orderAmountIsLowForDelivery && deliveryType !== "pickup") {
         canCompleteOrder = true;
         if (!allReadyAlerted) {
-          alert(
+          toast.error(
             `Minimum order amount for delivery is € ${deliveryDis?.minSpend}`
           );
           allReadyAlerted = true;
@@ -269,10 +270,10 @@ export default function CartLeft() {
       }
 
       if (canCompleteOrder) {
-        //  alert(`cancelorder, is canceling order because ${canCompleteOrder}`)
+        //  toast.error(`cancelorder, is canceling order because ${canCompleteOrder}`)
         return;
       } else {
-        //  alert(`cancelorder ${canCompleteOrder} , so it not cancle order`)
+        //  toast.error(`cancelorder ${canCompleteOrder} , so it not cancle order`)
       }
 
       const AddressId =
@@ -308,7 +309,7 @@ export default function CartLeft() {
       } as orderDataType;
 
       if (cartData.length !== 0) {
-        //  alert(`cart length is more than 0,order started, ${cartData.length}`)
+        //  toast.error(`cart length is more than 0,order started, ${cartData.length}`)
         const orderMasterId = await createNewOrder(purchaseData);
 
         if (paymentType === "stripe") {
@@ -321,7 +322,7 @@ export default function CartLeft() {
           );
         }
       } else {
-        alert(`Cart is empty, add some foods`);
+        toast.error(`Cart is empty, add some foods`);
       }
     } catch (error) {
       console.error("Order submission error:", error);
