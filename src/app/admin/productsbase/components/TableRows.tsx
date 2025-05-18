@@ -25,27 +25,36 @@ function TableRows({ product }:{product:ProductType}){
 
 //const router = useRouter();
 
- async function handleDelete(product:ProductType) {
-    // confirm("Do you want to delete the Product? \n If yes click OK \n If not click Cancel.");
- 
-
-  if (confirm("Möchten Sie das Produkt löschen? \n Falls ja, klicken Sie auf OK. \n Falls nicht, klicken Sie auf Cancel.")) {
-    const result = await deleteProduct(product.id!);
-    // if(result.errors){
-//   alert(result.errors)
-// }else{
-//   // router.push('/admin/products')
-//    //   router.refresh()
-//       location.reload()
-// }
- } else {
-   return false;
- }
-
- 
 
 
+async function handleDelete(product: ProductType) {
+  const confirmDelete = confirm(
+    "Möchten Sie das Produkt löschen?\nFalls ja, klicken Sie auf OK.\nFalls nicht, klicken Sie auf Cancel."
+  );
+
+  if (!confirmDelete) return false;
+
+  console.log("Deleting product:", product);
+
+  try {
+    const result = await deleteProduct(product.id!, product.image);
+
+    if (result?.errors) {
+      alert("Fehler: " + result.errors);
+    } else {
+    //  alert("Produkt erfolgreich gelöscht.");
+      // Option 1: Refresh router (Next.js App Router)
+      // router.refresh();
+
+      // Option 2: Full reload
+      location.reload();
+    }
+  } catch (err) {
+    console.error("Delete failed:", err);
+    alert("Ein unerwarteter Fehler ist aufgetreten beim Löschen.");
   }
+}
+
   
   const price = (product.price.toString()).replace(/\./g, ',') 
   let  discountedPrice = '';
