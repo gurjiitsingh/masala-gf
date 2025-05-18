@@ -32,15 +32,15 @@ function TableRows({ product }:{product:AddOnProductSchemaType}){
 
 if (confirm("Möchten Sie löschen? \n Falls ja, klicken Sie auf OK. \n Falls nein, klicken Sie auf Abbrechen.")) {
  
-  const result =  await deleteProduct(idS)
-console.log(result.message)
-if(result.message !== 'success'){
-  alert("Something went wrong")
-}else{
-  // router.push('/admin/products')
-   //   router.refresh()
-      location.reload()
-}
+//   const result =  await deleteProduct(idS)
+// console.log(result.message)
+// if(result.message !== 'success'){
+//   alert("Something went wrong")
+// }else{
+//   // router.push('/admin/products')
+//    //   router.refresh()
+//       location.reload()
+// }
   
 } else {
  return false;
