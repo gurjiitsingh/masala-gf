@@ -29,11 +29,8 @@ const menuList: Titem[] = [
   { name: "Variants", link: "/admin/flavorsProductG", icon: <BsBorderStyle /> },
   { name: "Coupon", link: "/admin/coupon", icon: <TbCategoryPlus /> },
   { name: "Delivery", link: "/admin/delivery", icon: <TbCategoryPlus /> },
-  // { name: "Orders", link: "/admin/orders", icon: <BsBorderStyle /> },
   { name: "Users", link: "/admin/users", icon: <FaUserTie /> },
-  { name:"Setting",link:"/admin/setting",icon: <IoMdSettings />},
- 
-  
+  { name: "Setting", link: "/admin/setting", icon: <IoMdSettings /> },
 ];
 
 const Sidebar = () => {
@@ -42,33 +39,33 @@ const Sidebar = () => {
   return (
     <>
       {/* Close button for mobile */}
-      <div className="flex items-center pt-2 justify-between lg:hidden">
+      <div className="flex items-center pt-4 px-4 justify-between lg:hidden">
         <div></div>
-        <div>
-          <button
-            onClick={() => setAdminSideBarToggleG(false)}
-            className="p-1  rounded-xl"
-            aria-label="close sidebar"
-          >
-            <IoClose size={30} />
-          </button>
-        </div>
+        <button
+          onClick={() => setAdminSideBarToggleG(false)}
+          className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-zinc-800 transition"
+          aria-label="close sidebar"
+        >
+          <IoClose size={24} />
+        </button>
       </div>
 
-      {/* Sidebar content */}
-      <div className="pt-12 h-screen w-[290px]  flex flex-col py-4 px-2 justify-start overflow-hidden">
-        <ul className="flex flex-col gap-2 overflow-y-auto">
+      {/* Sidebar container */}
+      <div className="pt-8 h-screen w-[280px] flex flex-col justify-between px-4 py-6  bg-white dark:bg-zinc-900 text-zinc-800 dark:text-zinc-100 shadow-md">
+        {/* Navigation */}
+        <ul className="flex flex-col gap-2">
           {menuList.map((item) => (
             <Tab key={item.name} item={item} />
           ))}
         </ul>
 
-        <div className="flex items-center my-3 justify-between w-full  rounded-2xl p-2">
-          <IoIosLogOut />
+        {/* Logout */}
+        <div className="mt-6  pt-4">
           <button
             onClick={() => signOut()}
-            className="flex gap-2 items-center px-4 py-1 rounded-lg font-semibold text-[.9rem]"
+            className="flex items-center gap-3 px-4 py-2 w-full text-sm font-medium rounded-lg bg-rose-100 text-rose-700 hover:bg-rose-200 transition"
           >
+            <IoIosLogOut size={20} />
             Logout
           </button>
         </div>
@@ -87,16 +84,18 @@ function Tab({ item }: { item: Titem }) {
 
   if (!isMounted) return null;
 
-  const isSelected = item.link === pathname;
+  const isSelected = pathname === item.link;
 
   return (
     <Link href={item.link}>
       <li
-        className={`w-full flex gap-2 items-center justify-between px-4 py-1 rounded-lg font-semibold text-[.9rem] 
-        ${isSelected ? "bg-amber-900 text-white" : "bg-amber-400 text-slate-700"}`}
+        className={`flex items-center gap-3 px-4 py-2 text-sm font-medium rounded-lg cursor-pointer transition 
+        ${isSelected
+          ? "bg-amber-500 text-white shadow-sm"
+          : "hover:bg-amber-100 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-200"}`}
       >
-        <div>{item.icon}</div>
-        <div>{item.name}</div>
+        <span className="text-lg">{item.icon}</span>
+        <span>{item.name}</span>
       </li>
     </Link>
   );

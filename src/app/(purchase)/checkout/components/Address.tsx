@@ -364,7 +364,7 @@ const Address = () => {
               <div className="w-fit">
                 <button className="w-fit px-2 py-1 text-center bg-amber-400 text-blue-900 font-bold rounded-xl text-[1.2rem] z-50">
                
-                  <span className=" text-blue-900">Use</span>
+                  <span className=" text-blue-900">Use </span>
                   <span className=" text-sky-500">Address</span>
                 </button>
               </div>

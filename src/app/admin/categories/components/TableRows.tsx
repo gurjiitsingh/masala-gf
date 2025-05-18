@@ -1,120 +1,108 @@
 import {
-  //Table,
-  //TableBody,
   TableCell,
-  //TableHead,
-  //TableHeader,
   TableRow,
-  //TableCaption,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-// import Link from "next/link";
-import { MdDeleteForever } from "react-icons/md";
-// import { CiEdit } from "react-icons/ci";
-// import Image from "next/image";
-
 import Image from "next/image";
 import Link from "next/link";
+import { MdDeleteForever } from "react-icons/md";
 import { CiEdit } from "react-icons/ci";
 import { categoryType } from "@/lib/types/categoryType";
 import { deleteCategory } from "@/app/action/category/dbOperations";
+
 function TableRows({ category }: { category: categoryType }) {
-  //const router = useRouter();
-
   async function handleDelete(category: categoryType) {
-
- if (confirm("Möchten Sie die Kategorie löschen?\n Falls ja, klicken Sie auf OK. \n Falls nicht, klicken Sie auf Cancel.")) {
-  const result = await deleteCategory(category.id!, category.image!);
-  if (result.errors) {
-    alert(result.errors);
-  } else {
-    // router.push('/admin/products')
-    //   router.refresh()
-    location.reload();
-  }
-   } else {
-     return false;
-   }
-
-
+    if (
+      confirm(
+        "Möchten Sie die Kategorie löschen?\n Falls ja, klicken Sie auf OK. \n Falls nicht, klicken Sie auf Cancel."
+      )
+    ) {
+      const result = await deleteCategory(category.id!, category.image!);
+      if (result.errors) {
+        alert(result.errors);
+      } else {
+        location.reload();
+      }
+    }
   }
 
   return (
     <TableRow
       key={category.id}
-      className="whitespace-nowrap bg-slate-50 rounded-lg p-1 my-1"
+      className="whitespace-nowrap hover:bg-green-50 dark:hover:bg-zinc-800 transition rounded-xl"
     >
       <TableCell>
-        <div className=" px-3 py-1 text-center min-w-[100px]">
+        <div className="flex justify-center items-center p-2">
           {category?.image && (
             <Image
-              className="h-12 w-12 object-cover rounded-md border p-1"
+              className="h-12 w-12 object-cover rounded-md border border-gray-200 dark:border-zinc-700"
               src={category?.image}
-              width={100}
-              height={100}
+              width={48}
+              height={48}
               alt={category.name}
             />
           )}
         </div>
       </TableCell>
-      <TableCell>{category.sortOrder}.&nbsp;{category.name}</TableCell>
 
-      <TableCell>{category.isFeatured}</TableCell>
-      {/* <TableCell></TableCell> */}
-      <TableCell>{category.desc}</TableCell>
-      {/* <TableCell>
-        {category?.isFeatured === true && (
-          <span className="ml-2 bg-gradient-to-tr from-blue-500 to-indigo-400 text-white text-[10px] rounded-full px-3 py-1">
+      <TableCell className="font-medium text-gray-800 dark:text-white">
+        {category.sortOrder}. {category.name}
+      </TableCell>
+
+      <TableCell className="text-center">
+        {category.isFeatured ? (
+          <span className="inline-block bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">
             Featured
           </span>
+        ) : (
+          <span className="text-gray-500 text-sm">—</span>
         )}
-      </TableCell> */}
-    
+      </TableCell>
+
+      <TableCell className="text-sm text-gray-700 dark:text-gray-300">
+        {category.desc}
+      </TableCell>
+
       <TableCell>
-        <p className="flex gap-3">
+        <div className="flex gap-2">
           <Link
             href={{
               pathname: `/admin/categories/editform`,
-              //  pathname: "/admin/products/editform",
-              query: {
-                id: category?.id,
-              },
+              query: { id: category?.id },
             }}
           >
-            <Button size="sm" className="bg-red-500 px-1 py-0">
-              {" "}
-              <CiEdit size={20} className="text-white" />
+            <Button
+              size="sm"
+              className="bg-amber-500 hover:bg-amber-600 text-white px-2 py-1 rounded-md"
+            >
+              <CiEdit size={18} />
             </Button>
           </Link>
-          {/* <Button onClick={async () => {await deleteItem("foobar")}} className="p-1">  <CiEdit /></Button> */}
 
           <Button
             onClick={() => handleDelete(category)}
             size="sm"
-            className="bg-red-600 px-1 py-0 "
+            className="bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded-md"
           >
-            <MdDeleteForever size={20} className="text-white" />
+            <MdDeleteForever size={18} />
           </Button>
-        </p>
+        </div>
       </TableCell>
 
       <TableCell>
-        <p className="flex gap-3">
-          <Link
-            href={{
-              pathname: `/admin/productsbase`,
-              //  pathname: "/admin/products/editform",
-              query: {
-                id: category?.id,
-              },
-            }}
+        <Link
+          href={{
+            pathname: `/admin/productsbase`,
+            query: { id: category?.id },
+          }}
+        >
+          <Button
+            size="sm"
+            className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-md"
           >
-            <Button size="sm" className="bg-red-500 px-1 py-0 text-white">
-              {" "}
-              View Products
-            </Button>
-          </Link>
-        </p>
+            View Products
+          </Button>
+        </Link>
       </TableCell>
     </TableRow>
   );

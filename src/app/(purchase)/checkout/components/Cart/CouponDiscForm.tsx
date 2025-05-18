@@ -13,7 +13,9 @@ export default function CouponDiscount() {
   const { setCouponDisc, couponDisc } = UseSiteContext();
   const [couponSuccess, setCouponSuccess] = useState("");
 
-  useEffect(() => {}, [couponDisc]);
+  useEffect(() => {
+    console.log("couponDisc-----------", couponDisc)
+  }, [couponDisc]);
 
   const {
     register,
