@@ -30,7 +30,7 @@ function TableRows({ product }:{product:ProductType}){
  
 
   if (confirm("Möchten Sie das Produkt löschen? \n Falls ja, klicken Sie auf OK. \n Falls nicht, klicken Sie auf Cancel.")) {
-    const result = await deleteProduct(product.id!);
+  //  const result = await deleteProduct(product.id!);
     // if(result.errors){
 //   alert(result.errors)
 // }else{
