@@ -73,9 +73,9 @@ export default function RootLayout({
             {children}
 
             <Footer />
-            <div className="sticky  bottom-8 flex justify-end pr-4 z-50">
-              <CartBottom />
-            </div>
+           
+<div className="fixed bottom-8 right-4 z-50 w-fit"><CartBottom /></div> 
+
           </CartProvider>
         </SiteProvider>
       </body>
