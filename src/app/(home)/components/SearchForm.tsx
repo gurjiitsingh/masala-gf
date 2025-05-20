@@ -1,36 +1,38 @@
-import React, { useEffect, useState } from 'react';
+import { UseSiteContext } from "@/SiteContext/SiteContext";
+import React, { useEffect, useState } from "react";
 
+export default function SearchForm() {
+  const { setProductToSearchQuery } = UseSiteContext();
+  const [query, setQuery] = useState("");
 
-
-export default function SearchForm({handleSearchForm}:{handleSearchForm:(e:string)=>void}) {
-  const [query, setQuery] = useState('');
-  // console.log("query--------",query)
-  // const filteredData = data.filter(item =>
-  //   item.name.toLowerCase().includes(query.toLowerCase())
-  // );
-  useEffect(()=>{
-    handleSearchForm(query)
-  },[query])
- 
+  useEffect(() => {
+    setProductToSearchQuery(query);
+  }, [query]);
 
   return (
-    <div className="max-w-md ">
-      <input
-        type="text"
-        placeholder="Gerichte suchen..."
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-        className="w-full seach-form"
-      />
-      {/* <ul className="list-disc pl-5">
-        {filteredData.length > 0 ? (
-          filteredData.map(item => (
-            <li key={item.id}>{item.name}</li>
-          ))
-        ) : (
-          <li className="text-gray-500">No results found.</li>
-        )}
-      </ul> */}
+    <div className="max-w-md w-full">
+      <div className="relative">
+        <input
+          type="text"
+          placeholder="Gerichte suchen..."
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          className="w-full py-2 pl-10 pr-4 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-yellow-400 text-sm text-gray-800 shadow-sm placeholder-gray-400"
+        />
+        <svg
+          className="absolute left-3 top-2.5 w-5 h-5 text-gray-400 pointer-events-none"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1010.5 18.5a7.5 7.5 0 006.15-3.85z"
+          />
+        </svg>
+      </div>
     </div>
   );
 }

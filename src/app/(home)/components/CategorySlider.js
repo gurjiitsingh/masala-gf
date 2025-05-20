@@ -89,8 +89,16 @@ export default function CategorySlider() {
     slidesToScroll: 2,
   };
 
-  return (
-    <div className="-mt-20 h-full w-[98%] px-2 gap-1">
+ return (
+  // <div className="relative z-10 mt-20 mb-7 container mx-auto ">
+    
+<div className="relative z-10 mt-10 mb-7 container mx-auto ">
+   <div className="container mx-auto w-full flex justify-end ">
+    <div className=" w-fit  text-zinc-500 light-bg rounded-t-2xl py-1 px-2 text-sm font-light md:font-normal">
+          Gericht suchen oder Kategorie auswählen
+        </div>
+</div>
+    <div className="mx-auto max-w-[1700px] min-h-[100px] bg-white/70 backdrop-blur-md rounded-b-xl rounded-tl-xl shadow-md p-3">
       {categoryData.length > 0 && (
         <Slider {...sliderSettings}>
           {categoryData.map((category) => (
@@ -126,5 +134,7 @@ export default function CategorySlider() {
         </Slider>
       )}
     </div>
-  );
+  </div>
+);
+
 }

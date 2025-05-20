@@ -6,7 +6,7 @@ import { deliveryType } from "@/lib/types/deliveryType";
 import { couponType } from "@/lib/types/couponType";
 import { getAllSettings } from "@/app/action/setting/dbOperations";
 import { SettingsDataType } from "@/lib/types/settings";
-
+import { ProductType } from "@/lib/types/productType";
 
 interface Props {
   children: React.ReactNode;
@@ -45,31 +45,32 @@ export const SiteProvider: React.FC<Props> = ({
   const [newOrderCondition, setNewOrderConditionL] = useState<boolean>(false);
   const [paymentType, setPaymentTypeL] = useState<string>("");
   const [deliveryCost, setDeliveryCostL] = useState<number>(0);
-const [settings, setSettings] = useState<SettingsDataType>({});
-//const [disablePickupCatDiscountIds, setDisablePickupCatDiscountIdsL] = useState<string[] | null>(null);
-const [disablePickupCatDiscountIds, setDisablePickupCatDiscountIdsL] = useState<string[]>([]);
-
-
- useEffect(() => {
+  const [settings, setSettings] = useState<SettingsDataType>({});
+  //const [disablePickupCatDiscountIds, setDisablePickupCatDiscountIdsL] = useState<string[] | null>(null);
+  const [disablePickupCatDiscountIds, setDisablePickupCatDiscountIdsL] =
+    useState<string[]>([]);
+  const [allProduct, setAllProduct] = useState<ProductType[]>([]);
+  const [productToSearchQuery, setProductToSearchQuery] = useState("");
+  useEffect(() => {
     getAllSettings().then(setSettings).catch(console.error);
   }, []);
   // useEffect(()=>{
   //   console.log("settings---------",settings)
   // },[settings])
 
-useEffect(() => {
-  const stored = localStorage.getItem('disablePickupCatDiscountIds');
-  try {
-    const parsed = stored ? JSON.parse(stored) : [];
-    if (Array.isArray(parsed)) {
-      setDisablePickupCatDiscountIdsL(parsed);
-    } else {
+  useEffect(() => {
+    const stored = localStorage.getItem("disablePickupCatDiscountIds");
+    try {
+      const parsed = stored ? JSON.parse(stored) : [];
+      if (Array.isArray(parsed)) {
+        setDisablePickupCatDiscountIdsL(parsed);
+      } else {
+        setDisablePickupCatDiscountIdsL([]);
+      }
+    } catch {
       setDisablePickupCatDiscountIdsL([]);
     }
-  } catch {
-    setDisablePickupCatDiscountIdsL([]);
-  }
-}, [])
+  }, []);
 
   useEffect(() => {
     const deliveryType = window.localStorage.getItem("delivery_type") as string;
@@ -148,11 +149,17 @@ useEffect(() => {
   }
   function setDisablePickupCatDiscountIds(CatIds: string[]) {
     setDisablePickupCatDiscountIdsL(CatIds);
-    localStorage.setItem('disablePickupCatDiscountIds', JSON.stringify(CatIds));
+    localStorage.setItem("disablePickupCatDiscountIds", JSON.stringify(CatIds));
   }
   return (
     <SiteContext.Provider
       value={{
+        allProduct,
+        setAllProduct,
+        //     handleSearchForm,
+        // setHandleSearchForm,
+        productToSearchQuery,
+        setProductToSearchQuery,
         paymentType,
         setPaymentType,
         newOrderCondition,

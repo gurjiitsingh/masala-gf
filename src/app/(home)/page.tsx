@@ -1,36 +1,48 @@
 "use client";
 
-
 import Hero from "./components/Hero";
 //import Categories from "./Components/Categories";
 import Products from "./components/Products";
-import CategorySlider from "./components/CategorySlider"
-
+import CategorySlider from "./components/CategorySlider";
+import SearchForm from "./components/SearchForm";
 
 //import { TnewProductSchema } from '@/lib/types';
 // import {  TnewProductSchema } from '@/lib/type/productType';
 
 export default function Page() {
   // const products = await fetchProducts();
- 
+
   return (
-    <div className="overflow-hidden min-h-screen">
-      <div className="container mx-auto pt-7 p-1">
-        <div className="w-full px-2 flex flex-col md:flex-row flex-wrap gap-3">
-        <div className='bg-slate-200 flex flex-nowrap md:justify-center  py-2 px-3 gap-2  rounded-2xl justify-between  w-full '>
-          <Hero />
-          <div className="flex flex-col">
-         <h1 className="flex items-center text-4xl sm:5xl md:text-6xl  text-[#64870d]">Abhol Rabatt 20% </h1>
-        <div className="text-sm text-slate-500">Das Essen kann vom Bild abweichen</div>
-         </div>
-          </div>
-          <CategorySlider />
-          {/* <Categories /> */}
-        
-          <Products />
-        
+    <div
+      style={{
+        backgroundImage: "url('/masala-gf-bg.jpg')",
+      }}
+      className="px-3 md:px-0 min-h-screen pb-6  z-0 relative bg-cover bg-center bg-no-repeat  "
+    >
+      <div className="container mx-auto ">
+        <div className="flex flex-col md:flex-row md:justify-between">
+          <div>
+        <h1 className="text-5xl w-full font-bold my-7  text-slate-500">
+          {" "}
+          Masala <span className="text-4xl font-extralight text-zinc-400">Taste of India</span> 
+        </h1>
+        <div className="flex items-center gap-2 w-full">
+          <SearchForm />
         </div>
+        </div>
+        <div>
+ <h2 className="text-3xl w-full my-4  text-slate-700">
+          {" "}
+            Abhol Rabatt 20%
+        </h2>
+        <p className="text-sm text-slate-500">Das Essen kann vom Bild abweichen</p>
+     </div></div>
       </div>
+ 
+      <CategorySlider />
+      {/* <Categories /> */}
+
+      <Products />
     </div>
   );
 }

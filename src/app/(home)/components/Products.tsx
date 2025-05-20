@@ -6,14 +6,14 @@ import { fetchAddOnProducts } from "@/app/action/productsaddon/dbOperation";
 import { ProductType } from "@/lib/types/productType";
 import { addOnType } from "@/lib/types/addOnType";
 import PageProductDetailComponent from "./PageProductDetailComponent";
-import SearchForm from "./SearchForm";
 import { UseSiteContext } from "@/SiteContext/SiteContext";
 
 export default function Products() {
-  const { productCategoryIdG, settings } = UseSiteContext();
+  const { productCategoryIdG, settings, setAllProduct, productToSearchQuery } =
+    UseSiteContext();
 
   const [products, setProducts] = useState<ProductType[]>([]);
-  const [allProducts, setAllProducts] = useState<ProductType[]>([]);
+  const [allProducts, setAllProductsC] = useState<ProductType[]>([]);
   const [addOns, setAddOns] = useState<addOnType[]>([]);
   const [categoryId, setCategoryId] = useState("");
 
@@ -37,10 +37,12 @@ export default function Products() {
         );
 
         setAddOns(fetchedAddOns);
-        setAllProducts(sortedProducts);
-
+        setAllProductsC(sortedProducts);
+        setAllProduct(fetchedProducts);
         if (categoryId) {
-          const filtered = sortedProducts.filter(p => p.categoryId === categoryId);
+          const filtered = sortedProducts.filter(
+            (p) => p.categoryId === categoryId
+          );
           setProducts(filtered);
         }
       } catch (error) {
@@ -54,28 +56,32 @@ export default function Products() {
   // Update when category or allProducts change
   useEffect(() => {
     if (!categoryId || allProducts.length === 0) return;
-    const filtered = allProducts.filter(p => p.categoryId === categoryId);
+    const filtered = allProducts.filter((p) => p.categoryId === categoryId);
     setProducts(filtered);
   }, [allProducts, categoryId]);
 
   // Search filter
-  function handleSearchForm(searchText: string) {
-    const filtered = allProducts.filter(p =>
-      p.name.toLowerCase().includes(searchText.toLowerCase())
+
+  useEffect(()=>{
+
+   if(productToSearchQuery === "") return;  
+    const filtered = allProducts.filter((p) =>
+      p.name.toLowerCase().includes(productToSearchQuery.toLowerCase())
     );
     setProducts(filtered);
-  }
+  
+  },[productToSearchQuery])
 
   return (
-    <div className="flex flex-col md:flex-row md:flex-wrap gap-1 md:gap-2 w-full">
-      <div className="flex items-center gap-2 w-full">
-        <SearchForm handleSearchForm={handleSearchForm} />
-        <div className="flex items-center light-bg rounded-full py-1 px-2 text-sm font-light md:font-normal">
-          Gericht suchen oder Kategorie auswählen
-        </div>
-      </div>
+    <div className="container mx-auto  flex flex-col md:flex-row md:flex-wrap gap-1 md:gap-2 w-full ">
+      
 
-      <div className="flex flex-col md:flex-row md:flex-wrap md:mt-3 gap-1 md:gap-5 w-full">
+
+
+
+
+
+      <div className="flex flex-col md:flex-row md:flex-wrap md:mt-3 gap-3 md:gap-5 w-full">
         {products.map((product, i) => (
           <PageProductDetailComponent
             key={product.id ?? `${product.name}-${i}`}

@@ -4,9 +4,15 @@ import { couponType } from "@/lib/types/couponType";
 import { deliveryType } from "@/lib/types/deliveryType";
 import { createContext, useContext } from "react";
 import { SettingsDataType } from "@/lib/types/settings";
-
+import { ProductType } from "@/lib/types/productType";
 
 type SiteContextType = {
+  allProduct: ProductType[];
+  setAllProduct: (e: ProductType[]) => void;
+  productToSearchQuery: string;
+setProductToSearchQuery: (e: string) => void;
+  // handleSearchForm: (e: string) => void;
+  // setHandleSearchForm: (fn: (e: string) => void) => void;
   newOrderCondition: boolean;
   setNewOrderCondition: (e: boolean) => void;
   open: boolean;
@@ -39,10 +45,16 @@ type SiteContextType = {
   setPaymentType: (e: string) => void;
   disablePickupCatDiscountIds: string[];
   setDisablePickupCatDiscountIds: (e: string[]) => void;
-  settings:SettingsDataType;
+  settings: SettingsDataType;
 };
 
 const SiteContext = createContext<SiteContextType>({
+  allProduct: [],
+  setAllProduct: (e: ProductType[]) => e,
+  productToSearchQuery: "",
+setProductToSearchQuery: (e: string) => e,
+  // handleSearchForm: (e: string) => {},
+  // setHandleSearchForm: (fn: (e: string) => void) => {},
   paymentType: "",
   setPaymentType: (e: string) => {
     return e;
@@ -120,11 +132,12 @@ const SiteContext = createContext<SiteContextType>({
     return e;
   },
 
-   disablePickupCatDiscountIds: [],
-  setDisablePickupCatDiscountIds: (e:string[]) => {return e},
+  disablePickupCatDiscountIds: [],
+  setDisablePickupCatDiscountIds: (e: string[]) => {
+    return e;
+  },
 
-settings:{}
- 
+  settings: {},
 });
 
 export const UseSiteContext = () => {
