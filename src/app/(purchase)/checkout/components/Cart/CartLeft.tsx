@@ -131,7 +131,7 @@ export default function CartLeft() {
   useEffect(() => {
     if (itemTotal <= 0) return;
 
-    if (couponDisc?.price && couponDisc.minSpend! <= itemTotal) {
+    if (couponDisc?.discount && couponDisc.minSpend! <= itemTotal) {
       const excludedCategoryIds = couponDisc.excludedCategoryIds || [];
       const isCouponAllowed = cartData.some(
         (item) => !excludedCategoryIds.includes(item.categoryId)
@@ -140,21 +140,21 @@ export default function CartLeft() {
 
       if (isCouponAllowed) {
         if (couponDisc.discountType === "flat") {
-          const price = +couponDisc.price;
+          const price = +couponDisc.discount;
           setCalCouponDisscount(0);
           setFlatCouponDisscount(price);
           setcouponDiscountPercentL(
             parseFloat(((price / itemTotal) * 100).toFixed(2))
           );
         } else {
-          const percent = +couponDisc.price;
+          const percent = +couponDisc.discount;
           const totalDis = parseFloat(((itemTotal * percent) / 100).toFixed(2));
           setCalCouponDisscount(totalDis);
           setFlatCouponDisscount(0);
           setcouponDiscountPercentL(percent);
         }
       }
-    } else if (couponDisc?.price) {
+    } else if (couponDisc?.discount) {
       toast.error(
         `Minmun purchase amount for discount is € ${couponDisc.minSpend} , Remove coupon or add more item to cart`
       );

@@ -6,17 +6,17 @@ export default function CouponDisc({ total }: { total: number }) {
 
   return (
     <>
-      {couponDisc?.price && (
+      {couponDisc?.discount && (
         <>
           {couponDisc?.discountType === "flat" ? (
             <div className="font-semibold border-b py-3 w-full flex justify-between items-center">
               <div className="text-sm font-semibold py-3 w-full text-left">
-                Coupon Discount <span>&euro;</span> {couponDisc?.price} flat
+                Coupon Discount <span>&euro;</span> {couponDisc?.discount} flat
               </div>
               <div className="flex gap-1">
                 - <span>&#8364;</span>{" "}
                 <span>
-                  {(Number(couponDisc?.price))
+                  {(Number(couponDisc?.discount))
                     .toFixed(2)
                     .replace(/\./g, ",")}
                 </span>
@@ -25,12 +25,12 @@ export default function CouponDisc({ total }: { total: number }) {
           ) : (
             <div className="font-semibold border-b py-3 w-full flex justify-between items-center">
               <div className="text-sm font-semibold py-3 w-full text-left">
-                Coupon Discount {couponDisc?.price}%
+                Coupon Discount {couponDisc?.discount}%
               </div>
               <div className="flex gap-1">
-                {couponDisc?.price && <span>- &#8364;</span>}
+                {couponDisc?.discount && <span>- &#8364;</span>}
                 <span>
-                  {((+total * Number(couponDisc?.price)) / 100)
+                  {((+total * Number(couponDisc?.discount)) / 100)
                     .toFixed(2)
                     .replace(/\./g, ",")}
                 </span>

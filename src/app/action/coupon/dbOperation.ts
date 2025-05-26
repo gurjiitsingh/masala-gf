@@ -19,8 +19,8 @@ import {
 import { couponType, couponSchema } from "@/lib/types/couponType";
 
 export async function addNewcoupon(formData: FormData) {
-  const name = formData.get("name");
-  const price = formData.get("price") as string;
+  const code = formData.get("code");
+  const discount = formData.get("discount") as string;
   const minSpend = formData.get("minSpend") as string;
   const productCat = formData.get("productCat");
   const couponDesc = formData.get("couponDesc");
@@ -36,8 +36,8 @@ const isActivated = true;
   //console.log("isFeatured ", typeof formData.get("isFeatured"));
 
   const receivedData = {
-    name,
-    price,
+    code,
+    discount,
     minSpend,
     productCat,
     couponDesc,
@@ -80,11 +80,11 @@ const isActivated = true;
     timeZone: "Europe/Berlin",
   });
 
- const priceF = parseFloat(price) as number;
+ const discountF = parseFloat(discount) as number;
  const minSpendF = parseFloat(minSpend) as number;
   const data = {
-    name,
-    price:priceF,
+    code,
+    discount:discountF,
     minSpend:minSpendF,
     productCat,
     couponDesc,
@@ -121,8 +121,8 @@ export async function deletecoupon(id: string): Promise<rt> {
 export  async  function editcoupon(id: string, formData: FormData){
   try {
     const updatedData: any = {
-      name: formData.get("name"),
-      price: formData.get("price"),
+      code: formData.get("code"),
+      discount: formData.get("discount"),
       offerType: formData.get("offerType"),
       expiry: formData.get("expiry"),
       discountType: formData.get("discountType"),
@@ -150,8 +150,8 @@ export async function editcoupon1(formData: FormData) {
   // featured_img = formData.get("oldImgageUrl");
 
   const receivedData = {
-    name: formData.get("name"),
-    price: formData.get("price"),
+    code: formData.get("code"),
+    discount: formData.get("discount"),
     productCat: formData.get("productCat"),
     couponDesc: formData.get("couponDesc"),
     minSpend: formData.get("minSpend"),
@@ -207,8 +207,8 @@ export async function editcoupon1(formData: FormData) {
   // }
 
   const couponUpdtedData = {
-    name: formData.get("name"),
-    price: formData.get("price"),
+    code: formData.get("code"),
+    discount: formData.get("discount"),
     productCat: formData.get("productCat"),
     couponDesc: formData.get("couponDesc"),
     minSpend: formData.get("minSpend"),
@@ -256,7 +256,7 @@ export async function fetchcouponByCode(
 ): Promise<couponType[]> {
    
   const data = [] as couponType[];
-  const q = query(collection(db, "coupon"), where("name", "==", condname));
+  const q = query(collection(db, "coupon"), where("code", "==", condname));
   const querySnapshot = await getDocs(q);
 
   querySnapshot.forEach((doc) => {

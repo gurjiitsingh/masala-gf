@@ -18,10 +18,10 @@ const Page = () => {
 
   async function onsubmit(data: TcouponSchema) {
     const formData = new FormData();
-    const code = data.name.toUpperCase();
+    const code = data.code.toUpperCase();
 
-    formData.append("name", code);
-    formData.append("price", data.price);
+    formData.append("code", code);
+    formData.append("discount", data.discount);
     formData.append("offerType", data.offerType!);
     formData.append("expiry", data.expiry!);
     formData.append("discountType", data.discountType!);
@@ -34,8 +34,8 @@ const Page = () => {
 
     const result = await addNewcoupon(formData);
 
-    setValue("name", "");
-    setValue("price", "");
+    setValue("code", "");
+    setValue("discount", "");
     setValue("minSpend", "");
   }
 
@@ -56,8 +56,8 @@ const Page = () => {
                 <label className="label-style">
                   Coupon Code <span className="text-red-500">*</span>
                 </label>
-                <input {...register("name")} className="input-style" placeholder="Enter code" />
-                <span className="text-[0.8rem] text-destructive">{errors.name?.message}</span>
+                <input {...register("code")} className="input-style" placeholder="Enter code" />
+                <span className="text-[0.8rem] text-destructive">{errors.code?.message}</span>
               </div>
 
               {/* Discount Type (Radio) */}
@@ -91,8 +91,8 @@ const Page = () => {
                 <label className="label-style">
                   Discount Amount <span className="text-red-500">*</span>
                 </label>
-                <input {...register("price")} className="input-style" placeholder="Enter amount" />
-                <span className="text-[0.8rem] text-destructive">{errors.price?.message}</span>
+                <input {...register("discount")} className="input-style" placeholder="Enter amount" />
+                <span className="text-[0.8rem] text-destructive">{errors.discount?.message}</span>
               </div>
 
               {/* Hidden productCat */}

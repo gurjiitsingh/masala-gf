@@ -8,14 +8,14 @@ import { z } from "zod";
 
 // const couponSchema = z.object({
 //   // id: z.number().optional(),
-//   name: z
+//   code: z
 //     .string()
 //     .trim()
-//     .min(2, { message: "coupon name is very short" })
-//     .max(30, { message: "coupon name is very long" }),
-//   price: z
+//     .min(2, { message: "coupon code is very short" })
+//     .max(30, { message: "coupon code is very long" }),
+//   discount: z
 //     .string()
-//     .refine((value) => /^\d+$/.test(value), "Invalid coupon price"), // Refinement
+//     .refine((value) => /^\d+$/.test(value), "Invalid coupon discount"), // Refinement
 //   productCat: z.string().min(1, { message: "Please select category" }),
 
 //   couponDesc: z.string().min(1, { message: "Please select category" }),
@@ -26,7 +26,7 @@ import { z } from "zod";
 //   // image:z.object({
 //   //   size: z.number(),
 //   // type: z.string(),
-//   // name: z.string(),
+//   // code: z.string(),
 //   // lastModified: z.number(),
 //   //  }),
 // });
@@ -36,10 +36,11 @@ import { z } from "zod";
 
 export const couponSchema = z.object({
   id: z.string().optional(),
-  name: z.string().min(4, { message: "coupon name is required" }),
-  price: z
+  message:z.string().optional(),
+  code: z.string().min(4, { message: "coupon code is required" }),
+  discount: z
     .string(),
-   // .refine((value) => /^\d+$/.test(value), "Invalid coupon price"), // Refinement
+   // .refine((value) => /^\d+$/.test(value), "Invalid coupon discount"), // Refinement
   productCat: z.string().min(1, { message: "Please select category" }),
   couponDesc: z
     .string().optional(),
@@ -58,8 +59,9 @@ export type TcouponSchema = z.infer<typeof couponSchema>;
 
 
 export type couponType = {
-  name: string;
-  price: number;
+  code: string;
+  message:string | undefined;
+  discount: number;
   productCat: string;
   id?: string | undefined;
   couponDesc?: string | undefined;
@@ -78,8 +80,9 @@ export type couponType = {
 
 export type ShowPorductT = {
   id: string;
-  name: string;
-  price: string;
+  code: string;
+  message:string | undefined;
+  discount: string;
   Desc: string;
   productCat: string;
   couponDesc: string;
@@ -89,10 +92,11 @@ export type ShowPorductT = {
 
 export const editCouponSchema = z.object({
   id: z.string().optional(),
-  name: z.string().min(4, { message: "coupon name is required" }),
-  price: z
+  code: z.string().min(4, { message: "coupon code is required" }),
+   message:z.string().optional(),
+  discount: z
     .string()
-    .refine((value) => /^\d+$/.test(value), "Invalid coupon price"), // Refinement
+    .refine((value) => /^\d+$/.test(value), "Invalid coupon discount"), // Refinement
   productCat: z.string().min(1, { message: "Please select category" }),
   couponDesc: z
     .string()
@@ -116,7 +120,8 @@ export type TeditcouponSchema = z.infer<typeof editCouponSchema>;
 //export default couponSchema;
 
 export type Tcoupon = {
-  name: string;
+  code: string;
+  message:string | undefined;
   id: string;
   image: string;
   category: string;

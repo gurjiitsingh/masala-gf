@@ -37,11 +37,11 @@ console.log("copoun data------------",coupon)
 
   return (
     <TableRow key={coupon.id} className="whitespace-nowrap bg-slate-50 rounded-lg p-1 my-1">
-      <TableCell>{coupon.name}</TableCell>
+      <TableCell>{coupon.code}</TableCell>
      <TableCell>
   {coupon.discountType === "flat"
-    ? `Flat €${coupon.price}`
-    : `Percent %${coupon.price}`}
+    ? `Flat €${coupon.discount}`
+    : `Percent %${coupon.discount}`}
 </TableCell>
       {/* <TableCell>
         <div className=" px-3 py-1 text-center ">

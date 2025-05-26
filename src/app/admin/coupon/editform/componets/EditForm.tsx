@@ -26,9 +26,9 @@ const EditForm = () => {
     async function prefetch() {
       const couponData = await fetchcouponById(id);
       setValue("id", id);
-      setValue("name", couponData.name);
+      setValue("code", couponData.code);
       setValue("couponDesc", couponData.couponDesc);
-      setValue("price", couponData.price.toString());
+      setValue("discount", couponData.discount.toString());
       setValue("minSpend", couponData.minSpend!.toString());
       setValue("isFeatured", couponData.isFeatured);
       setValue("discountType", couponData.discountType || "percentage");
@@ -40,8 +40,8 @@ const EditForm = () => {
 
   async function onsubmit(data: TcouponSchema) {
     const formData = new FormData();
-    formData.append("name", data.name);
-    formData.append("price", data.price);
+    formData.append("code", data.code);
+    formData.append("discount", data.discount);
     formData.append("productCat", data.productCat || "all");
     formData.append("couponDesc", data.couponDesc || "");
     formData.append("minSpend", data.minSpend || "");
@@ -74,8 +74,8 @@ const EditForm = () => {
 
               <div className="flex flex-col gap-1">
                 <label className="label-style">Coupon Name<span className="text-red-500">*</span></label>
-                <input {...register("name")} className="input-style" />
-                <span className="text-[0.8rem] text-destructive">{errors.name?.message}</span>
+                <input {...register("code")} className="input-style" />
+                <span className="text-[0.8rem] text-destructive">{errors.code?.message}</span>
               </div>
 
                <div className="flex flex-col gap-2">
@@ -90,8 +90,8 @@ const EditForm = () => {
 
                  <div className="flex flex-col gap-1">
                 <label className="label-style">Discount Value<span className="text-red-500">*</span></label>
-                <input {...register("price")} className="input-style" placeholder="Enter discount value" />
-                <span className="text-[0.8rem] text-destructive">{errors.price?.message}</span>
+                <input {...register("discount")} className="input-style" placeholder="Enter discount value" />
+                <span className="text-[0.8rem] text-destructive">{errors.discount?.message}</span>
               </div>
 
             </div>
