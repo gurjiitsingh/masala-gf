@@ -117,16 +117,16 @@ body {
  .modul-info,
  .modul-img {
   @apply order-2;
-}
+} 
 
 .slick-arrow{
-  background-color: #aaa !important;
+  background-color: #438a57 !important;
   border-radius: 100%;
-  padding:auto;
+  padding-top:3px !important;
   z-index: 9999;
   height: 40px !important;
   width: 40px !important;
-  opacity: .5;
+  opacity: .7;
   z-index: 1 !important;
 } 
 .slick-prev{
