@@ -58,12 +58,13 @@ const ButtonContext = createContext<ButtonContextType>({
     couponDesc: "",
     isFeatured: false,
     minSpend: 0,
-    name: "",
-    price: 0,
+    code: "",
+    discount: 0,
     productCat: "",
     isActivated:false,
      startDate:"",
-      date:""
+      date:"",
+      message:"",
   },
 
   setCouponDisc: (e) => {
