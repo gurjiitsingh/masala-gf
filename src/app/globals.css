@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+/* text-[#64870d] */
+/* text-emerald-800 */
 .input-style1 {
   @apply border border-slate-300 rounded focus:outline-none py-[.5rem] px-1 text-slate-700 text-[.8rem];
 }

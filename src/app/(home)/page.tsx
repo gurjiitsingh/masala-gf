@@ -15,10 +15,10 @@ export default function Page() {
   // const products = await fetchProducts();
 
   return (
-    <>
+    <div>
       {" "}
       <div
-        className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat"
+        className="absolute top-18 inset-0 z-0 bg-cover bg-center bg-no-repeat"
         style={{ backgroundImage: "url('/hero-bg.jpg')" }}
       ></div>
       <div className="relative min-h-screen px-3 md:px-0 pb-6">
@@ -45,6 +45,6 @@ export default function Page() {
           <Products />
         </div>
       </div>
-    </>
+    </div>
   );
 }

@@ -13,26 +13,7 @@ import Link from "next/link";
 // }
 const Header = () => {
   const { bargerMenuToggle } = UseSiteContext();
-  // const [width, setWidth] = useState(0);
-  // const [height, setHeight] = useState(0);
-  // const [showNav, setShowNav] = useState(true);
-
-  //  useEffect(() => {
-  //   const handleResize = () => setWidth(window.innerWidth);
-  //   window.addEventListener("resize", handleResize);
-  //   return () => window.removeEventListener("resize", handleResize);
-
-  //  }, []);
-
-  //  useEffect(()=>{
-  //   if(width >= 1024 ){
-  //     setShowNav(true);
-  //   }else{
-  //    // setShowNav(false);
-  //   }
-
-  //  },[width])
-
+ 
   return (
     <header className="bg-white shadow-md  py-1  px-4  mx-auto w-full md:w-full ">
       <div className="container mx-auto flex items-center justify-between gap-3">
@@ -40,21 +21,20 @@ const Header = () => {
         <img className="h-12 md:h-12" src="/logo.webp" alt="Logo" />
         </Link> 
         <Navbar />
-        {/* {showNav ? <Navbar /> : <></>} */}
+      
       </div>
       <div className="flex gap-2">
         <SessionProvider>
           <Login />
         </SessionProvider>
-        {/* <Cart /> */}
-        {/* <CartLink /> */}
+     
 
         <button
           onClick={()=>bargerMenuToggle(false)}
           className="size-lg px-3 block lg:hidden"
           aria-label="toggle burger menu"
         >
-          {/* <FaBars className="hidden md:block" size={40} /> */}
+         
           <FaBars className="" size={32} />
         </button>
       </div>
@@ -62,5 +42,5 @@ const Header = () => {
     </header>
   );
 };
-
+ {/* <FaBars className="hidden md:block" size={40} /> */}
 export default Header;

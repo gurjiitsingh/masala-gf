@@ -17,7 +17,7 @@ export default function SearchForm() {
           placeholder="Gerichte suchen..."
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          className="w-full py-2 pl-10 pr-4 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-yellow-400 text-sm text-gray-800 shadow-sm placeholder-gray-400"
+          className="w-full py-2 pl-10 pr-4 rounded-xl border border-[#64870d] focus:outline-none focus:ring-2 focus:ring-yellow-400 text-sm text-gray-800 shadow-sm placeholder-gray-400"
         />
         <svg
           className="absolute left-3 top-2.5 w-5 h-5 text-gray-400 pointer-events-none"
