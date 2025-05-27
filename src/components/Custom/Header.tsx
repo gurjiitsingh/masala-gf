@@ -9,19 +9,27 @@ import Link from "next/link";
 
 const Header = () => {
   const { bargerMenuToggle } = UseSiteContext();
-
+// #eafad6
   return (
-    <header className="bg-white shadow-md py-2 px-4 w-full">
-      <div className="container mx-auto flex items-center justify-between">
+    <header className="bg-[#64870d] px-3 opacity-70 z-50 shadow-md  w-full mx-auto  rounded-xl  mt-3">
+      <div className=" flex items-center justify-between">
         {/* Left Side: Logo and Navbar */}
         <div className="flex items-center gap-4">
-          <Link href="/">
+
+          <button
+            onClick={() => bargerMenuToggle(false)}
+            className="lg:hidden p-2 rounded-md hover:bg-gray-100 focus:outline-none"
+            aria-label="Toggle menu"
+          >
+            <FaBars size={28} />
+          </button>
+          {/* <Link href="/">
             <img
               src="/logo.webp"
               alt="Company Logo"
               className="h-12 w-auto"
             />
-          </Link>
+          </Link> */}
           <Navbar />
         </div>
 
@@ -31,13 +39,7 @@ const Header = () => {
             <Login />
           </SessionProvider>
 
-          <button
-            onClick={() => bargerMenuToggle(false)}
-            className="lg:hidden p-2 rounded-md hover:bg-gray-100 focus:outline-none"
-            aria-label="Toggle menu"
-          >
-            <FaBars size={28} />
-          </button>
+          
         </div>
       </div>
     </header>

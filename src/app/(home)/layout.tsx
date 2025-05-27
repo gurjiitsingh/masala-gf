@@ -31,6 +31,7 @@ export default function RootLayout({
   return (
     <html lang="de">
       <body>
+        
         <SiteProvider>
           <CartProvider>
             <BargerMenu />
@@ -68,18 +69,29 @@ export default function RootLayout({
               }}
               reverseOrder={false}
             />
+          <div className="relative w-full h-screen overflow-x-hidden bg-[#ebf1ec] md:bg-green-100 m-0 p-0"> 
+  <div
+        className="absolute top-0 inset-0 z-0 bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: "url('/hero-bg.jpg')" }}
+      ></div>
+
             <div className="z-50">
               <SideCart />
             </div>
-            <Header />
+             {/* left-0 w-full z-50 bg-white shadow-md */}
+            <div className="container mx-auto  top-0 px-2 md:px-0 inset-0 z-50"> 
+              <Header />
+              </div>
+           
             {children}
 
             <Footer />
            
 <div className="fixed bottom-8 right-4 z-50 w-fit"><CartBottom /></div> 
-
+</div> 
           </CartProvider>
         </SiteProvider>
+       
       </body>
     </html>
   );

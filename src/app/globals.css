@@ -46,6 +46,13 @@
 .form-btn{
   @apply bg-red-500 rounded-xl w-fit px-3 py-1 text-white
 }
+
+.bg-dark{
+  @apply bg-[#64870d]
+}
+.text-dark{
+   @apply text-[#64870d]
+}
 /* #F2F0EC; */
 /* bg-gradient-to-bl from-[#ffe4e6]  to-[#ccfbf1]  */
 :root {

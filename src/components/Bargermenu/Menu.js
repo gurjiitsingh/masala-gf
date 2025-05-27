@@ -30,7 +30,7 @@ export const BargerMenu = () => {
             ></motion.div>
             <motion.div
               {...framerMenuPanel}
-              className="fixed   mx-auto right-5 left-5 rounded-b-3xl top-0 px-6 pt-12 pb-3  z-50   primary"
+              className="fixed   mx-auto right-5 left-5 rounded-b-3xl top-0 px-6 pt-12 pb-3  z-50   bg-dark"
               ref={ref}
               aria-label="Menu"
             >
