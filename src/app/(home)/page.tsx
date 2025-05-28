@@ -17,7 +17,7 @@ export default function Page() {
   return (
     <>
     
-      <div className="relative min-h-screen px-3 md:px-0 pb-6 mt-22">
+      <div className="relative min-h-screen px-3 md:px-0 pb-6 mt-10">
         {/* Background Layer */}
 
         {/* Foreground Content */}

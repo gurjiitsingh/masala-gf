@@ -2,7 +2,7 @@ import React from "react";
 
 export default function Page() {
   return (
-    <div className="container mx-auto py-5 p-1">
+    <div className="relative container mx-auto py-5 p-1">
     
     
     <h1 className="text-[2rem]">Allergene</h1>

@@ -4,7 +4,7 @@ import React from "react";
 
 export default function Footer() {
   return (
-    <footer className="   bg-[#FADB5E] pt-12  -mb-20">
+    <footer className="relative   bg-[#FADB5E] pt-12  -mb-20">
       <div className="container mx-auto  ">
         <div className="flex flex-col md:flex-row justify-between gap-8 md:gap-1">
           <div className="flex items-center gap-1 w-full h-fit border border-amber-50 p-1 mx-1 rounded-2xl bg-amber-200">

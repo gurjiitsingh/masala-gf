@@ -2,7 +2,7 @@ import React from 'react'
 
 export default function Contact() {
   return (
-    <div className="container mx-auto py-5 p-1">
+    <div className="relative container mx-auto py-5 p-1">
       
       <div className="flex flex-col gap-8 md:flex-row my-24 justify-between">
         {/* Address Section */}
