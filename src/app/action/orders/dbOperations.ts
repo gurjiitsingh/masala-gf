@@ -14,7 +14,7 @@ import {
   updateDoc,
   where,
 } from "@firebase/firestore";
-import {  setDoc, serverTimestamp } from "firebase/firestore";
+import { setDoc, serverTimestamp } from "firebase/firestore";
 
 import { Timestamp } from "firebase/firestore";
 import { addUserDirect } from "../user/dbOperation";
@@ -23,8 +23,6 @@ import { TOrderMaster, orderMasterDataT } from "@/lib/types/orderMasterType";
 import { orderProductsT } from "@/lib/types/orderType";
 import { orderDataType, purchaseDataT } from "@/lib/types/cartDataType";
 import { ProductType } from "@/lib/types/productType";
-
-
 
 export async function createNewOrderCustomerAddress(
   purchaseData: purchaseDataT
@@ -51,8 +49,8 @@ export async function createNewOrderCustomerAddress(
   formData.append("confirmPassword", password);
   // const result = await addUser(formData);
   const UserAddedId = (await addUserDirect(formData)) as string;
-  console.log("UserAdded by id------------", UserAddedId)
-  
+  console.log("UserAdded by id------------", UserAddedId);
+
   // Now check address or add new address
   const formDataAdd = new FormData();
   formDataAdd.append("firstName", purchaseData.address.firstName);
@@ -73,7 +71,6 @@ export async function createNewOrderCustomerAddress(
   const customerName = firstName + " " + lastName;
 
   return { addressAddedId, UserAddedId, customerName };
-  
 }
 
 export async function createNewOrder(purchaseData: orderDataType) {
@@ -128,22 +125,20 @@ export async function createNewOrder(purchaseData: orderDataType) {
 
   const flatDiscount = purchaseData.flatDiscount;
   const calCouponDiscount = purchaseData.calCouponDiscount;
-
+  const couponCode = purchaseData.couponCode;
   const couponDiscountPercentL = purchaseData.couponDiscountPercentL;
   const pickUpDiscountPercentL = purchaseData.pickUpDiscountPercentL;
-  const noOffers  = purchaseData.noOffers;
+  const noOffers = purchaseData.noOffers;
 
   let status = "Payment Pending";
   if (paymentType === "cod") {
     status = "Completed";
   }
 
-console.log("noOfers----------", noOffers)
-
   const orderMasterData = {
     // also add auto increment to order,
     customerName: customerName,
-    //email,
+    email,
     userId: userAddedId,
     addressId: addressId,
     itemTotal,
@@ -153,14 +148,14 @@ console.log("noOfers----------", noOffers)
     calculatedPickUpDiscountL,
     flatDiscount,
     calCouponDiscount,
-
+    couponCode,
     couponDiscountPercentL,
     pickUpDiscountPercentL,
 
     paymentType,
     status,
     totalDiscountG,
-
+    createdAt: serverTimestamp(),
     time: now_german,
     srno: new_srno,
   } as orderMasterDataT;
@@ -178,14 +173,14 @@ console.log("noOfers----------", noOffers)
     addProductDraft(element, userAddedId, orderMasterId);
   });
 
-// save marketing data
+  // save marketing data
 
-await marketingData ({
-  name: customerName,
-  userId: userAddedId,
-  email,
-  noOfferEmails: noOffers,
-});
+  await marketingData({
+    name: customerName,
+    userId: userAddedId,
+    email,
+    noOfferEmails: noOffers,
+  });
 
   return orderMasterId;
 
@@ -193,12 +188,6 @@ await marketingData ({
   //  console.log(toBeDeleted)
   //  await deleteDoc(doc(db, "orderProducts", toBeDeleted));
 } //end of cart to orderProduct
-
-
-
-
-
-
 
 /**
  * Save or update customer info in Firestore
@@ -218,7 +207,7 @@ export async function marketingData({
   email: string;
   noOfferEmails: boolean;
 }) {
-  console.log("this is inside marketing data")
+  console.log("this is inside marketing data");
   // Use serverTimestamp for updatedAt
   const now = new Date();
 
@@ -242,9 +231,6 @@ export async function marketingData({
     { merge: true } // Will update if document already exists
   );
 }
-
-
-
 
 export async function updateOrderMaster(id: string, status: string) {
   try {
@@ -304,22 +290,56 @@ export async function addOrderToMaster(element: orderMasterDataT) {
   // }
 }
 
-export async function fetchOrdersMaster(): Promise<orderMasterDataT[]> {
-  const data = [] as orderMasterDataT[];
-  //  const q = query(collection(db, "orderMaster"));
-  //  const querySnapshot = await getDocs(q);
+// export async function fetchOrdersMaster(): Promise<orderMasterDataT[]> {
+//   const data = [] as orderMasterDataT[];
+//   //  const q = query(collection(db, "orderMaster"));
+//   //  const querySnapshot = await getDocs(q);
+
+//   const collectionRef = collection(db, "orderMaster");
+
+//   const targetQuery = query(collectionRef, orderBy("srno", "desc"), limit(20));
+//   const querySnapshot = await getDocs(targetQuery);
+
+//   querySnapshot.forEach((doc) => {
+//     const pData = { id: doc.id, ...doc.data() } as orderMasterDataT;
+//     data.push(pData);
+//   });
+//   return data;
+// }
+
+
+
+type orderMasterDataSafeT = Omit<orderMasterDataT, "createdAt"> & {
+  createdAt: string; // ISO string
+};
+
+export async function fetchOrdersMaster(): Promise<orderMasterDataSafeT[]> {
+  const data: orderMasterDataSafeT[] = [];
 
   const collectionRef = collection(db, "orderMaster");
-
   const targetQuery = query(collectionRef, orderBy("srno", "desc"), limit(20));
   const querySnapshot = await getDocs(targetQuery);
 
   querySnapshot.forEach((doc) => {
-    const pData = { id: doc.id, ...doc.data() } as orderMasterDataT;
+    const raw = doc.data() as orderMasterDataT;
+
+    const createdAtStr =
+      raw.createdAt instanceof Timestamp
+        ? raw.createdAt.toDate().toISOString()
+        : new Date().toISOString(); // fallback
+
+    const pData: orderMasterDataSafeT = {
+      ...raw,
+      id: doc.id,
+      createdAt: createdAtStr,
+    };
+
     data.push(pData);
   });
+
   return data;
 }
+
 
 export async function deleteOrderMasterRec(id: string) {
   const docRef = doc(db, "orderMaster", id);

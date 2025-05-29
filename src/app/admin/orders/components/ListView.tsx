@@ -34,10 +34,10 @@ const ListView = ({ title }: productTableProps) => {
   }, []);
 
   return (
-    <div className="mt-6">
-      <h3 className="text-2xl font-bold mb-6 text-gray-800 dark:text-white">
+    <div className="mt-2">
+      {/* <h3 className="text-2xl font-bold mb-6 text-gray-800 dark:text-white">
         {title || "Orders"}
-      </h3>
+      </h3> */}
 
       <div className="overflow-x-auto bg-white dark:bg-zinc-900 shadow rounded-xl border border-gray-200 dark:border-zinc-700">
         <Table className="min-w-[800px] text-sm text-left text-gray-700 dark:text-zinc-200">
@@ -49,6 +49,7 @@ const ListView = ({ title }: productTableProps) => {
               <TableHead className="hidden md:table-cell">Status</TableHead>
               <TableHead>Total</TableHead>
               <TableHead>Payment</TableHead>
+              <TableHead>Coupon</TableHead>
               <TableHead>Discount %</TableHead>
               <TableHead>Flat Discount</TableHead>
               <TableHead>Action</TableHead>

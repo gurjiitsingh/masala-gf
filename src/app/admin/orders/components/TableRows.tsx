@@ -19,7 +19,7 @@ function TableRows({ order }: { order: orderMasterDataT }) {
       }
     }
   }
-
+ 
   return (
     <TableRow className="bg-white dark:bg-zinc-800 hover:bg-amber-50 dark:hover:bg-zinc-700 transition duration-200">
       <TableCell>
@@ -67,7 +67,9 @@ function TableRows({ order }: { order: orderMasterDataT }) {
       <TableCell className="text-sm text-gray-600 dark:text-zinc-400">
         {order.paymentType}
       </TableCell>
-
+ <TableCell className="text-sm text-gray-600 dark:text-zinc-400">
+        {order.couponCode}
+      </TableCell>
       <TableCell className="text-sm text-gray-600">
         {order.totalDiscountG}%
       </TableCell>

@@ -111,7 +111,12 @@ export default function CartLeft() {
       ).toFixed(2);
       setCalculatedPickUpDiscount(+pickupDiscountRemovedCate);
       setdeliveryCostL(0);
+       if (parseInt(pickupDiscountRemovedCate) === 0) {
+       setPickUpDiscountPercent(0);
+      }else{
       setPickUpDiscountPercent(pickupDiscountPersent);
+      }
+
     } else if (
       deliveryType === "delivery" &&
       deliveryDis?.price !== undefined
@@ -304,7 +309,7 @@ export default function CartLeft() {
         flatDiscount: flatCouponDiscount,
         calCouponDiscount,
         couponDiscountPercentL,
-        couponCode:couponDisc?.code,
+        couponCode: couponDisc?.code?.trim() ? couponDisc.code : "NA",//couponCode: couponDisc?.code ?? "NA",
         pickUpDiscountPercentL,
         noOffers,
       } as orderDataType;
