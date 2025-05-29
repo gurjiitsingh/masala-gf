@@ -339,7 +339,7 @@ export default function CartLeft() {
           <h2 className="text-xl font-semibold border-b border-slate-200 py-3 w-full uppercase">
             {/* Shopping cart total */}
             {/* Gesamtsumme im Warenkorb */}
-            Warenkorb-Summe
+            Warenkorb-Summe.
           </h2>
 
           <div className="font-semibold border-b border-slate-200 py-3 w-full flex flex-col justify-between gap-4">
