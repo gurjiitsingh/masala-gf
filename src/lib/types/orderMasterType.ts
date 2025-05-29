@@ -17,7 +17,7 @@ export type orderMasterDataT = {
   timeId: string;
   deliveryCost: number;
   calculatedPickUpDiscountL: number;
-  createdAt:Timestamp;
+  createdAt:Timestamp | string;
   calCouponDiscount: number;
   couponDiscountPercentL: number;
   couponCode: string | undefined;
