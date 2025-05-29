@@ -14,7 +14,7 @@ export default function CouponDiscount() {
   const [couponSuccess, setCouponSuccess] = useState("");
 
   useEffect(() => {
-    console.log("couponDisc-----------", couponDisc?.couponDesc)
+    //console.log("couponDisc-----------", couponDisc?.code)
   }, [couponDisc]);
 
   const {
@@ -34,7 +34,7 @@ export default function CouponDiscount() {
     const couponCode = data.coupon.toUpperCase();
 
     const result = await fetchcouponByCode(couponCode);
-    //console.log("Discolount coupon data----------", result[0]);
+  
     if (result.length !== 0) {
       setCouponSuccess("Gutschein angewendet");
     } else {

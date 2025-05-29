@@ -74,6 +74,7 @@ export type couponType = {
   discountType?: string | undefined;
   startDate:string | undefined;
   date:string | undefined;
+  createdAt:Date | undefined;
   image?: any;
 }
 

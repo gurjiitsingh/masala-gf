@@ -263,11 +263,76 @@ export async function fetchcouponByCode(
     const datas = doc.data() as couponType;
     data.push(datas);
   });
-  
+  console.log("data-----------------",data)
+
   return data;
 }
 
 
+// export async function fetchcouponByCode(condname: string): Promise<couponType[]> {
+//   const data: couponType[] = [];
+
+//   const q = query(collection(db, "coupon"), where("code", "==", condname));
+//   const querySnapshot = await getDocs(q);
+
+//   querySnapshot.forEach((doc) => {
+//     const raw = doc.data();
+
+//    const converted: couponType = {
+//   code: raw.code,
+//   discount: raw.discount,
+//   discountType: raw.discountType,
+//   message: raw.message,
+//   minSpend: raw.minSpend,
+//   expiry: raw.expiry,
+//   startDate: raw.startDate,
+//   offerType: raw.offerType,
+//   isActivated: raw.isActivated,
+//   isFeatured: raw.isFeatured,
+//   productCat: raw.productCat,
+//   couponDesc: raw.couponDesc,
+//   excludedCategoryIds: raw.excludedCategoryIds,
+//   createdAt: raw.createdAt?.toDate?.() ?? undefined,
+//   date: raw.date?.toDate?.() ?? new Date(), // <--- FIX HERE
+// };
+
+
+//     data.push(converted);
+//   });
+
+//   return data;
+// }
+
+// export async function fetchCouponByCode(condname: string): Promise<couponType | null> {
+//   const q = query(collection(db, "coupon"), where("code", "==", condname));
+//   const querySnapshot = await getDocs(q);
+
+//   if (querySnapshot.empty) {
+//     return null; // No coupon found
+//   }
+
+//   const raw = querySnapshot.docs[0].data();
+
+//   const converted: couponType = {
+//     code: raw.code,
+//     discount: raw.discount,
+//     discountType: raw.discountType,
+//     message: raw.message,
+//     minSpend: raw.minSpend,
+//     expiry: raw.expiry,
+//     startDate: raw.startDate,
+//     offerType: raw.offerType,
+//     isActivated: raw.isActivated,
+//     isFeatured: raw.isFeatured,
+//     productCat: raw.productCat,
+//     couponDesc: raw.couponDesc,
+//     excludedCategoryIds: raw.excludedCategoryIds,
+//     createdAt: raw.createdAt?.toDate?.() ?? undefined,
+//     date: raw.date?.toDate?.() ?? new Date(),
+//   };
+
+//   return converted;
+// }
 
 export async function updateCouponExcludedCategories(couponId: string, categoryIds: string[]) {
 

@@ -304,6 +304,7 @@ export default function CartLeft() {
         flatDiscount: flatCouponDiscount,
         calCouponDiscount,
         couponDiscountPercentL,
+        couponCode:couponDisc?.code,
         pickUpDiscountPercentL,
         noOffers,
       } as orderDataType;

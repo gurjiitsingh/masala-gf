@@ -116,6 +116,7 @@ export type cartDataT = {
         calCouponDiscount:number;
         flatCouponDiscount:number;
         couponDiscountPercentL:number;
+        couponCode: string | undefined;
         pickUpDiscountPercentL:number;
         calculatedPickUpDiscountL:number;
         noOffers:boolean;

@@ -17,6 +17,7 @@ export type orderMasterDataT = {
   calculatedPickUpDiscountL: number;
   calCouponDiscount: number;
   couponDiscountPercentL: number;
+   couponCode: string | undefined;
   pickUpDiscountPercentL: number;
 };
 
