@@ -118,11 +118,11 @@ const email = Address.email as string;
         </div>
 
         <div className="text-lg text-center text-slate-500">
-          Zubereitungszeit: 20–30 Minuten
+          Abholen: 20–25 Minuten
         </div>
         <div />
         <div className="text-lg text-center text-slate-500">
-          Lieferzeit: 40–65 Minuten
+          Lieferzeit: 40–55 Minuten
         </div>
         <div />
 
