@@ -1,10 +1,25 @@
 "use client";
+
 import { Button } from "@/components/ui/button";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { TcouponSchema, couponSchema } from "@/lib/types/couponType";
-import { addNewcoupon } from "@/app/action/coupon/dbOperation";
+import {
+  TcouponSchema,
+  couponSchema,
+} from "@/lib/types/couponType";
+import { db } from "@/lib/firebaseConfig";
+import {
+  addDoc,
+  collection,
+  Timestamp,
+  getDocs,
+} from "firebase/firestore";
+
+type CategoryType = {
+  id: string;
+  name: string;
+};
 
 const Page = () => {
   const {
@@ -15,6 +30,27 @@ const Page = () => {
   } = useForm<TcouponSchema>({
     resolver: zodResolver(couponSchema),
   });
+
+  const [categories, setCategories] = useState<CategoryType[]>([]);
+  const [excludedCategoryIds, setExcludedCategoryIds] = useState<string[]>([]);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      const result = await getDocs(collection(db, "category"));
+      const data: CategoryType[] = [];
+      result.forEach((doc) =>
+        data.push({ id: doc.id, ...(doc.data() as any) })
+      );
+      setCategories(data);
+    };
+    fetchCategories();
+  }, []);
+
+  const handleExcludedChange = (id: string) => {
+    setExcludedCategoryIds((prev) =>
+      prev.includes(id) ? prev.filter((eid) => eid !== id) : [...prev, id]
+    );
+  };
 
   async function onsubmit(data: TcouponSchema) {
     const formData = new FormData();
@@ -32,11 +68,45 @@ const Page = () => {
       formData.append("isFeatured", "true");
     }
 
-    const result = await addNewcoupon(formData);
+    // Extra metadata
+    const startDate = new Date();
+    const oneYearLater = new Date();
+    oneYearLater.setFullYear(startDate.getFullYear() + 1);
+
+    const excludedNames = categories
+      .filter((cat) => excludedCategoryIds.includes(cat.id))
+      .map((cat) => cat.name)
+      .join(" and ");
+
+    const couponData = {
+      code,
+      discount: Number(data.discount),
+      discountType: data.discountType,
+      offerType: data.offerType,
+      couponDesc: excludedNames
+        ? `Not applicable on ${excludedNames}.`
+        : data.couponDesc,
+      productCat: "all",
+      minSpend: Number(data.minSpend),
+      expiry: data.expiry,
+      isFeatured: !!data.isFeatured,
+      isActivated: true,
+      excludedCategoryIds,
+      message: "Enjoy your discount!",
+      startDate: startDate.toLocaleString(),
+      createdAt: Timestamp.now(),
+    };
+
+    try {
+      await addDoc(collection(db, "coupon"), couponData);
+    } catch (err) {
+      console.error("Failed to save coupon", err);
+    }
 
     setValue("code", "");
     setValue("discount", "");
     setValue("minSpend", "");
+    setExcludedCategoryIds([]);
   }
 
   return (
@@ -47,72 +117,80 @@ const Page = () => {
         <div className="flex flex-col lg:flex-row gap-5">
           {/* Left Box */}
           <div className="flex-1 flex flex-col gap-y-5">
-            {/* Coupon Detail */}
             <div className="bg-white rounded-xl p-4 border flex flex-col gap-3">
               <h2 className="font-semibold">Coupon Detail</h2>
 
-              {/* Coupon Code */}
               <div>
                 <label className="label-style">
                   Coupon Code <span className="text-red-500">*</span>
                 </label>
-                <input {...register("code")} className="input-style" placeholder="Enter code" />
-                <span className="text-[0.8rem] text-destructive">{errors.code?.message}</span>
+                <input
+                  {...register("code")}
+                  className="input-style"
+                  placeholder="Enter code"
+                />
+                <span className="text-[0.8rem] text-destructive">
+                  {errors.code?.message}
+                </span>
               </div>
 
-              {/* Discount Type (Radio) */}
               <div>
                 <label className="label-style">
                   Discount Type <span className="text-red-500">*</span>
                 </label>
                 <div className="flex items-center gap-4 mt-2">
                   <label className="flex items-center gap-2">
-                    <input
-                      type="radio"
-                      value="flat"
-                      {...register("discountType")}
-                    />
+                    <input type="radio" value="flat" {...register("discountType")} />
                     Flat
                   </label>
                   <label className="flex items-center gap-2">
-                    <input
-                      type="radio"
-                      value="percent"
-                      {...register("discountType")}
-                    />
+                    <input type="radio" value="percent" {...register("discountType")} />
                     Percent
                   </label>
                 </div>
-                <span className="text-[0.8rem] text-destructive">{errors.discountType?.message}</span>
+                <span className="text-[0.8rem] text-destructive">
+                  {errors.discountType?.message}
+                </span>
               </div>
 
-              {/* Discount Amount */}
               <div>
                 <label className="label-style">
                   Discount Amount <span className="text-red-500">*</span>
                 </label>
-                <input {...register("discount")} className="input-style" placeholder="Enter amount" />
-                <span className="text-[0.8rem] text-destructive">{errors.discount?.message}</span>
+                <input
+                  {...register("discount")}
+                  className="input-style"
+                  placeholder="Enter amount"
+                />
+                <span className="text-[0.8rem] text-destructive">
+                  {errors.discount?.message}
+                </span>
               </div>
 
-              {/* Hidden productCat */}
-              <input type="hidden" {...register("productCat", { value: "all" })} />
+              <input
+                type="hidden"
+                {...register("productCat", { value: "all" })}
+              />
             </div>
 
-            {/* Discount Conditions */}
+            {/* Conditions */}
             <div className="bg-white rounded-xl p-4 border flex flex-col gap-3">
               <h2 className="font-semibold">Discount Conditions</h2>
 
-              {/* Min Spend */}
               <div>
                 <label className="label-style">
                   Min Spend <span className="text-red-500">*</span>
                 </label>
-                <input {...register("minSpend")} className="input-style" placeholder="Enter min spend" />
-                <span className="text-[0.8rem] text-destructive">{errors.minSpend?.message}</span>
+                <input
+                  {...register("minSpend")}
+                  className="input-style"
+                  placeholder="Enter min spend"
+                />
+                <span className="text-[0.8rem] text-destructive">
+                  {errors.minSpend?.message}
+                </span>
               </div>
 
-              {/* Expiry Date (Date Picker) */}
               <div>
                 <label className="label-style">
                   Expiry Date <span className="text-red-500">*</span>
@@ -122,14 +200,15 @@ const Page = () => {
                   {...register("expiry")}
                   className="input-style"
                 />
-                <span className="text-[0.8rem] text-destructive">{errors.expiry?.message}</span>
+                <span className="text-[0.8rem] text-destructive">
+                  {errors.expiry?.message}
+                </span>
               </div>
             </div>
           </div>
 
           {/* Right Box */}
           <div className="flex-1 flex flex-col gap-5">
-            {/* General Detail */}
             <div className="bg-white rounded-xl p-4 border flex flex-col gap-3">
               <h2 className="font-semibold">General Detail</h2>
 
@@ -138,7 +217,6 @@ const Page = () => {
                 {...register("couponDesc", { value: "This is discount coupon" })}
               />
 
-              {/* Description */}
               <div>
                 <label className="label-style">Description</label>
                 <textarea {...register("couponDesc")} className="textarea-style" />
@@ -147,7 +225,6 @@ const Page = () => {
                 </span>
               </div>
 
-              {/* Offer Type */}
               <div>
                 <label className="label-style">Offer Type</label>
                 <input
@@ -155,23 +232,38 @@ const Page = () => {
                   className="input-style"
                   placeholder="All"
                 />
-                <span className="text-[0.8rem] text-destructive">{errors.offerType?.message}</span>
+                <span className="text-[0.8rem] text-destructive">
+                  {errors.offerType?.message}
+                </span>
               </div>
 
-              {/* Featured Checkbox */}
               <div className="flex items-center gap-4">
                 <label className="label-style">Featured Coupon</label>
                 <input type="checkbox" {...register("isFeatured")} />
-                <span className="text-[0.8rem] text-destructive">{errors.isFeatured?.message}</span>
+                <span className="text-[0.8rem] text-destructive">
+                  {errors.isFeatured?.message}
+                </span>
               </div>
 
-              {/* Submit Button */}
-              <button
-                type="submit"
-                className="w-full py-2 bg-amber-400 italic font-bold rounded-xl text-[1.2rem] text-blue-900"
-              >
+              <div>
+                <label className="label-style">Exclude Categories</label>
+                <div className="flex flex-wrap gap-2 mt-2">
+                  {categories.map((cat) => (
+                    <label key={cat.id} className="flex items-center gap-2">
+                      <input
+                        type="checkbox"
+                        checked={excludedCategoryIds.includes(cat.id)}
+                        onChange={() => handleExcludedChange(cat.id)}
+                      />
+                      {cat.name}
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              <Button type="submit" className="w-full">
                 Submit
-              </button>
+              </Button>
             </div>
           </div>
         </div>

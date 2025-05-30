@@ -226,28 +226,83 @@ export async function editcoupon1(formData: FormData) {
   }
 }
 
+// export async function fetchcoupon(): Promise<couponType[]> {
+//   const result = await getDocs(collection(db, "coupon"));
+
+//   const data = [] as couponType[];
+//   result.forEach((doc) => {
+//     const pData = { id: doc.id, ...doc.data() } as couponType;
+//     data.push(pData);
+//   });
+//   return data;
+// }
+
+
 export async function fetchcoupon(): Promise<couponType[]> {
   const result = await getDocs(collection(db, "coupon"));
 
-  const data = [] as couponType[];
+  const data: couponType[] = [];
+
   result.forEach((doc) => {
-    const pData = { id: doc.id, ...doc.data() } as couponType;
-    data.push(pData);
+    const raw = doc.data();
+
+    const converted: couponType = {
+      id: doc.id,
+      code: raw.code,
+      discount: raw.discount,
+      discountType: raw.discountType,
+      message: raw.message,
+      minSpend: raw.minSpend,
+      expiry: raw.expiry,
+      startDate: raw.startDate,
+      offerType: raw.offerType,
+      isActivated: raw.isActivated,
+      isFeatured: raw.isFeatured,
+      productCat: raw.productCat,
+      couponDesc: raw.couponDesc,
+      excludedCategoryIds: raw.excludedCategoryIds,
+      createdAt: raw.createdAt?.toDate?.() ?? undefined,
+      date: raw.date?.toDate?.() ?? new Date(),
+      image: raw.image,
+    };
+
+    data.push(converted);
   });
+
   return data;
 }
 
 export async function fetchcouponById(id: string): Promise<couponType> {
   const docRef = doc(db, "coupon", id);
   const docSnap = await getDoc(docRef);
-  let couponData = {} as couponType;
-  if (docSnap.exists()) {
-    console.log("Document data:", docSnap.data());
-  } else {
-    //   docSnap.data() //will be undefined in this case
-    console.log("No such document!");
+
+  if (!docSnap.exists()) {
+    console.warn("No such document!");
+    throw new Error("Coupon not found");
   }
-  couponData = docSnap.data() as couponType;
+
+  const raw = docSnap.data();
+
+  const couponData: couponType = {
+    id: docSnap.id,
+    code: raw.code,
+    discount: raw.discount,
+    discountType: raw.discountType,
+    message: raw.message,
+    minSpend: raw.minSpend,
+    expiry: raw.expiry,
+    startDate: raw.startDate,
+    offerType: raw.offerType,
+    isActivated: raw.isActivated,
+    isFeatured: raw.isFeatured,
+    productCat: raw.productCat,
+    couponDesc: raw.couponDesc,
+    excludedCategoryIds: raw.excludedCategoryIds,
+    createdAt: raw.createdAt?.toDate?.() ?? undefined,
+    date: raw.date?.toDate?.() ?? undefined,
+    image: raw.image,
+  };
+
   return couponData;
 }
 

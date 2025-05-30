@@ -30,7 +30,7 @@ const ListView = () => {
     async function fetchcouponL() {
       try {
           const result = await fetchcoupon();
-       
+       console.log("resutl---------------",result)
         setcouponData(result);
       } catch (error) {
         console.log(error);

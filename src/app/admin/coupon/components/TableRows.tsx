@@ -59,7 +59,7 @@ console.log("copoun data------------",coupon)
       {/* <TableCell>{coupon.productCat}</TableCell> */}
  
       <TableCell>{coupon.expiry}</TableCell>
-      <TableCell>{coupon.date}</TableCell>
+      <TableCell>{coupon.createdAt ? coupon.createdAt.toLocaleDateString() : "No date"}</TableCell>
       {/* <TableCell>       
         {coupon?.isFeatured === true && (
           <span className="ml-2 bg-gradient-to-tr from-blue-500 to-indigo-400 text-white text-[10px] rounded-full px-3 py-1">
