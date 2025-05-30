@@ -1,3 +1,5 @@
+"use client";
+
 import {
   TableCell,
   TableRow,
@@ -9,14 +11,24 @@ import { MdDeleteForever } from "react-icons/md";
 import { CiEdit } from "react-icons/ci";
 import { categoryType } from "@/lib/types/categoryType";
 import { deleteCategory } from "@/app/action/category/dbOperations";
+import { fetchProductByCategoryId } from "@/app/action/productsbase/dbOperation";
 
 function TableRows({ category }: { category: categoryType }) {
   async function handleDelete(category: categoryType) {
-    if (
-      confirm(
-        "Möchten Sie die Kategorie löschen?\n Falls ja, klicken Sie auf OK. \n Falls nicht, klicken Sie auf Cancel."
-      )
-    ) {
+    const products = await fetchProductByCategoryId(category.id!);
+
+    if (products && products.length > 0) {
+      alert(
+        `Diese Kategorie enthält noch Produkte (${products.length}).\nBitte löschen Sie zuerst alle Produkte, bevor Sie die Kategorie löschen.`
+      );
+      return;
+    }
+
+    const confirmDelete = confirm(
+      "Möchten Sie die Kategorie wirklich löschen?\nFalls ja, klicken Sie auf OK.\nFalls nicht, klicken Sie auf Abbrechen."
+    );
+
+    if (confirmDelete) {
       const result = await deleteCategory(category.id!, category.image!);
       if (result.errors) {
         alert(result.errors);
