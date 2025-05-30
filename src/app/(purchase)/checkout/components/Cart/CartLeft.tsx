@@ -320,9 +320,9 @@ const couponCode="KJKKS";// couponDisc?.code?.trim() ? couponDisc.code : "NA";
         const orderMasterId = await createNewOrder(purchaseData);
 
         if (paymentType === "stripe") {
-          router.push(`/stripe?orderMasterId=${orderMasterId}`);
+          router.push(`/stripe?orderMasterId=${orderMasterId}&deliveryType=${deliveryType}&customerNote=${"this is cusomer note"}&couponCode=${couponCode}&couponDiscount=${calCouponDiscount}`);
         } else if (paymentType === "paypal") {
-          router.push(`/pay?orderMasterId=${orderMasterId}`);
+          router.push(`/pay?orderMasterId=${orderMasterId}&deliveryType=${deliveryType}&customerNote=${"this is cusomer note"}&couponCode=${couponCode}&couponDiscount=${calCouponDiscount}`);
         } else if (paymentType === "cod") {
           router.push(
             `/complete?paymentType=Barzahlung&orderMasterId=${orderMasterId}&deliveryType=${deliveryType}&customerNote=${"this is cusomer note"}&couponCode=${couponCode}&couponDiscount=${calCouponDiscount}`

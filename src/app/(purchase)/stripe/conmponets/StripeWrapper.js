@@ -24,6 +24,10 @@ function CheckoutForm() {
 
   const searchParams = useSearchParams();
      const orderMasterId = searchParams.get("orderMasterId");
+       const deliveryType = searchParams.get("deliveryType");
+  const customerNote = searchParams.get("customerNote");
+  const couponCode = searchParams.get("couponCode");
+  const couponDiscount = searchParams.get("couponDiscount");
 
   const {  endTotalG } = useCartContext();
   
@@ -96,7 +100,7 @@ function CheckoutForm() {
      // setStatus(confirmError.message);
       router.push(`/order-fail?paymentType=paypal&status=fail&orderMasterId=${orderMasterId}`)
     } else if (paymentIntent.status === "succeeded") {
-      router.push(`/complete?paymentType=paypal&status=success&orderMasterId=${orderMasterId}`)
+      router.push(`/complete?paymentType=paypal&status=success&orderMasterId=${orderMasterId}&deliveryType=${deliveryType}&customerNote=${customerNote}&couponCode=${couponCode}&couponDiscount=${couponDiscount}`)
      // setStatus("Payment successful!");
     }
   };

@@ -110,7 +110,7 @@ export default function CouponDiscount() {
           </form>
         </div>
         <div className="text-red-300 text-sm">  {couponSuccess}</div>
-         <div className="text-slate-400 text-sm">  {couponDisc?.couponDesc}</div>
+         <div className="text-slate-400 text-sm">  {couponDisc?.message}</div>
       </div>
     </>
   );

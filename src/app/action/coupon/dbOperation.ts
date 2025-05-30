@@ -128,6 +128,7 @@ export  async  function editcoupon(id: string, formData: FormData){
       discountType: formData.get("discountType"),
       productCat: formData.get("productCat"),
       couponDesc: formData.get("couponDesc"),
+      message: formData.get("message"),
       minSpend: formData.get("minSpend"),
       isFeatured: formData.get("isFeatured") === "true",
     };

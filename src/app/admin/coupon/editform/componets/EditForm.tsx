@@ -33,6 +33,7 @@ const EditForm = () => {
       setValue("isFeatured", couponData.isFeatured);
       setValue("discountType", couponData.discountType || "percentage");
       setValue("expiry", couponData.expiry?.split("T")[0]); // for input type="date"
+      setValue("message", couponData.message || "");
     }
 
     prefetch();
@@ -47,11 +48,12 @@ const EditForm = () => {
     formData.append("minSpend", data.minSpend || "");
     formData.append("isFeatured", data.isFeatured ? "true" : "false");
     formData.append("discountType", data.discountType || "percentage");
-     formData.append("expiry", data.expiry!);
+    formData.append("expiry", data.expiry!);
+    formData.append("message", data.message || "");
     if (data.expiry) formData.append("expiry", data.expiry);
     formData.append("id", data.id || "");
 
-    const result = await editcoupon(id,formData);
+    const result = await editcoupon(id, formData);
     if (!result?.error) {
       router.push("/admin/coupon");
     } else {
@@ -73,49 +75,83 @@ const EditForm = () => {
               <input {...register("productCat", { value: "all" })} hidden />
 
               <div className="flex flex-col gap-1">
-                <label className="label-style">Coupon Name<span className="text-red-500">*</span></label>
+                <label className="label-style">
+                  Coupon Name<span className="text-red-500">*</span>
+                </label>
                 <input {...register("code")} className="input-style" />
-                <span className="text-[0.8rem] text-destructive">{errors.code?.message}</span>
+                <span className="text-[0.8rem] text-destructive">
+                  {errors.code?.message}
+                </span>
               </div>
 
-               <div className="flex flex-col gap-2">
+              <div className="flex flex-col gap-2">
                 <label className="label-style">Discount Type</label>
                 <div className="flex items-center gap-4">
-                     <label><input type="radio" value="flat" {...register("discountType")} /> Flat</label>
-                  <label><input type="radio" value="percentage" {...register("discountType")} /> Percentage</label>
-               
+                  <label>
+                    <input
+                      type="radio"
+                      value="flat"
+                      {...register("discountType")}
+                    />{" "}
+                    Flat
+                  </label>
+                  <label>
+                    <input
+                      type="radio"
+                      value="percentage"
+                      {...register("discountType")}
+                    />{" "}
+                    Percentage
+                  </label>
                 </div>
-                <span className="text-[0.8rem] text-destructive">{errors.discountType?.message}</span>
+                <span className="text-[0.8rem] text-destructive">
+                  {errors.discountType?.message}
+                </span>
               </div>
 
-                 <div className="flex flex-col gap-1">
-                <label className="label-style">Discount Value<span className="text-red-500">*</span></label>
-                <input {...register("discount")} className="input-style" placeholder="Enter discount value" />
-                <span className="text-[0.8rem] text-destructive">{errors.discount?.message}</span>
+              <div className="flex flex-col gap-1">
+                <label className="label-style">
+                  Discount Value<span className="text-red-500">*</span>
+                </label>
+                <input
+                  {...register("discount")}
+                  className="input-style"
+                  placeholder="Enter discount value"
+                />
+                <span className="text-[0.8rem] text-destructive">
+                  {errors.discount?.message}
+                </span>
               </div>
-
             </div>
-
-
 
             {/* Discount Info */}
             <div className="bg-white rounded-xl p-4 border flex flex-col gap-3">
               <h1 className="font-semibold">Discount Details</h1>
 
-           
-
               <div className="flex flex-col gap-1">
-                <label className="label-style">Minimum Spend<span className="text-red-500">*</span></label>
-                <input {...register("minSpend")} className="input-style" placeholder="Minimum spend amount" />
-                <span className="text-[0.8rem] text-destructive">{errors.minSpend?.message}</span>
+                <label className="label-style">
+                  Minimum Spend<span className="text-red-500">*</span>
+                </label>
+                <input
+                  {...register("minSpend")}
+                  className="input-style"
+                  placeholder="Minimum spend amount"
+                />
+                <span className="text-[0.8rem] text-destructive">
+                  {errors.minSpend?.message}
+                </span>
               </div>
-
-             
 
               <div className="flex flex-col gap-1">
                 <label className="label-style">Expiry Date</label>
-                <input type="date" {...register("expiry")} className="input-style" />
-                <span className="text-[0.8rem] text-destructive">{errors.expiry?.message}</span>
+                <input
+                  type="date"
+                  {...register("expiry")}
+                  className="input-style"
+                />
+                <span className="text-[0.8rem] text-destructive">
+                  {errors.expiry?.message}
+                </span>
               </div>
             </div>
           </div>
@@ -127,17 +163,35 @@ const EditForm = () => {
 
               <div className="flex flex-col gap-1">
                 <label className="label-style">Coupon Description</label>
-                <textarea {...register("couponDesc")} className="textarea-style" />
-                <span className="text-[0.8rem] text-destructive">{errors.couponDesc && "Coupon description is required"}</span>
+                <textarea
+                  {...register("couponDesc")}
+                  className="textarea-style"
+                />
+                <span className="text-[0.8rem] text-destructive">
+                  {errors.couponDesc && "Coupon description is required"}
+                </span>
+              </div>
+
+              {/* Message */}
+              <div className="flex flex-col gap-1">
+                <label className="label-style">Message</label>
+                <textarea {...register("message")} className="textarea-style" />
+                <span className="text-[0.8rem] text-destructive">
+                  {errors.message?.message}
+                </span>
               </div>
 
               <div className="flex items-center gap-4">
                 <label className="label-style">Featured Coupon</label>
                 <input type="checkbox" {...register("isFeatured")} />
-                <span className="text-[0.8rem] text-destructive">{errors.isFeatured?.message}</span>
+                <span className="text-[0.8rem] text-destructive">
+                  {errors.isFeatured?.message}
+                </span>
               </div>
 
-              <Button type="submit" className="bg-red-500">Edit Coupon</Button>
+              <Button type="submit" className="bg-red-500">
+                Edit Coupon
+              </Button>
             </div>
           </div>
         </div>

@@ -13,6 +13,10 @@ import {
 export default function Checkout(){
  const searchParams = useSearchParams();
    const orderMasterId = searchParams.get("orderMasterId");
+   const deliveryType = searchParams.get("deliveryType");
+  const customerNote = searchParams.get("customerNote");
+  const couponCode = searchParams.get("couponCode");
+  const couponDiscount = searchParams.get("couponDiscount");
   
 
     const [{ options, isPending,isRejected,isResolved, isInitial  }, dispatch] = usePayPalScriptReducer();
@@ -50,10 +54,10 @@ export default function Checkout(){
       return actions.order.capture().then((details) => {
 	  // const payer = details.payer;
     // 	  console.log("details-----",payer);
-          router.push(`/complete?paymentType=paypal&status=success&orderMasterId=${orderMasterId}`)
+          router.push(`/complete?paymentType=paypal&status=success&orderMasterId=${orderMasterId}&deliveryType=${deliveryType}&customerNote=${customerNote}&couponCode=${couponCode}&couponDiscount=${couponDiscount}`)
        });
     };
-
+ 
     const onError = (err) => {
       //console.log("paypal errot-------------",err)
      router.push(`/order-fail?paymentType=paypal&status=fail&orderMasterId=${orderMasterId}&error=${encodeURIComponent(err)}`)

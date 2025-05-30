@@ -83,16 +83,16 @@ const Page = () => {
       discount: Number(data.discount),
       discountType: data.discountType,
       offerType: data.offerType,
-      couponDesc: excludedNames
-        ? `Not applicable on ${excludedNames}.`
-        : data.couponDesc,
+      couponDesc: data.couponDesc,
       productCat: "all",
       minSpend: Number(data.minSpend),
       expiry: data.expiry,
       isFeatured: !!data.isFeatured,
       isActivated: true,
       excludedCategoryIds,
-      message: "Enjoy your discount!",
+      message: excludedNames
+        ? `Not applicable on ${excludedNames}.`
+        : data.couponDesc,
       startDate: startDate.toLocaleString(),
       createdAt: Timestamp.now(),
     };
@@ -225,17 +225,20 @@ const Page = () => {
                 </span>
               </div>
 
-              <div>
-                <label className="label-style">Offer Type</label>
-                <input
-                  {...register("offerType", { value: "All" })}
-                  className="input-style"
-                  placeholder="All"
-                />
-                <span className="text-[0.8rem] text-destructive">
-                  {errors.offerType?.message}
-                </span>
-              </div>
+             <div>
+  <label className="label-style">Offer Type</label>
+  <select
+    {...register("offerType")}
+    className="input-style"
+    defaultValue="MA"
+  >
+    <option value="MA">MA</option>
+    <option value="CM">CM</option>
+  </select>
+  <span className="text-[0.8rem] text-destructive">
+    {errors.offerType?.message}
+  </span>
+</div>
 
               <div className="flex items-center gap-4">
                 <label className="label-style">Featured Coupon</label>
