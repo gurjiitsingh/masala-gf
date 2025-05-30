@@ -293,6 +293,7 @@ export default function CartLeft() {
       const customer_email = JSON.parse(
         localStorage.getItem("customer_email") || ""
       );
+const couponCode="KJKKS";// couponDisc?.code?.trim() ? couponDisc.code : "NA";
 
       const purchaseData = {
         userId: order_user_Id,
@@ -324,9 +325,9 @@ export default function CartLeft() {
           router.push(`/pay?orderMasterId=${orderMasterId}`);
         } else if (paymentType === "cod") {
           router.push(
-            `/complete?paymentType=Barzahlung&orderMasterId=${orderMasterId}`
+            `/complete?paymentType=Barzahlung&orderMasterId=${orderMasterId}&deliveryType=${deliveryType}&customerNote=${"this is cusomer note"}&couponCode=${couponCode}&couponDiscount=${calCouponDiscount}`
           );
-        }
+        } 
       } else {
         toast.error(`Cart is empty, add some foods`);
       }
