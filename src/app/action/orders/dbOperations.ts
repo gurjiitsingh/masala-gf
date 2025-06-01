@@ -113,7 +113,7 @@ export async function createNewOrder(purchaseData: orderDataType) {
   const total = purchaseData.endTotalG;
   const totalDiscountG = purchaseData.totalDiscountG;
   const addressId = purchaseData.addressId;
-  const userAddedId = purchaseData.userId;
+  const userAddedId = purchaseData.userId as string;
   const customerName = purchaseData.customerName;
   const email = purchaseData.email;
   const paymentType = purchaseData.paymentType;
@@ -219,14 +219,14 @@ export async function marketingData({
   const germanDate = new Date(germanDateStr);
 
   await setDoc(
-    doc(db, "marketingData", userId),
+    doc(db, "customerRecentOrder", userId),
     {
       name,
       email,
       userId,
       noOfferEmails,
-      lastOrderDate: Timestamp.fromDate(germanDate), // Easily comparable in Firestore
-      updatedAt: serverTimestamp(), // Always use server time for tracking updates
+      lastOrderDate: serverTimestamp(), // Always use server time for tracking updates
+      updatedAt: Timestamp.fromDate(germanDate), // Easily comparable in Firestore
     },
     { merge: true } // Will update if document already exists
   );
