@@ -113,7 +113,7 @@ export async function createNewOrder(purchaseData: orderDataType) {
   const total = purchaseData.endTotalG;
   const totalDiscountG = purchaseData.totalDiscountG;
   const addressId = purchaseData.addressId;
-  const userAddedId = purchaseData.addressId;
+  const userAddedId = purchaseData.userId;
   const customerName = purchaseData.customerName;
   const email = purchaseData.email;
   const paymentType = purchaseData.paymentType;
