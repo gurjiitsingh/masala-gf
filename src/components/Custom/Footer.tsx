@@ -29,7 +29,7 @@ export default function Footer() {
                 <Link href="/">Home</Link>
               </li>
               <li className="border-b border-slate-400 pb-1">
-                <Link href="/shop">Menü</Link>
+                <Link href="/">Menü</Link>
               </li>
               <li className="border-b border-slate-400 pb-1">
                 <Link href="/about">Über Uns</Link>

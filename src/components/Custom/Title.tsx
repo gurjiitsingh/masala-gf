@@ -9,17 +9,17 @@ export default function Title() {
   return (
     <div className="flex gap-2 my-5">
       <div className=" flex items-center">
-        <img src="/logo.webp" alt="Company Logo" className="h-12 w-auto" />
+        <img src="/logo.webp" alt="masala  Logo" className="h-12 w-auto" />
       </div>
       <div className="">
-        {" "}
+       
         <h1
           className={`${sourGummy.className} rounded-2xl  text-5xl w-full font-bold    text-[#496208] `}
         >
           <div className="">
             {" "}
-            Masala{" "}
-            <span className="text-4xl font-extralight ">Taste of India</span>
+            Masala
+            <span className="text-3xl font-extralight pl-1">Taste of India</span>
           </div>
         </h1>
       </div>
