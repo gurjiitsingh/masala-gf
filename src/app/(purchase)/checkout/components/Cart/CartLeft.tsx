@@ -105,10 +105,13 @@ export default function CartLeft() {
     if (itemTotal <= 0) return;
 
     if (deliveryType === "pickup") {
-      const pickupDiscount = (itemTotal * pickupDiscountPersent) / 100;
+      const pickupDiscount = ((itemTotal- flatCouponDiscount - calCouponDiscount) * pickupDiscountPersent) / 100;
+
+     
       const pickupDiscountRemovedCate = (
-        pickupDiscount - filteredCategoryDiscount
+        pickupDiscount - filteredCategoryDiscount 
       ).toFixed(2);
+
       setCalculatedPickUpDiscount(+pickupDiscountRemovedCate);
       setdeliveryCostL(0);
        if (parseInt(pickupDiscountRemovedCate) === 0) {
@@ -131,6 +134,8 @@ export default function CartLeft() {
     deliveryDis,
     pickupDiscountPersent,
     filteredCategoryDiscount,
+    flatCouponDiscount,
+    calCouponDiscount
   ]);
 
   useEffect(() => {

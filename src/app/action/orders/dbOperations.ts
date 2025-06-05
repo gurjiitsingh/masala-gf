@@ -178,6 +178,7 @@ export async function createNewOrder(purchaseData: orderDataType) {
   await marketingData({
     name: customerName,
     userId: userAddedId,
+    addressId,
     email,
     noOfferEmails: noOffers,
   });
@@ -199,11 +200,13 @@ export async function createNewOrder(purchaseData: orderDataType) {
 export async function marketingData({
   name,
   userId,
+  addressId,
   email,
   noOfferEmails,
 }: {
   name: string;
   userId: string;
+  addressId:string;
   email: string;
   noOfferEmails: boolean;
 }) {
@@ -224,6 +227,7 @@ export async function marketingData({
       name,
       email,
       userId,
+      addressId,
       noOfferEmails,
       lastOrderDate: serverTimestamp(), // Always use server time for tracking updates
       updatedAt: Timestamp.fromDate(germanDate), // Easily comparable in Firestore
