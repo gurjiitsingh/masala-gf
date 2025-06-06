@@ -51,7 +51,7 @@ export default function Footer() {
             </h3>
             <ul className="space-y-1">
               <li className="border-b border-slate-400 pb-1">
-                <a rel="noopener noreferrer" href="#">
+                <a rel="noopener noreferrer" href="/privacy">
                   Privacy
                 </a>
               </li>
