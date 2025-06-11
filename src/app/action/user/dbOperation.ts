@@ -3,7 +3,7 @@ import { hashPassword } from "@/lib/auth";
 import { db } from "@/lib/firebaseConfig";
 import {   TuserSchem, userType } from "@/lib/types/userType";
 
-import { addDoc, collection, deleteDoc, doc, getDocs, query, serverTimestamp, setDoc, where } from "@firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, getDocs, query, where } from "@firebase/firestore";
 
 
 export async function addUserDirect(formData: FormData) {
@@ -164,22 +164,3 @@ export async function searchUserById(id: string | undefined): Promise<TuserSchem
     //   return {errors:"Somthing went wrong, can not delete product"}
     // }
   }
-
-
-
-
-  export async function unsbscribeUser(email: string): Promise<boolean> {
-  try {
-    if (!email) return false;
-
-    await setDoc(doc(db, "unsubscribedEmails", email), {
-      email,
-      unsubscribedAt: serverTimestamp(),
-    });
-
-    return true;
-  } catch (error) {
-    console.error("❌ Failed to unsubscribe user:", error);
-    return false;
-  }
-}
