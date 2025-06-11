@@ -4,17 +4,9 @@ import { Button } from "@/components/ui/button";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  TcouponSchema,
-  couponSchema,
-} from "@/lib/types/couponType";
+import { TcouponSchema, couponSchema } from "@/lib/types/couponType";
 import { db } from "@/lib/firebaseConfig";
-import {
-  addDoc,
-  collection,
-  Timestamp,
-  getDocs,
-} from "firebase/firestore";
+import { addDoc, collection, Timestamp, getDocs } from "firebase/firestore";
 
 type CategoryType = {
   id: string;
@@ -89,6 +81,8 @@ const Page = () => {
       expiry: data.expiry,
       isFeatured: !!data.isFeatured,
       isActivated: true,
+      applyPickup: data.applyPickup ?? true,
+  applyDelivery: data.applyDelivery ?? true,
       excludedCategoryIds,
       message: excludedNames
         ? `Not applicable on ${excludedNames}.`
@@ -96,6 +90,8 @@ const Page = () => {
       startDate: startDate.toLocaleString(),
       createdAt: Timestamp.now(),
     };
+
+    console.log("couponData new data -------------", couponData)
 
     try {
       await addDoc(collection(db, "coupon"), couponData);
@@ -140,11 +136,19 @@ const Page = () => {
                 </label>
                 <div className="flex items-center gap-4 mt-2">
                   <label className="flex items-center gap-2">
-                    <input type="radio" value="flat" {...register("discountType")} />
+                    <input
+                      type="radio"
+                      value="flat"
+                      {...register("discountType")}
+                    />
                     Flat
                   </label>
                   <label className="flex items-center gap-2">
-                    <input type="radio" value="percent" {...register("discountType")} />
+                    <input
+                      type="radio"
+                      value="percent"
+                      {...register("discountType")}
+                    />
                     Percent
                   </label>
                 </div>
@@ -214,31 +218,56 @@ const Page = () => {
 
               <input
                 type="hidden"
-                {...register("couponDesc", { value: "This is discount coupon" })}
+                {...register("couponDesc", {
+                  value: "This is discount coupon",
+                })}
               />
 
               <div>
                 <label className="label-style">Description</label>
-                <textarea {...register("couponDesc")} className="textarea-style" />
+                <textarea
+                  {...register("couponDesc")}
+                  className="textarea-style"
+                />
                 <span className="text-[0.8rem] text-destructive">
                   {errors.couponDesc && "Description is required"}
                 </span>
               </div>
 
-             <div>
-  <label className="label-style">Offer Type</label>
-  <select
-    {...register("offerType")}
-    className="input-style"
-    defaultValue="MA"
-  >
-    <option value="MA">MA</option>
-    <option value="CM">CM</option>
-  </select>
-  <span className="text-[0.8rem] text-destructive">
-    {errors.offerType?.message}
-  </span>
-</div>
+        
+
+             
+
+      
+
+         
+
+            
+            </div>
+          </div>
+
+
+
+<div className="flex-1 flex flex-col gap-5">
+            <div className="bg-white rounded-xl p-4 border flex flex-col gap-3">
+              <h2 className="font-semibold">General Conditions</h2>
+
+         
+
+              <div>
+                <label className="label-style">Offer Type</label>
+                <select
+                  {...register("offerType")}
+                  className="input-style"
+                  defaultValue="MA"
+                >
+                  <option value="MA">MA</option>
+                  <option value="CM">CM</option>
+                </select>
+                <span className="text-[0.8rem] text-destructive">
+                  {errors.offerType?.message}
+                </span>
+              </div>
 
               <div className="flex items-center gap-4">
                 <label className="label-style">Featured Coupon</label>
@@ -246,6 +275,26 @@ const Page = () => {
                 <span className="text-[0.8rem] text-destructive">
                   {errors.isFeatured?.message}
                 </span>
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <label className="label-style">Apply Coupon On</label>
+                <label className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    defaultChecked
+                    {...register("applyPickup")}
+                  />
+                  Pickup
+                </label>
+                <label className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    defaultChecked
+                    {...register("applyDelivery")}
+                  />
+                  Delivery
+                </label>
               </div>
 
               <div>
@@ -269,6 +318,9 @@ const Page = () => {
               </Button>
             </div>
           </div>
+
+
+
         </div>
       </div>
     </form>

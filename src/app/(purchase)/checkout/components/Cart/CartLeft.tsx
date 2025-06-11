@@ -105,21 +105,22 @@ export default function CartLeft() {
     if (itemTotal <= 0) return;
 
     if (deliveryType === "pickup") {
-      const pickupDiscount = ((itemTotal- flatCouponDiscount - calCouponDiscount) * pickupDiscountPersent) / 100;
+      const pickupDiscount =
+        ((itemTotal - flatCouponDiscount - calCouponDiscount) *
+          pickupDiscountPersent) /
+        100;
 
-     
       const pickupDiscountRemovedCate = (
-        pickupDiscount - filteredCategoryDiscount 
+        pickupDiscount - filteredCategoryDiscount
       ).toFixed(2);
 
       setCalculatedPickUpDiscount(+pickupDiscountRemovedCate);
       setdeliveryCostL(0);
-       if (parseInt(pickupDiscountRemovedCate) === 0) {
-       setPickUpDiscountPercent(0);
-      }else{
-      setPickUpDiscountPercent(pickupDiscountPersent);
+      if (parseInt(pickupDiscountRemovedCate) === 0) {
+        setPickUpDiscountPercent(0);
+      } else {
+        setPickUpDiscountPercent(pickupDiscountPersent);
       }
-
     } else if (
       deliveryType === "delivery" &&
       deliveryDis?.price !== undefined
@@ -135,11 +136,23 @@ export default function CartLeft() {
     pickupDiscountPersent,
     filteredCategoryDiscount,
     flatCouponDiscount,
-    calCouponDiscount
+    calCouponDiscount,
   ]);
 
   useEffect(() => {
     if (itemTotal <= 0) return;
+
+    if (deliveryType === "pickup" && !couponDisc?.applyPickup) {
+      setCalCouponDisscount(0);
+      setFlatCouponDisscount(0);
+      return;
+    }
+
+    if (deliveryType === "delivery" && !couponDisc?.applyDelivery) {
+      setCalCouponDisscount(0);
+      setFlatCouponDisscount(0);
+      return;
+    }
 
     if (couponDisc?.discount && couponDisc.minSpend! <= itemTotal) {
       const excludedCategoryIds = couponDisc.excludedCategoryIds || [];
@@ -156,6 +169,7 @@ export default function CartLeft() {
           setcouponDiscountPercentL(
             parseFloat(((price / itemTotal) * 100).toFixed(2))
           );
+          console.log("discount on pickup appll----------");
         } else {
           const percent = +couponDisc.discount;
           const totalDis = parseFloat(((itemTotal * percent) / 100).toFixed(2));
@@ -172,7 +186,7 @@ export default function CartLeft() {
       setCalCouponDisscount(0);
       setcouponDiscountPercentL(0);
     }
-  }, [couponDisc, itemTotal, cartData]);
+  }, [couponDisc, itemTotal, cartData, deliveryType]);
 
   useEffect(() => {
     const netPay = (
@@ -298,7 +312,7 @@ export default function CartLeft() {
       const customer_email = JSON.parse(
         localStorage.getItem("customer_email") || ""
       );
-const couponCode="KJKKS";// couponDisc?.code?.trim() ? couponDisc.code : "NA";
+      const couponCode = "KJKKS"; // couponDisc?.code?.trim() ? couponDisc.code : "NA";
 
       const purchaseData = {
         userId: order_user_Id,
@@ -315,7 +329,7 @@ const couponCode="KJKKS";// couponDisc?.code?.trim() ? couponDisc.code : "NA";
         flatDiscount: flatCouponDiscount,
         calCouponDiscount,
         couponDiscountPercentL,
-        couponCode: couponDisc?.code?.trim() ? couponDisc.code : "NA",//couponCode: couponDisc?.code ?? "NA",
+        couponCode: couponDisc?.code?.trim() ? couponDisc.code : "NA", //couponCode: couponDisc?.code ?? "NA",
         pickUpDiscountPercentL,
         noOffers,
       } as orderDataType;
@@ -325,14 +339,18 @@ const couponCode="KJKKS";// couponDisc?.code?.trim() ? couponDisc.code : "NA";
         const orderMasterId = await createNewOrder(purchaseData);
 
         if (paymentType === "stripe") {
-          router.push(`/stripe?orderMasterId=${orderMasterId}&deliveryType=${deliveryType}&customerNote=${"this is cusomer note"}&couponCode=${couponCode}&couponDiscount=${calCouponDiscount}`);
+          router.push(
+            `/stripe?orderMasterId=${orderMasterId}&deliveryType=${deliveryType}&customerNote=${"this is cusomer note"}&couponCode=${couponCode}&couponDiscount=${calCouponDiscount}`
+          );
         } else if (paymentType === "paypal") {
-          router.push(`/pay?orderMasterId=${orderMasterId}&deliveryType=${deliveryType}&customerNote=${"this is cusomer note"}&couponCode=${couponCode}&couponDiscount=${calCouponDiscount}`);
+          router.push(
+            `/pay?orderMasterId=${orderMasterId}&deliveryType=${deliveryType}&customerNote=${"this is cusomer note"}&couponCode=${couponCode}&couponDiscount=${calCouponDiscount}`
+          );
         } else if (paymentType === "cod") {
           router.push(
             `/complete?paymentType=Barzahlung&orderMasterId=${orderMasterId}&deliveryType=${deliveryType}&customerNote=${"this is cusomer note"}&couponCode=${couponCode}&couponDiscount=${calCouponDiscount}`
           );
-        } 
+        }
       } else {
         toast.error(`Cart is empty, add some foods`);
       }

@@ -27,8 +27,8 @@ export async function addNewcoupon(formData: FormData) {
   const offerType = formData.get("offerType");
   const expiry = formData.get("expiry");
   const discountType = formData.get("discountType");
-  const isFeatured= false;
-const isActivated = true;
+  const isFeatured = false;
+  const isActivated = true;
   // formData.append("isFeatured", data.isFeatured);
 
   //image = formData.get("image"),
@@ -80,12 +80,12 @@ const isActivated = true;
     timeZone: "Europe/Berlin",
   });
 
- const discountF = parseFloat(discount) as number;
- const minSpendF = parseFloat(minSpend) as number;
+  const discountF = parseFloat(discount) as number;
+  const minSpendF = parseFloat(minSpend) as number;
   const data = {
     code,
-    discount:discountF,
-    minSpend:minSpendF,
+    discount: discountF,
+    minSpend: minSpendF,
     productCat,
     couponDesc,
     offerType,
@@ -93,10 +93,10 @@ const isActivated = true;
     discountType,
     isFeatured,
     isActivated,
-    startDate:now_german,
-    date:now_german,
+    startDate: now_german,
+    date: now_german,
   };
-  console.log("data to be saved ---", data)
+  console.log("data to be saved ---", data);
 
   try {
     const docRef = await addDoc(collection(db, "coupon"), data);
@@ -118,7 +118,7 @@ export async function deletecoupon(id: string): Promise<rt> {
   return { success: "Delete implimented" };
 }
 
-export  async  function editcoupon(id: string, formData: FormData){
+export async function editcoupon(id: string, formData: FormData) {
   try {
     const updatedData: any = {
       code: formData.get("code"),
@@ -141,7 +141,7 @@ export  async  function editcoupon(id: string, formData: FormData){
     console.error("Failed to update coupon:", error);
     return { success: false, error: "Failed to update coupon." };
   }
-};
+}
 
 export async function editcoupon1(formData: FormData) {
   const id = formData.get("id") as string;
@@ -238,7 +238,6 @@ export async function editcoupon1(formData: FormData) {
 //   return data;
 // }
 
-
 export async function fetchcoupon(): Promise<couponType[]> {
   const result = await getDocs(collection(db, "coupon"));
 
@@ -296,6 +295,8 @@ export async function fetchcouponById(id: string): Promise<couponType> {
     offerType: raw.offerType,
     isActivated: raw.isActivated,
     isFeatured: raw.isFeatured,
+    applyPickup: raw.applyPickup ?? true, // fallback to true if undefined
+    applyDelivery: raw.applyDelivery ?? true,
     productCat: raw.productCat,
     couponDesc: raw.couponDesc,
     excludedCategoryIds: raw.excludedCategoryIds,
@@ -310,7 +311,7 @@ export async function fetchcouponById(id: string): Promise<couponType> {
 // export async function fetchcouponByCode(
 //   condname: string
 // ): Promise<couponType[]> {
-   
+
 //   const data = [] as couponType[];
 //   const q = query(collection(db, "coupon"), where("code", "==", condname));
 //   const querySnapshot = await getDocs(q);
@@ -324,8 +325,9 @@ export async function fetchcouponById(id: string): Promise<couponType> {
 //   return data;
 // }
 
-
-export async function fetchcouponByCode(condname: string): Promise<couponType[]> {
+export async function fetchcouponByCode(
+  condname: string
+): Promise<couponType[]> {
   const data: couponType[] = [];
 
   const q = query(collection(db, "coupon"), where("code", "==", condname));
@@ -334,24 +336,25 @@ export async function fetchcouponByCode(condname: string): Promise<couponType[]>
   querySnapshot.forEach((doc) => {
     const raw = doc.data();
 
-   const converted: couponType = {
-  code: raw.code,
-  discount: raw.discount,
-  discountType: raw.discountType,
-  message: raw.message,
-  minSpend: raw.minSpend,
-  expiry: raw.expiry,
-  startDate: raw.startDate,
-  offerType: raw.offerType,
-  isActivated: raw.isActivated,
-  isFeatured: raw.isFeatured,
-  productCat: raw.productCat,
-  couponDesc: raw.couponDesc,
-  excludedCategoryIds: raw.excludedCategoryIds,
-  createdAt: raw.createdAt?.toDate?.() ?? undefined,
-  date: raw.date?.toDate?.() ?? new Date(), // <--- FIX HERE
-};
-
+    const converted: couponType = {
+      code: raw.code,
+      discount: raw.discount,
+      discountType: raw.discountType,
+      message: raw.message,
+      minSpend: raw.minSpend,
+      expiry: raw.expiry,
+      startDate: raw.startDate,
+      offerType: raw.offerType,
+      isActivated: raw.isActivated,
+      isFeatured: raw.isFeatured,
+      applyPickup: raw.applyPickup ?? true, // fallback to true if undefined
+    applyDelivery: raw.applyDelivery ?? true,
+      productCat: raw.productCat,
+      couponDesc: raw.couponDesc,
+      excludedCategoryIds: raw.excludedCategoryIds,
+      createdAt: raw.createdAt?.toDate?.() ?? undefined,
+      date: raw.date?.toDate?.() ?? new Date(), // <--- FIX HERE
+    };
 
     data.push(converted);
   });
@@ -390,15 +393,16 @@ export async function fetchcouponByCode(condname: string): Promise<couponType[]>
 //   return converted;
 // }
 
-export async function updateCouponExcludedCategories(couponId: string, categoryIds: string[]) {
-
-  console.log("categoryIds-------------", categoryIds)
+export async function updateCouponExcludedCategories(
+  couponId: string,
+  categoryIds: string[]
+) {
+  console.log("categoryIds-------------", categoryIds);
   const couponRef = doc(db, "coupon", couponId);
   await updateDoc(couponRef, {
     excludedCategoryIds: categoryIds,
   });
 }
-
 
 export async function fetchSingleCoupon(id: string) {
   const docRef = doc(db, "coupon", id);

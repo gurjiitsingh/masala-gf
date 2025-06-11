@@ -47,7 +47,7 @@ const onSubmit = async (data: PickupDiscountForm) => {
         defaultValue=""
       >
         <option value="" disabled>Select a discount</option>
-        {Array.from({ length: 31 }, (_, i) => i).map((val) => (
+        {Array.from({ length: 51 }, (_, i) => i).map((val) => (
           <option key={val} value={val}>
             {val}%
           </option>
