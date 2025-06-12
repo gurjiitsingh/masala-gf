@@ -5,8 +5,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { addressSchimaCheckout, TaddressSchemaCheckout } from "@/lib/types/addressType";
 import { Button } from "@/components/ui/button";
 //import { useSearchParams } from "next/navigation";
-import { newCustomerAddress } from "@/app/action/checkout/dbOperations";
-import {  searchUserById, } from "@/app/action/user/dbOperation";
+import { newCustomerAddress } from "@/app/(universal)/action/checkout/dbOperations";
+import {  searchUserById, } from "@/app/(universal)/action/user/dbOperation";
 
 import { useSession } from "next-auth/react";
 

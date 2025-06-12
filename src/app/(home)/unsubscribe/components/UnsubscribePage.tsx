@@ -1,6 +1,6 @@
 'use client';
 
-import { unsbscribeUser } from '@/app/action/user/dbOperation';
+import { unsbscribeUser } from '@/app/(universal)/action/user/dbOperation';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useState } from 'react';
 

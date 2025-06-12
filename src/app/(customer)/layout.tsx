@@ -1,6 +1,6 @@
 "use client";
 import Sidebar from "./components/Sidebar";
-import Header from "@/app/admin/components/Header";
+import Header from "@/app/(universal)/admin/components/Header";
 import React, { useEffect, useRef, useState } from "react";
 import "../globals.css";
 //import { Metadata } from "next";

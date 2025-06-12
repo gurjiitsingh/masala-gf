@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { fetchProducts } from "@/app/action/productsbase/dbOperation";
-import { fetchAddOnProducts } from "@/app/action/productsaddon/dbOperation";
+import { fetchProducts } from "@/app/(universal)/action/productsbase/dbOperation";
+import { fetchAddOnProducts } from "@/app/(universal)/action/productsaddon/dbOperation";
 import { ProductType } from "@/lib/types/productType";
 import { addOnType } from "@/lib/types/addOnType";
 import PageProductDetailComponent from "./PageProductDetailComponent";

@@ -4,7 +4,7 @@ import SiteContext from "./SiteContext";
 import { useEffect, useState } from "react";
 import { deliveryType } from "@/lib/types/deliveryType";
 import { couponType } from "@/lib/types/couponType";
-import { getAllSettings } from "@/app/action/setting/dbOperations";
+import { getAllSettings } from "@/app/(universal)/action/setting/dbOperations";
 import { SettingsDataType } from "@/lib/types/settings";
 import { ProductType } from "@/lib/types/productType";
 

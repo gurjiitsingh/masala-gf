@@ -1,4 +1,4 @@
-import { fetchCategories } from '@/app/action/category/dbOperations';
+import { fetchCategories } from '@/app/(universal)/action/category/dbOperations';
 import { categoryType } from '@/lib/types/categoryType';
 import React, { useEffect, useState } from 'react'
 import CategoryList from './CategoryList';
