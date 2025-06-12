@@ -14,8 +14,8 @@ import CartBottom from "@/components/CartBottom/CartBottom";
 import Modal from "./components/Modal";
 
 export const metadata: Metadata = {
-  title: "Masala Taste of India, Germany ",
-  description: "Masala Taste of India, Indian Restaurant in German , Gifhorn,  Lower Saxony ",
+  title: "Best Athenas Food, Germany ",
+  description: "Best Athenas Food in German , Gifhorn,  Lower Saxony ",
   other: {
     google: "notranslate",
   },
@@ -69,7 +69,10 @@ export default function RootLayout({
               }}
               reverseOrder={false}
             />
-          <div className="relative w-full h-screen overflow-x-hidden bg-[#ebf1ec] md:bg-green-100 m-0 p-0"> 
+          <div 
+          className="relative w-full h-screen overflow-x-hidden bg-cover bg-[#cb9d80] md:bg-[#cb9d80] m-0 p-0"
+           style={{ backgroundImage: "url('/hero-bg.jpg')" }}
+          > 
   <div
         className="absolute top-0 inset-0 z-0 bg-cover bg-center bg-no-repeat"
         style={{ backgroundImage: "url('/hero-bg.jpg')" }}

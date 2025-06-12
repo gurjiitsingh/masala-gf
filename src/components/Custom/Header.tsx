@@ -5,13 +5,13 @@ import Login from "../Login";
 import { SessionProvider } from "next-auth/react";
 import { UseSiteContext } from "@/SiteContext/SiteContext";
 import { FaBars } from "react-icons/fa6";
-import Link from "next/link";
+
 
 const Header = () => {
   const { bargerMenuToggle } = UseSiteContext();
 // #eafad6
   return (
-    <header className="bg-[#64870d] px-3 opacity-70 z-50 shadow-md  w-full mx-auto  rounded-xl  mt-3">
+    <header className="bg-[#eba363] px-3 opacity-70 z-50 shadow-md  w-full mx-auto  rounded-xl  mt-3">
       <div className=" flex items-center justify-between">
         {/* Left Side: Logo and Navbar */}
         <div className="flex items-center gap-4">
@@ -25,7 +25,7 @@ const Header = () => {
           </button>
           {/* <Link href="/">
             <img
-              src="/logo.webp"
+              src="/logo.png"
               alt="Company Logo"
               className="h-12 w-auto"
             />

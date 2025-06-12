@@ -10,7 +10,7 @@ export default function Title() {
   return (
     <div className="flex gap-2 my-5">
       <div className="flex items-center">
-        <img src="/logo.webp" alt="masala Logo" className="h-12 w-auto" />
+        <img src="/logo.png" alt="masala Logo" className="h-12 w-auto" />
       </div>
       <div>
         <h1

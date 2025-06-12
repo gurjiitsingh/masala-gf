@@ -1,11 +1,11 @@
 export const allText = {
-  title: "Abhol Rabatt 10%",
+  title: "Best Athenas Food",//Abhol Rabatt 20%
   deliveryNote: "Lieferung ist ebenfalls verfügbar.",
   disclaimer: "Das Essen kann vom Bild abweichen",
   logoAlt: "Logo",
-  brand: "Masala",
-  tagline: "Taste of India",
-  brandName: "Masala Taste of India",
+  brand: "Athenas Grill",
+  tagline: "",
+  brandName: "",
   menuList: [
     { name: "Heim", link: "/" },
     { name: "Über Uns", link: "/about" },
@@ -41,7 +41,7 @@ export const allText = {
     copyright: {
       prefix: "Copyright ©",
       suffix: "All Rights Reserved by",
-      company: "Masala Taste of India",
+      company: "Athenas Grill-",
     },
   },
 };

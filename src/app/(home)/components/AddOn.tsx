@@ -22,7 +22,7 @@ export default function AddOn({
        
         return (
           <div key={i} className="flex flex-col gap-1">
-            <div className="flex text-slate-500 items-center bg-amber-300 justify-between p-1  rounded-3xl">
+            <div className="flex text-slate-500 items-center  justify-between p-1  rounded-3xl">
             {i ? <><div>{addon.name}</div> <div className="flex">&euro;{addon.price}<div><RiDiscountPercentFill size={24} className="text-white" /></div></div></> 
             :    <> <div>{addon.name}</div> <div>&euro;{addon.price}</div></>
       }

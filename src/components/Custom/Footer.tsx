@@ -6,13 +6,13 @@ import { allText } from "@/lib/constants/alltext";
 
 export default function Footer() {
   return (
-    <footer className="relative bg-[#FADB5E] pt-12 -mb-20">
+    <footer className="relative bg-[#eba363] pt-12 -mb-20">
       <div className="container mx-auto">
         <div className="flex flex-col md:flex-row justify-between gap-8 md:gap-1">
           <div className="flex items-center gap-1 w-full h-fit border border-amber-50 p-1 mx-1 rounded-2xl bg-amber-200">
             <div className="flex items-center justify-start rounded-full">
               <Link href="/">
-                <img className="h-12 md:h-12" src="/logo.webp" alt={allText.logoAlt} />
+                <img className="h-12 md:h-12" src="/logo.png" alt={allText.logoAlt} />
               </Link>
             </div>
             <div className="flex items-center h-fit">
@@ -66,7 +66,7 @@ export default function Footer() {
       </div>
 
       {/* Footer Bottom */}
-      <div className="bg-[#64870d] mt-12 pt-3 pb-6">
+      <div className="bg-[#6a4931] mt-12 pt-3 pb-6">
         <div className="container mx-auto flex flex-col items-center">
           <p className="text-md text-slate-100">
             {allText.footerBottom.poweredBy}{" "}
