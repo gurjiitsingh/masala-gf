@@ -141,18 +141,19 @@ export default function CartLeft() {
 
   useEffect(() => {
     if (itemTotal <= 0) return;
+   // console.log("applyDelivery, applyPickup-------", couponDisc?.applyDelivery,couponDisc?.applyPickup)
 
-    // if (deliveryType === "pickup" && !couponDisc?.applyPickup) {
-    //   setCalCouponDisscount(0);
-    //   setFlatCouponDisscount(0);
-    //   return;
-    // }
+    if (deliveryType === "pickup" && !couponDisc?.applyPickup) {
+      setCalCouponDisscount(0);
+      setFlatCouponDisscount(0);
+      return;
+    }
 
-    // if (deliveryType === "delivery" && !couponDisc?.applyDelivery) {
-    //   setCalCouponDisscount(0);
-    //   setFlatCouponDisscount(0);
-    //   return;
-    // }
+    if (deliveryType === "delivery" && !couponDisc?.applyDelivery) {
+      setCalCouponDisscount(0);
+      setFlatCouponDisscount(0);
+      return;
+    }
 
     if (couponDisc?.discount && couponDisc.minSpend! <= itemTotal) {
       const excludedCategoryIds = couponDisc.excludedCategoryIds || [];
@@ -450,7 +451,7 @@ export default function CartLeft() {
             calculatedPickUpDiscount={calculatedPickUpDiscountL}
           />
 
-          {onlyItemsWithDisabledCouponCode && <CouponDisc total={itemTotal} />}
+          {onlyItemsWithDisabledCouponCode && (flatCouponDiscount+calCouponDiscount) !== 0 && <CouponDisc total={itemTotal} />}
 
           <div className="font-semibold border-b border-slate-200 py-3 w-full flex justify-between items-center">
             <div className="text-md font-semibold py-3 w-full text-left">

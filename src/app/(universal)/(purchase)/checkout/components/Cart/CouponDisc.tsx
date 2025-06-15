@@ -2,11 +2,11 @@ import { UseSiteContext } from "@/SiteContext/SiteContext";
 import React from "react";
 
 export default function CouponDisc({ total }: { total: number }) {
-  const { couponDisc, deliveryType } = UseSiteContext();
+  const { couponDisc } = UseSiteContext();
 
   return (
     <>
-      {couponDisc?.discount &&   deliveryType !== 'pickup' &&(
+      {couponDisc?.discount  &&(
         <>
           {couponDisc?.discountType === "flat" ? (
             <div className="font-semibold border-b py-3 w-full flex justify-between items-center">
