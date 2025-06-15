@@ -142,17 +142,17 @@ export default function CartLeft() {
   useEffect(() => {
     if (itemTotal <= 0) return;
 
-    if (deliveryType === "pickup" && !couponDisc?.applyPickup) {
-      setCalCouponDisscount(0);
-      setFlatCouponDisscount(0);
-      return;
-    }
+    // if (deliveryType === "pickup" && !couponDisc?.applyPickup) {
+    //   setCalCouponDisscount(0);
+    //   setFlatCouponDisscount(0);
+    //   return;
+    // }
 
-    if (deliveryType === "delivery" && !couponDisc?.applyDelivery) {
-      setCalCouponDisscount(0);
-      setFlatCouponDisscount(0);
-      return;
-    }
+    // if (deliveryType === "delivery" && !couponDisc?.applyDelivery) {
+    //   setCalCouponDisscount(0);
+    //   setFlatCouponDisscount(0);
+    //   return;
+    // }
 
     if (couponDisc?.discount && couponDisc.minSpend! <= itemTotal) {
       const excludedCategoryIds = couponDisc.excludedCategoryIds || [];
