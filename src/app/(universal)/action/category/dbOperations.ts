@@ -89,14 +89,20 @@ export async function addNewCategory(formData: FormData) {
       : { success: true };
   }
 
-  let imageUrl;
+   let imageUrl;
+  if(image === "0"){
+     imageUrl = '/com-1.jpg'
+ 
+}else{
   try {
-  
     imageUrl = await upload(image);
+    console.log(imageUrl);
   } catch (error) {
+    //  throw new Error("error");
     console.log(error);
     return { errors: "image cannot uploaded" };
   }
+}
 
   const data = {
     name,

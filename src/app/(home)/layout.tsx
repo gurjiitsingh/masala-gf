@@ -12,6 +12,7 @@ import Footer from "@/components/Custom/Footer";
 
 import CartBottom from "@/components/CartBottom/CartBottom";
 import Modal from "./components/Modal";
+import UTMInitializer from "../UTMInitializer";
 
 export const metadata: Metadata = {
   title: "Masala Taste of India, Germany ",
@@ -31,7 +32,7 @@ export default function RootLayout({
   return (
     <html lang="de">
       <body>
-        
+        <UTMInitializer />
         <SiteProvider>
           <CartProvider>
             <BargerMenu />
