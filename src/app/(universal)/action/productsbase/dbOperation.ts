@@ -334,6 +334,20 @@ export async function fetchProductByCategoryId(
 }
 
 
+
+export async function fetchAllProducts(): Promise<ProductType[]> {
+  const result = await getDocs(collection(db, 'product'))
+  const data: ProductType[] = []
+
+  result.forEach((doc) => {
+    const product = { id: doc.id, ...doc.data() } as ProductType
+    data.push(product)
+  })
+
+  return data
+}
+
+
 //console.log("Foorm data ---------",formData.get("oldImgageUrl"));
 // console.log(formData.get("price"));
 // console.log(formData.get("sortOrder"));

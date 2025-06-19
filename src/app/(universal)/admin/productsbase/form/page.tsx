@@ -37,88 +37,43 @@ const Page = () => {
 
   //const images = watch("images");
 
-  async function onsubmit(data: TnewProductSchema) {
-    //typeof(data.featured)
-    console.log("formdata in client----- ", data);
-    const formData = new FormData();
-     console.log("images client---------", data.image[0]);
-     if(data.image[0] === undefined){
-      console.log("undefind")
-      formData.append("image", "0");
-     }else{
-      formData.append("image", data.image[0]);
-     }
-    formData.append("name", data.name);
-    formData.append("price", data.price);
-    formData.append("discountPrice", data.discountPrice!);
-    // formData.append("isFeatured", data.isFeatured);
-    // formData.append("isFeatured", true);
-    formData.append("sortOrder", data.sortOrder);
-    formData.append("categoryId", data.categoryId!);
-    formData.append("productDesc", data.productDesc);
-   
-    
-    const result = await addNewProduct(formData);
+async function onsubmit(data: TnewProductSchema) {
+  const formData = new FormData();
 
-    if (!result?.errors) {
-      // router.push('/admin/products')
+  
 
-      setValue("name", "");
-      setValue("productDesc", "");
-      setValue("price", "");
-     // setValue("sortOrder", "");
-      // setValue("brand", "Select Brand");
-      // setValue("weight", "");
-      // setValue("dimensions", "");
-      setValue("isFeatured", false);
-    } else {
-      alert("Some thing went wrong");
-    }
-
-    // if (result.errors) {
-    //   // not network error but data validation error
-    //   const errors: Terror = result.errors;
-
-    //   if (errors.name) {
-    //     setError("name", {
-    //       type: "server",
-    //       message: errors.name,
-    //     });
-    //   } else if (errors.price) {
-    //     setError("price", {
-    //       type: "server",
-    //       message: errors.price,
-    //     });
-    //   } else if (errors.sortOrder) {
-    //     setError("sortOrder", {
-    //       type: "server",
-    //       message: errors.sortOrder,
-    //     });
-    //   }
-    //   if (errors.productDesc) {
-    //     setError("productDesc", {
-    //       type: "server",
-    //       message: errors.productDesc,
-    //     });
-    //   }
-    //   if (errors.image) {
-    //     setError("image", {
-    //       type: "server",
-    //       message: errors.image,
-    //     });
-    //   }
-    //   if (errors.company) {
-    //     // setError("company", {
-    //     //   type: "server",
-    //     //   message: errors.company,
-    //     // });
-    //   } else {
-    //     //  alert("Something went wrong");
-    //   }
-    // }
-
-    console.log("response in create product form ", result);
+  if (!data.image?.[0]) {
+    formData.append("image", "0");
+  } else {
+    formData.append("image", data.image[0]);
   }
+
+  formData.append("name", data.name);
+  formData.append("price", data.price);
+  formData.append("discountPrice", data.discountPrice!);
+  formData.append("sortOrder", data.sortOrder);
+  formData.append("categoryId", data.categoryId!);
+  formData.append("productDesc", data.productDesc!);
+
+  const result = await addNewProduct(formData);
+
+  if (!result?.errors) {
+    setValue("name", "");
+    setValue("productDesc", "");
+    setValue("price", "");
+    setValue("isFeatured", false);
+
+    // increment sortOrder by 1
+    const currentSortOrder = parseInt(data.sortOrder) || 0;
+    setValue("sortOrder", (currentSortOrder + 1).toString());
+  } else {
+    alert("Something went wrong");
+  }
+
+  console.log("response in create product form ", result);
+}
+
+
 
   return (
     <>

@@ -93,8 +93,8 @@ export const newPorductSchema = z.object({
   categoryId:z.string().optional(),
   sortOrder: z.string().min(1, { message: "Please add sort order" }),
   productDesc: z
-    .string()
-    .min(2, { message: "Product productDescription is required" }),
+    .string().optional(),
+   // .min(2, { message: "Product productDescription is required" }),
   //  brand: z.string().min(1, { message: "Please select category" }),
   //  dimensions:z.string().optional(),
   //weight:z.string().optional(),
@@ -139,8 +139,8 @@ export const editPorductSchema = z.object({
   categoryId:z.string().optional(),
   categoryIdOld:z.string().optional(),
   productDesc: z
-    .string()
-    .min(2, { message: "Product productDescription is required" }),
+    .string().optional(),
+   // .min(2, { message: "Product productDescription is required" }),
   // brand: z.string().optional(),
   // dimensions:z.string().optional(),
   // weight:z.string().optional(),
