@@ -18,7 +18,7 @@ export default function Title() {
         >
           <div>
             {allText.brand}
-            <span className="text-3xl font-extralight pl-1">{allText.tagline}</span>
+            <span className="text-xl font-light pl-1">{allText.tagline}</span>
           </div>
         </h1>
       </div>

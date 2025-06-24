@@ -23,6 +23,7 @@ type Titem = {
 const menuList: Titem[] = [
   { name: "Home", link: "/", icon: <GoHome /> },
   { name: "Orders", link: "/admin", icon: <MdSpaceDashboard /> },
+   { name: "Reservations", link: "/admin/reservations", icon: <MdSpaceDashboard /> },
   { name: "Categories", link: "/admin/categories", icon: <TbCategoryPlus /> },
   { name: "Pickup Discount", link: "/admin/pickupdiscount/pickup-discount", icon: <TbCategoryPlus /> },
   { name: "Products", link: "/admin/productsbase", icon: <MdOutlineProductionQuantityLimits /> },

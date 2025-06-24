@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { sendReservationConfirmationEmail } from '@/lib/email/sendReservationConfirmationEmail';
-import { saveReservationToFirestore } from '@/lib/firestore/saveReservationToFirestore';
 import { reservationSchema } from '../../../../types/ReservationFormData';
 
 export async function POST(req: NextRequest) {
@@ -12,24 +11,13 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ success: false, error: 'Invalid input' }, { status: 400 });
     }
 
-    const data = parsed.data;
-
-    // ✅ Save to Firestore first
-    const saveResult = await saveReservationToFirestore(data);
-
-    if (!saveResult.success) {
-      return NextResponse.json({ success: false, error: saveResult.error }, { status: 500 });
-    }
-
-    // ✅ Then send email
-    const result = await sendReservationConfirmationEmail(data);
+    const result = await sendReservationConfirmationEmail(parsed.data);
 
     if (result.success) {
-      return NextResponse.json({ success: true, message: 'Reservation saved and email sent' });
+      return NextResponse.json({ success: true, message: 'Email sent successfully' });
     } else {
-      return NextResponse.json({ success: false, error: result.message || 'Email send failed' }, { status: 500 });
+      return NextResponse.json({ success: false, error: result.message || 'Email failed to send' }, { status: 500 });
     }
-
   } catch (err) {
     console.error('Server error:', err);
     return NextResponse.json({ success: false, error: 'Internal server error' }, { status: 500 });
