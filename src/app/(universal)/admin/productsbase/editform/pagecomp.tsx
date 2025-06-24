@@ -91,7 +91,7 @@ const PageComp = () => {
     formData.append("discountPrice", data.discountPrice!);
     formData.append("categoryId", data.categoryId!);
     formData.append("sortOrder", data.sortOrder);
-    formData.append("productDesc", data.productDesc);
+    formData.append("productDesc", data.productDesc!);
     formData.append("image", data.image[0]);
     formData.append("oldImgageUrl", data.oldImgageUrl!);
     // formData.append("isFeatured",data.isFeatured)

@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-
 import { ProductType } from '@/lib/types/productType'
 import { fetchAllProducts } from '../../action/productsbase/dbOperation'
 
@@ -16,7 +15,7 @@ export default function ProductCSVExportPage() {
 
       const headers = ['ArtikelNr', 'Artikelname', 'Preis']
       const rows = products.map((p) => [
-        p.k ?? '',
+        p.id ?? '', // Use id as ArtikelNr
         (p.name ?? '').replace(/;/g, ','), // Clean semicolons in name
         formatPrice(p.price),
       ])
