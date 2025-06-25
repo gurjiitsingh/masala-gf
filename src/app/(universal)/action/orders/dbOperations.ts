@@ -49,7 +49,7 @@ export async function createNewOrderCustomerAddress(
   formData.append("confirmPassword", password);
   // const result = await addUser(formData);
   const UserAddedId = (await addUserDirect(formData)) as string;
-  console.log("UserAdded by id------------", UserAddedId);
+  
 
   // Now check address or add new address
   const formDataAdd = new FormData();
@@ -404,19 +404,28 @@ export async function fetchOrdersMasterByUserId(
 // }
 
 export async function fetchOrderMasterById(id: string) {
-  console.log("Document data:--------");
   const docRef = doc(db, "orderMaster", id);
   const docSnap = await getDoc(docRef);
-  let productData = {} as orderMasterDataT;
-  if (docSnap.exists()) {
-    console.log("Document data:", docSnap.data());
-  } else {
-    //   docSnap.data() //will be undefined in this case
+
+  if (!docSnap.exists()) {
     console.log("No such document!");
+    return null;
   }
-  productData = docSnap.data() as orderMasterDataT;
-  return productData;
+
+  const raw = docSnap.data() as orderMasterDataT;
+
+  const createdAtStr =
+    raw.createdAt instanceof Timestamp
+      ? raw.createdAt.toDate().toISOString()
+      : new Date().toISOString();
+
+  return {
+    ...raw,
+    createdAt: createdAtStr,
+    id: docSnap.id,
+  } as orderMasterDataSafeT;
 }
+
 
 /***************** Order detail  **************************/
 

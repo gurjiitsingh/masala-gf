@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form"; //, Controller
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -38,6 +38,7 @@ const Address = () => {
   const { data: session } = useSession();
 
   useEffect(() => {
+    console.log("customerEmail----------", customerEmail)
     if (customerEmail !== undefined) {
       getAddressByEmail(customerEmail);
     }
@@ -382,46 +383,41 @@ const Address = () => {
     </div>
   );
 
-  async function getAddressByEmail(inputEmail: string) {
-    const addressRes = await searchAddressEmail(inputEmail);
-    if (addressRes?.firstName !== null) {
-      setAddress(addressRes);
-      const zipInfo = await fetchdeliveryByZip(addressRes.zipCode);
-      setdeliveryDis(zipInfo);
-    }
-    //  setValue("email", inputEmail);
-  }
+  // async function getAddressByEmail(inputEmail: string) {
+  //   const addressRes = await searchAddressEmail(inputEmail);
+  //   if (addressRes?.firstName !== null) {
+  //     setAddress(addressRes);
+  //     const zipInfo = await fetchdeliveryByZip(addressRes.zipCode);
+  //     setdeliveryDis(zipInfo);
+  //   }
+  //   //  setValue("email", inputEmail);
+  // }
 
-  async function getAddressByID() {
-    // const custAddressRes =
-    //   (await searchAddressByUserId(session?.user.id)) || {};
-    //    setFormAddress(custAddressRes);
-  }
+ async function getAddressByEmail(inputEmail: string) {
+  const addressRes = await searchAddressEmail(inputEmail);
 
-  async function setFormAddress(custAddressRes: addressResT) {
-    // let setemail;
-    if (custAddressRes.email !== undefined) {
-      // setAddressFound(true)
-
-      setAddress(custAddressRes);
-    } else {
-      const userResById = "khkjhk"; //await searchUserById(session?.user?.id);
-      if (userResById !== undefined) {
-        //   setValue("email", userResById.email);
-        //    console.log("this is befor email set---------------2",userResById.email)
-        // setValue("firstName", userResById.firstName);
-        // setValue("lastName", userResById.lastName);
-        // setValue("userId", userResById.userId);
-        // setValue("email", userResById.email);
-        // setValue("mobNo", userResById.mobNo);
-        // setValue("addressLine1", userResById.addressLine1);
-        // setValue("addressLine2", userResById.addressLine2);
-        // setValue("city", userResById.city);
-        // setValue("state", userResById.state);
-        // setValue("zipCode", userResById.zipCode);
-      }
-    }
+  if (addressRes) {
+    setAddress(addressRes);
+    const zipInfo = await fetchdeliveryByZip(addressRes.zipCode);
+    setdeliveryDis(zipInfo);
+  } else {
+    setAddressReset();
+    console.warn("No address found for email:", inputEmail);
   }
+}
+
+function setAddressReset() {
+    setValue("email", customerEmail);
+    setValue("firstName", "");
+    setValue("lastName", "");
+    setValue("mobNo", "");
+    setValue("addressLine1", "");
+    setValue("addressLine2", "");
+    setValue("city", "");
+    setValue("state", "");
+    setValue("zipCode", "");
+  }
+ 
   function setAddress(addressRes: addressResT) {
     setValue("email", addressRes.email);
     setValue("firstName", addressRes.firstName);

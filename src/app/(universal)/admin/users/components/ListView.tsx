@@ -20,7 +20,7 @@ import {
 
 import TableRows from "./TableRows";
 import { fetchAllUsers } from "@/app/(universal)/action/user/dbOperation";
-import { userType, userTypeArr } from "@/lib/types/userType";
+import { userType } from "@/lib/types/userType";
 //import FeaturProductUpdate from "./FeaturProductUpdate";
 
 const ListView = ({ title }: productTableProps) => {

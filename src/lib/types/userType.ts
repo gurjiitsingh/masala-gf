@@ -1,3 +1,4 @@
+import { Timestamp } from "@firebase/firestore";
 import { z } from "zod";
 
 export type userType = {
@@ -9,19 +10,10 @@ isVerfied:string;
 role:string;
 username:string;
 time:string | undefined;
+createdAt?: Timestamp; // Firestore server timestamp
 }
 
 
-export type userTypeArr = {
-    id:string;
-    email:string;
-hashedPassword:string;
-isAdmin:string;
-isVerfied:string;
-role:string;
-username:string;
-time:string | undefined;
-}[]
 
 
 export const userSchima = z.object({

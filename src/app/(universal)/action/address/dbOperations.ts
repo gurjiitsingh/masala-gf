@@ -9,6 +9,8 @@ import {
   getDoc,
   getDocs,
   query,
+  serverTimestamp,
+  Timestamp,
   updateDoc,
   where,
 } from "@firebase/firestore";
@@ -34,7 +36,7 @@ export async function addNewAddress(formData: FormData) {
     zipCode,
   };
 
-  console.log("-----", recievedData);
+ 
 
   const result = addressSchima.safeParse(recievedData);
   console.log(result);
@@ -108,76 +110,36 @@ export async function editCustomerAddress(formData: FormData) {
   }
 }
 
-type Task = {
-  id: string;
-  addressLine1: string;
-  addressLine2: string;
-  city: string;
-  email: string;
-  firstName: string;
-  lastName: string;
-  mobNo: string;
-  state: string;
-  userId: string;
-  zipCode: string;
-}[];
 
 
-export async function searchAddressEmail1(email: string): Promise<addressResType> {
-
-  const result = await getDocs(collection(db, "address"));
-  
-    const data = {} as addressResType;
-
-    result.forEach((doc) => {
-      console.log("find or not--------",doc.data().email)
-    //  const pData = { id: doc.id, ...doc.data() } as addressResType;
-     // data.push(pData);
-     if(doc.data().email===email){
-      Object.assign(data, doc.data());
-     }
-    });
-
-    console.log("llllllll",data)
-    return {
-      addressLine2: 'Avenue 7',
-      email: 'gurjiitsingh4@gmail.com',
-      firstName: 'Gim',
-      mobNo: '9838883323',
-      state: 'undefined',
-      addressLine1: '25 Street H No. 1',
-      userId: 'gDqlXKIfvis6SgnwaOc7',
-      lastName: 'Kari',
-      zipCode: '38518',
-      city: 'Hostin'
-    } as addressResType;
-
-}
-
-export async function searchAddressEmail(email: string): Promise<addressResType> {
-
-  let data = {
-    addressLine2: '',
-    email: email,
-    firstName: '',
-    mobNo: '',
-    state: '',
-    addressLine1: '',
-    userId: '',
-    lastName: '',
-    zipCode: '',
-    city: ''
-  } as addressResType;
-
+export async function searchAddressEmail(email: string): Promise<addressResType | null> {
   const q = query(collection(db, "address"), where("email", "==", email));
   const querySnapshot = await getDocs(q);
-    
-  querySnapshot.forEach((doc) => {
-      data = doc.data() as addressResType;
-  });
-  
-  return data;
+
+  if (querySnapshot.empty) return null;
+
+  const doc = querySnapshot.docs[0];
+  const docData = doc.data();
+
+  const result: addressResType = {
+    id: doc.id,
+    addressLine1: docData.addressLine1 || '',
+    addressLine2: docData.addressLine2 || '',
+    city: docData.city || '',
+    state: docData.state || '',
+    zipCode: docData.zipCode || '',
+    email: docData.email || '',
+    firstName: docData.firstName || '',
+    lastName: docData.lastName || '',
+    mobNo: docData.mobNo || '',
+    userId: docData.userId || '',
+    // ✅ Convert Firestore Timestamp to ISO string
+    createdAt: docData.createdAt?.toDate().toISOString() || '',
+  };
+
+  return result;
 }
+
 
 export async function searchAddressByAddressId(
   id: string
@@ -217,6 +179,7 @@ export const searchAddressByUserId = async (
   }
 };
 
+
 export async function addCustomerAddressDirect(formData: FormData) {
   const email = formData.get("email");
   const lastName = formData.get("lastName");
@@ -230,7 +193,7 @@ export async function addCustomerAddressDirect(formData: FormData) {
   const state = formData.get("state");
   const zipCode = formData.get("zipCode");
 
-  const recievedData = {
+  const receivedData = {
     email,
     firstName,
     lastName,
@@ -244,46 +207,31 @@ export async function addCustomerAddressDirect(formData: FormData) {
     zipCode,
   };
 
-  const result = addressSchimaCheckout.safeParse(recievedData);
-  //console.log("validation result in addaddressDirect ----", result, recievedData);
+  const result = addressSchimaCheckout.safeParse(receivedData);
 
   const q = query(collection(db, "address"), where("email", "==", email));
   const querySnapshot = await getDocs(q);
   let recordId = null;
+
   querySnapshot.forEach((doc) => {
     recordId = doc.id;
-    //console.log("address allredy exist ------", doc.id);
-    return recordId;
-    // doc.data() is never undefined for query doc snapshots
-    //console.log(doc.data());
   });
 
-  // if customer address not in address table, add adress of cutomer
-  if (result && !recordId) {
-    // add address
-
+  if (result.success && !recordId) {
     const addressData = {
-      email,
-      firstName,
-      lastName,
-      userId: userId,
-      mobNo,
-      addressLine1,
-      addressLine2,
-      city,
-      state,
-      zipCode,
+      ...receivedData,
+      createdAt: serverTimestamp(), // 🔥 Recommended
     };
 
     try {
-      const aadDocRef = await addDoc(collection(db, "address"), addressData);
-      console.log("new address added ------", aadDocRef.id);
-      recordId = aadDocRef.id;
-      return recordId;
-      // Clear the form
+      const addDocRef = await addDoc(collection(db, "address"), addressData);
+      console.log("New address added ------", addDocRef.id);
+      return addDocRef.id;
     } catch (e) {
       console.error("Error adding document: ", e);
     }
   }
+
   return recordId;
 }
+

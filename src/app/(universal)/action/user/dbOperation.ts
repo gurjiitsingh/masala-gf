@@ -6,80 +6,137 @@ import {   TuserSchem, userType } from "@/lib/types/userType";
 import { addDoc, collection, deleteDoc, doc, getDocs, query, serverTimestamp, setDoc, where } from "@firebase/firestore";
 
 
+// export async function addUserDirect(formData: FormData) {
+//  const email = formData.get("email") as string;
+// const password = formData.get("password") as string;
+// const firstName = formData.get("firstName") as string;
+// const lastName = formData.get("lastName") as string;
+// let username = (formData.get("username") || undefined) as string | undefined;
+//   //const confirmPassword = formData.get("confirmPassword");
+//   // const recievedData = {
+//   //   email,
+//   //   password,
+//   //   username,
+//   //   confirmPassword,
+//   // };
+
+//   const q = query(collection(db, "user"), where("email", "==", email));
+//   const querySnapshot = await getDocs(q);
+//   let recordId = undefined;
+//   querySnapshot.forEach((doc) => {
+//     recordId = doc.id;
+//     // doc.data() is never undefined for query doc snapshots
+//     //console.log("User allready exist ------", doc.id);
+//     return doc.id;
+//   });
+
+//   if (recordId === undefined) {
+//     // console.log("start adding user -----")
+//     //also add data in user/cutomer table
+//     if (username === undefined) {
+//       username = firstName + " " + lastName;
+//     }
+//     let userDocRef = "" as string;
+
+//     const date = new Date();
+//     // toLocaleString, default format for language de
+//    // console.log(date.toLocaleString('de',{timeZone:'Europe/Berlin', timeZoneName: 'long'}));
+//     // DateTimeFormat.format with specific options
+//     const f = new Intl.DateTimeFormat('de', {
+//       year: 'numeric',
+//       month: 'short',
+//       day: 'numeric',
+//       hour: '2-digit',
+//       hour12: false,
+//       minute: '2-digit',
+//       // timeZone: 'Europe/Berlin',
+//       // timeZoneName: 'short'
+//     });
+//     const time = f.format(date)
+
+//     try {
+//       const hashedPassword = await hashPassword(password);
+//       const newuser = {
+//         username,
+//         firstName,
+//         lastName,
+//         email,
+//         hashedPassword,
+//         role: "user",
+//         isVerified: true,
+//         isAdmin: false,
+//         time,
+//       };
+
+//       userDocRef = (await addDoc(collection(db, "user"), newuser)).id ;
+//       console.log("User added with ID: ", userDocRef);
+//       recordId = userDocRef;
+//       return userDocRef;
+//       // Clear the form
+//     } catch (e) {
+//       console.error("Error adding document: ", e);
+//     }
+//   }
+
+//   return recordId;
+  
+// } // end of add user
+
+
 export async function addUserDirect(formData: FormData) {
- const email = formData.get("email") as string;
-const password = formData.get("password") as string;
-const firstName = formData.get("firstName") as string;
-const lastName = formData.get("lastName") as string;
-let username = (formData.get("username") || undefined) as string | undefined;
-  //const confirmPassword = formData.get("confirmPassword");
-  // const recievedData = {
-  //   email,
-  //   password,
-  //   username,
-  //   confirmPassword,
-  // };
+  const email = formData.get("email") as string;
+  const password = formData.get("password") as string;
+  const firstName = formData.get("firstName") as string;
+  const lastName = formData.get("lastName") as string;
+  let username = (formData.get("username") || undefined) as string | undefined;
 
   const q = query(collection(db, "user"), where("email", "==", email));
   const querySnapshot = await getDocs(q);
-  let recordId = undefined;
+  let recordId: string | undefined = undefined;
+
   querySnapshot.forEach((doc) => {
     recordId = doc.id;
-    // doc.data() is never undefined for query doc snapshots
-    //console.log("User allready exist ------", doc.id);
-    return doc.id;
+    return;
   });
 
   if (recordId === undefined) {
-    // console.log("start adding user -----")
-    //also add data in user/cutomer table
     if (username === undefined) {
-      username = firstName + " " + lastName;
+      username = `${firstName} ${lastName}`;
     }
-    let userDocRef = "" as string;
-
-    const date = new Date();
-    // toLocaleString, default format for language de
-   // console.log(date.toLocaleString('de',{timeZone:'Europe/Berlin', timeZoneName: 'long'}));
-    // DateTimeFormat.format with specific options
-    const f = new Intl.DateTimeFormat('de', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      hour12: false,
-      minute: '2-digit',
-      // timeZone: 'Europe/Berlin',
-      // timeZoneName: 'short'
-    });
-    const time = f.format(date)
 
     try {
       const hashedPassword = await hashPassword(password);
+
       const newuser = {
         username,
+        firstName,
+        lastName,
         email,
         hashedPassword,
         role: "user",
         isVerified: true,
         isAdmin: false,
-        time,
+        time: new Intl.DateTimeFormat("de", {
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+          hour: "2-digit",
+          hour12: false,
+          minute: "2-digit",
+        }).format(new Date()),
+        createdAt: serverTimestamp(), // ✅ Add server timestamp here
       };
 
-      userDocRef = (await addDoc(collection(db, "user"), newuser)).id ;
-      console.log("User added with ID: ", userDocRef);
-      recordId = userDocRef;
-      return userDocRef;
-      // Clear the form
+      const userDocRef = await addDoc(collection(db, "user"), newuser);
+      console.log("User added with ID: ", userDocRef.id);
+      return userDocRef.id;
     } catch (e) {
       console.error("Error adding document: ", e);
     }
   }
 
   return recordId;
-  
-} // end of add user
-
+}
 
 
 export async function searchUserById(id: string | undefined): Promise<TuserSchem> {
@@ -119,18 +176,51 @@ export async function searchUserById(id: string | undefined): Promise<TuserSchem
 
 
 
-  export async function fetchAllUsers(): Promise<userType[]>{
+  // export async function fetchAllUsers(): Promise<userType[]>{
 
 
-     const data = [] as userType[];
-     const q = query(collection(db, "user"));
-     const querySnapshot = await getDocs(q);
-     querySnapshot.forEach((doc) => {
-     const  userData = {id:doc.id, ...doc.data()} as userType;
-     data.push(userData)
-     });
-     return data;
-    }
+  //    const data = [] as userType[];
+  //    const q = query(collection(db, "user"));
+  //    const querySnapshot = await getDocs(q);
+  //    querySnapshot.forEach((doc) => {
+  //    const  userData = {id:doc.id, ...doc.data()} as userType;
+  //    data.push(userData)
+  //    });
+  //    return data;
+  //   }
+  
+ 
+
+
+export async function fetchAllUsers(): Promise<userType[]> {
+  const data: userType[] = [];
+
+  const q = query(collection(db, "user"));
+  const querySnapshot = await getDocs(q);
+
+  querySnapshot.forEach((doc) => {
+    const docData = doc.data();
+    
+    const userData: userType = {
+      id: doc.id,
+      email: docData.email || "",
+      hashedPassword: docData.hashedPassword || "",
+      isAdmin: docData.isAdmin ?? false,
+      isVerfied: docData.isVerified ?? false,
+      role: docData.role || "user",
+      username: docData.username || "",
+      time: docData.time || "",
+
+      // ✅ convert Timestamp to string
+      createdAt: docData.createdAt?.toDate().toISOString() || undefined,
+    };
+
+    data.push(userData);
+  });
+
+  return data;
+}
+
 
 
 
