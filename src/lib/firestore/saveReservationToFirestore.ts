@@ -3,7 +3,7 @@ import { collection, addDoc } from 'firebase/firestore';
 import { ReservationFormDataType } from '../../../types/ReservationFormData';
 
 export async function saveReservationToFirestore(data: ReservationFormDataType) {
-    console.log("inside save-----------------")
+    console.log("inside save-----------------", data)
   try {
     const docRef = await addDoc(collection(db, 'reservations'), {
       ...data,

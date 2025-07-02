@@ -53,6 +53,40 @@
 .text-dark{
    @apply text-[#64870d]
 }
+
+
+/* side bar */
+
+
+/* 🦚 Elegant Teal Theme */
+
+.sb-bg {
+  @apply bg-[#121C1B]; /* Very dark teal slate background */
+}
+
+.sb-tab {
+  @apply text-slate-300 hover:bg-[#1C2B29]; /* Soft slate hover */
+}
+
+.sb-tab-active {
+  @apply bg-[#00897B] text-white shadow-md; /* Main active tab color */
+}
+
+.sb-btn {
+  @apply bg-[#00897B] text-white hover:bg-[#00695C]; /* Main button */
+}
+
+.sb-btn-outline {
+  @apply border border-[#00897B] text-[#00897B] hover:bg-[#00897B] hover:text-white;
+}
+
+.sb-header {
+  @apply text-[#00BFA5]; /* Highlight teal tone for headers */
+}
+
+
+
+
 /* #F2F0EC; */
 /* bg-gradient-to-bl from-[#ffe4e6]  to-[#ccfbf1]  */
 :root {

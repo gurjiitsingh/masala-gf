@@ -9,13 +9,12 @@ import Header from "@/components/Custom/Header";
 import { SideCart } from "@/components/MiniCart/SideCart";
 import { BargerMenu } from "@/components/Bargermenu/Menu";
 import Footer from "@/components/Custom/Footer";
-
 import CartBottom from "@/components/CartBottom/CartBottom";
 import Modal from "./components/Modal";
 import UTMInitializer from "../UTMInitializer";
 
 export const metadata: Metadata = {
-  title: "Masala Taste of India, Germany ",
+  title:   "Masala Taste of India, Germany ",
   description: "Masala Taste of India, Indian Restaurant in German , Gifhorn,  Lower Saxony ",
   other: {
     google: "notranslate",

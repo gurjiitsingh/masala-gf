@@ -1,6 +1,5 @@
 "use client";
 
-import Hero from "./components/Hero";
 //import Categories from "./Components/Categories";
 import Products from "./components/Products";
 import CategorySlider from "./components/CategorySlider";

@@ -1,5 +1,7 @@
 export const allText = {
-  title: "Abhol Rabatt 10%",
+  title: "",
+   offer: "Abhol Rabatt 10%",
+  offer_instruction:"",
   deliveryNote: "Lieferung ist ebenfalls verfügbar.",
   disclaimer: "Das Essen kann vom Bild abweichen",
   logoAlt: "Logo",

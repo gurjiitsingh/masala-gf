@@ -12,7 +12,9 @@ export default function HeroText() {
     <div>
       <div className="flex mt-2 md:mt-0 md:flex-col gap-2">
         <h2 className={`${bebas.className} text-3xl w-fit my-2 text-emerald-900`}>
-          {allText.title}
+         
+           {allText.offer}  {" "} 
+            <span className="text-xl"> {allText.offer_instruction} </span>
         </h2>
         <div className="p-2 bg-amber-200 text-sky-600 w-fit h-fit font-semibold rounded-xl mb-2">
           {allText.deliveryNote}
