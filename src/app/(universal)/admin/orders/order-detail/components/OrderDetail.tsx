@@ -23,7 +23,7 @@ const OrderDetail = () => {
   const masterOrderId = searchParams.get("masterId") as string;
   const [orderProducts, setOrderProducts] = useState<orderProductsT[]>([]);
   const [customerAddress, setCustomerAddress] = useState<addressResT>();
-  const [orderMasterData, setOrderMasterData] = useState<orderMasterDataT>();
+  const [orderMasterData, setOrderMasterData] = useState<orderMasterDataT | null>(null);
 
   useEffect(() => {
     async function getOrderProducts() {
