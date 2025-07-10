@@ -1,10 +1,10 @@
 import React, { Suspense } from 'react'
-import PageComp from './pagecomp'
+import EditProduct from './componets/EditProduct'
 
 export default function page() {
   return (
   <Suspense>
-    <PageComp />
+    <EditProduct />
   </Suspense>
   )
 }

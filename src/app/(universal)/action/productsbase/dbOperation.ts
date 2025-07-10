@@ -111,7 +111,7 @@ export async function addNewProduct(formData: FormData) {
   };
 
   try {
-    const docRef = await addDoc(collection(db, "product"), data);
+    const docRef = await addDoc(collection(db, "products"), data);
     console.log("Document written with ID: ", docRef.id);
     // Clear the form
   } catch (e) {
@@ -122,7 +122,7 @@ export async function addNewProduct(formData: FormData) {
 }
 
 export async function deleteProduct(id: string, oldImgageUrl: string) {
-  const docRef = doc(db, "product", id);
+  const docRef = doc(db, "products", id);
   await deleteDoc(docRef);
   //return { errors: "Delete not implimented jet" };
   // if (result?.rowCount === 1) {
@@ -157,15 +157,15 @@ export async function editProduct(formData: FormData) {
   const id = formData.get("id") as string;
   const name = formData.get("name");
   const price = formData.get("price");
+  const status = formData.get("status") || "published"; // default fallback
   const discountPrice = formData.get("discountPrice") as string ;
-  console.log("discountPrice type---------",discountPrice, typeof(discountPrice))
   const sortOrder = formData.get("sortOrder") as string;
   const categoryId = formData.get("categoryId");
   const productDesc = formData.get("productDesc");
   const oldImgageUrl = formData.get("oldImgageUrl") as string;
   const image = formData.get("image");
   const isFeatured = featured_img;
-//console.log("-----------", formData)
+
 
   const receivedData = {
     name,
@@ -176,6 +176,7 @@ export async function editProduct(formData: FormData) {
     productDesc,
     image,
     isFeatured,
+    status,
   };
 
   const result = editPorductSchema.safeParse(receivedData);
@@ -250,11 +251,12 @@ export async function editProduct(formData: FormData) {
     productDesc,
     image: imageUrl,
     isFeatured,
+    status,
   };
 
   
   try {
-    const docRef = doc(db, "product", id);
+    const docRef = doc(db, "products", id);
     await setDoc(docRef, productUpdtedData);
   } catch (error) {
     console.log("error", error);
@@ -263,7 +265,7 @@ export async function editProduct(formData: FormData) {
 }
 
 export async function fetchProductById(id: string): Promise<ProductType> {
-  const docRef = doc(db, "product", id);
+  const docRef = doc(db, "products", id);
   const docSnap = await getDoc(docRef);
   if (docSnap.exists()) {
     //  console.log("Document data:", docSnap.data());
@@ -273,12 +275,12 @@ export async function fetchProductById(id: string): Promise<ProductType> {
   }
   const product = { id: docSnap.id, ...docSnap.data() } as ProductType;
   return product;
-  // const docRef = doc(db, "product", id);
+  // const docRef = doc(db, "products", id);
   // const docSnap = await getDoc(docRef);
   //  return docSnap.data();
 
   //  let data = [] as ProductType[];
-  //   const q = query(collection(db, "product", id));
+  //   const q = query(collection(db, "products", id));
   //   const querySnapshot = await getDocs(q);
   //   querySnapshot.forEach((doc) => {
   //     data = doc.data() as ProductTypeArr;
@@ -287,37 +289,21 @@ export async function fetchProductById(id: string): Promise<ProductType> {
 }
 
 export async function fetchProducts(): Promise<ProductType[]> {
-  // const result = await getDocs(collection(db, "product"))
-  // let data = [];
-  // result.forEach((doc) => {
-  //   data.push({id:doc.id, ...doc.data()});
-  // });
-  //  return data;
-  
-
-  const result = await getDocs(collection(db, "product"));
-
+  const result = await getDocs(collection(db, "products"));
   const data = [] as ProductType[];
   result.forEach((doc) => {
     const pData = { id: doc.id, ...doc.data() } as ProductType;
     data.push(pData);
   });
   return data;
-  // let data = [] as ProductType[];
-  //   const q = query(collection(db, "product"));
-  //   const querySnapshot = await getDocs(q);
-  //   querySnapshot.forEach((doc) => {
-  //     const ab = doc.data() as ProductType;
-  //     data.push(ab);
-  //   });
-  //   return data;
 }
+
 export async function fetchProductByCategoryId(
   id: string
 ): Promise<ProductType[]> {
   // console.log("this is sauce action-------------",id)
 
-  const collectionRef = query(collection(db, "product"), where("categoryId", "==", id));
+  const collectionRef = query(collection(db, "products"), where("categoryId", "==", id));
   const querySnapshot = await getDocs(collectionRef);
 
   
@@ -345,6 +331,59 @@ export async function fetchAllProducts(): Promise<ProductType[]> {
   })
 
   return data
+}
+
+export async function fetchProductsForExport(): Promise<ProductType[]> {
+  const snapshot = await getDocs(collection(db, 'product'));
+  const data: ProductType[] = [];
+
+  snapshot.forEach((doc) => {
+    const pData = { id: doc.id, ...doc.data() } as ProductType;
+    data.push(pData);
+  });
+
+  return data;
+}
+
+
+
+/**
+ * Upload a product to Firestore from CSV data
+ */
+export async function uploadProductFromCSV(data: Partial<ProductType>) {
+  if (!data.name || data.price === undefined) {
+    throw new Error('Missing required fields: name or price');
+  }
+
+  const productData: Omit<ProductType, 'id'> = {
+    name: data.name,
+    price: Number(data.price),
+    discountPrice:
+      data.discountPrice !== undefined ? Number(data.discountPrice) : 0,
+    categoryId: data.categoryId ?? '',
+    productCat: data.productCat ?? '',
+    baseProductId: data.baseProductId ?? '',
+    productDesc: data.productDesc ?? '',
+    sortOrder: data.sortOrder !== undefined ? Number(data.sortOrder) : 0,
+    image: data.image ?? '',
+   isFeatured:
+  String(data.isFeatured).toLowerCase() === 'true' ? true : false,
+    purchaseSession: data.purchaseSession ?? null,
+    quantity:
+      data.quantity !== undefined && data.quantity !== null
+        ? Number(data.quantity)
+        : null,
+    flavors:
+  String(data.flavors).toLowerCase() === 'true' ? true : false,
+    status:
+      data.status === 'published' ||
+      data.status === 'draft' ||
+      data.status === 'out_of_stock'
+        ? data.status
+        : undefined,
+  };
+
+  await addDoc(collection(db, 'product'), productData);
 }
 
 

@@ -1,23 +1,33 @@
 import { z } from "zod";
 
+
+
 export const settingSchema = z.object({
   id: z.string().optional(),
-  settingName: z.string().min(2, { message: "Setting name is required" }),
-  settingValue: z
-    .string().optional(),
-    // .refine((value) => /^\d+$/.test(value), "Invalid product price"), // Refinement
-    //.refine((value) => /[.,\d]+/.test(value), "Invalid setting value"),
-   
+  name: z.string().min(1, "Setting name is required"),
+  value: z.string(),
+  key:z.string(),
+  type:z.string().optional(),
 });
 
 export type settingSchemaType = z.infer<typeof settingSchema>;
 
 
+
+
+// export type settingSchemaType = {
+//   id?:string;
+//   name?: string;
+//   value: string;
+//   key: string; // <-- Add this
+//   type?: string;
+// };
+
 export const editSettingSchema = z.object({
   id: z.string().optional(),
-  settingName: z.string().optional(),
+  name: z.string().optional(),
   //.min(2, { message: "Setting name is required" }),
-  settingValue: z
+  value: z
     .string().optional(),
     // .refine((value) => /^\d+$/.test(value), "Invalid product price"), // Refinement
     //.refine((value) => /[.,\d]+/.test(value), "Invalid setting value"),

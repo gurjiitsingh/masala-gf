@@ -1,5 +1,5 @@
-export type SettingValue = string | number;
+export type value = string | number | null;
 
 export type SettingsDataType = {
-  [key: string]: SettingValue;
+  [key: string]: value;
 };

@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { sendReservationConfirmationEmail } from '@/lib/email/sendReservationConfirmationEmail';
 import { saveReservationToFirestore } from '@/lib/firestore/saveReservationToFirestore';
-import { reservationSchema } from '../../../../types/ReservationFormData';
+import { reservationSchema } from '@/lib/types/ReservationFormData';
+
 
 export async function POST(req: NextRequest) {
   try {

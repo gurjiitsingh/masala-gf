@@ -1,18 +1,193 @@
-'use client'
+"use client";
 
-import ListView from './components/ListView'
-import Link from "next/link"
+import React, { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
+import { Pencil, Trash2 } from "lucide-react";
 
-export default function page(){
+import {
+  Table,
+  TableBody,
+  TableHead,
+  TableHeader,
+  TableRow,
+  TableCell,
+} from "@/components/ui/table";
+
+import {
+  settingSchema,
+  settingSchemaType,
+} from "@/lib/types/settingType";
+
+import {
+  addNewsetting,
+  fetchSettings,
+  deleteSettingById,
+} from "@/app/(universal)/action/setting/dbOperations";
+
+const Page = () => {
+  const [settings, setSettings] = useState<settingSchemaType[]>([]);
+  const router = useRouter();
+
+  useEffect(() => {
+    loadSettings();
+  }, []);
+
+  async function loadSettings() {
+    try {
+      const data = await fetchSettings();
+      console.log("data------------", data)
+      setSettings(data);
+    } catch (err) {
+      console.error("Failed to fetch settings:", err);
+    }
+  }
+
+  const {
+    register,
+    formState: { errors },
+    reset,
+    handleSubmit,
+  } = useForm<settingSchemaType>({
+    resolver: zodResolver(settingSchema),
+  });
+
+  async function onsubmit(data: settingSchemaType) {
+    if (!data.value.trim()) return;
+
+    const formData = new FormData();
+    formData.append("name", data.name!.trim());
+    formData.append("value", data.value);
+
+    const result = await addNewsetting(formData);
+
+    if (!result?.errors) {
+      await loadSettings();
+      reset();
+    } else {
+      console.log("Errors:", result.errors);
+    }
+  }
+
+  async function handleDelete(key: string) {
+    const userInput = window.prompt(
+      `⚠️ To confirm deletion, please type the doc ID exactly:\n\n"${key}"`
+    );
+
+    if (userInput !== key) {
+      alert("❌ Document ID does not match. Deletion cancelled.");
+      return;
+    }
+
+    try {
+      await deleteSettingById(key);
+      await loadSettings();
+      alert("✅ Setting deleted successfully.");
+    } catch (error) {
+      console.error("Delete failed:", error);
+      alert("Failed to delete setting.");
+    }
+  }
+
   return (
-    <div className='h-screen flex flex-col '>
-      <div className="flex justify-start gap-3 p-1">
-      <Link href='/admin/setting/editform'><button className="bg-[#313131] text-sm text-white px-4 py-2 rounded-lg">Modify Value</button></Link>
-      <Link href='/admin/setting/form'><button className="bg-[#313131] text-sm text-white px-4 py-2 rounded-lg">Create</button></Link>
+    <form onSubmit={handleSubmit(onsubmit)} className="p-6">
+      <h1 className="text-2xl font-bold mb-4">⚙️ Manage Settings</h1>
+
+      {/* Form Section */}
+      <div className="flex flex-col md:flex-row gap-4 mb-8">
+        <div className="flex-1">
+          <label className="label-style">
+            Setting Name<span className="text-red-500">*</span>
+          </label>
+          <input
+            {...register("name")}
+            className="input-style"
+            placeholder="e.g. Home page offer"
+          />
+          {errors.name?.message && (
+            <p className="text-red-500 text-sm">
+              {errors.name.message}
+            </p>
+          )}
+        </div>
+
+        <div className="flex-1">
+          <label className="label-style">
+            Value<span className="text-red-500">*</span>
+          </label>
+          <input
+            {...register("value")}
+            className="input-style"
+            placeholder="e.g. bei Abholung"
+          />
+          {errors.value?.message && (
+            <p className="text-red-500 text-sm">
+              {errors.value.message}
+            </p>
+          )}
+        </div>
+
+        <button className="form-btn-style self-end mt-2" type="submit">
+          Save
+        </button>
       </div>
 
-      {/* <ListView /> */}
+      {/* Table Section */}
+      <div className="rounded-2xl shadow-md border border-gray-200 overflow-hidden bg-white dark:bg-zinc-900">
+        <Table>
+          <TableHeader className="bg-gray-100 dark:bg-zinc-800">
+            <TableRow>
+              <TableHead>Setting Name</TableHead>
+              <TableHead>Value</TableHead>
+              <TableHead className="hidden md:table-cell">Key (Doc ID)</TableHead>
+              <TableHead>Action</TableHead>
+            </TableRow>
+          </TableHeader>
 
-    </div>
-  )
-}
+          <TableBody>
+            {Array.isArray(settings) &&
+              settings
+                .filter(
+                  (setting) =>
+                    setting.name !== undefined &&
+                    setting.name !== null &&
+                    setting.name.trim() !== ""
+                )
+                .map((setting) => (
+                  <TableRow key={setting.key}>
+                    <TableCell className="capitalize">{setting.name}</TableCell>
+                    <TableCell>{String(setting.value)}</TableCell>
+                    <TableCell className="hidden md:table-cell text-gray-500">
+                      {setting.key}
+                    </TableCell>
+                    <TableCell className="flex gap-2">
+                      <button
+                        type="button"
+                        onClick={() =>
+                          router.push(`/admin/setting/edit?key=${setting.key}`)
+                        }
+                        className="text-blue-600 hover:text-blue-800"
+                        title="Edit"
+                      >
+                        <Pencil size={16} />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleDelete(setting.key)}
+                        className="text-red-600 hover:text-red-800"
+                        title="Delete"
+                      >
+                        <Trash2 size={16} />
+                      </button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+          </TableBody>
+        </Table>
+      </div>
+    </form>
+  );
+};
+
+export default Page;

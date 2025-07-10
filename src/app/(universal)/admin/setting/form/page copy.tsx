@@ -4,12 +4,15 @@ import React, { useEffect, useState } from "react";
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { editSettingSchema, editSettingSchemaType, settingSchema, settingSchemaType } from "@/lib/types/settingType";
-import { addNewsetting, editsetting, fetchSettings } from "@/app/(universal)/action/setting/dbOperations";
+import { settingSchema, settingSchemaType } from "@/lib/types/settingType";
+import {
+  addNewsetting,
+  fetchSettings,
+} from "@/app/(universal)/action/setting/dbOperations";
 import { Button } from "@/components/ui/button";
 
 const Page = () => {
-  const [name, setname] = useState<editSettingSchemaType[]>([]);
+  const [name, setname] = useState<settingSchemaType[]>([]);
   const [settingId, setSettingId] = useState<string>("");
   useEffect(() => {
     async function prefetch() {
@@ -31,39 +34,34 @@ const Page = () => {
     handleSubmit,
     // setError,
     formState: {}, //dirtyFields
-  } = useForm<editSettingSchemaType>({
-    resolver: zodResolver(editSettingSchema),
+  } = useForm<settingSchemaType>({
+    resolver: zodResolver(settingSchema),
   });
 
   //const images = watch("images");
 
-  async function onsubmit(data: editSettingSchemaType) {
+  async function onsubmit(data: settingSchemaType) {
     //typeof(data.featured)
     console.log("formdata in client----- ", data);
     const formData = new FormData();
-       formData.append("id", data.id!);
+    formData.append("name", data.name!.toLowerCase());
     formData.append("value", data.value!);
- 
 
-    const result = await editsetting(formData);
+    const result = await addNewsetting(formData);
 
     if (!result?.errors) {
       // router.push('/admin/products')
-
-    
     } else {
       alert("Some thing went wrong");
     }
 
-   
     console.log("response  ", result);
   }
-  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedSettingId = e.target.value;
-    console.log("id selected ---------", selectedSettingId)
-    setSettingId(selectedSettingId);
-    setValue("id", selectedSettingId); // Update the form field with the selected setting ID
-  };
+  // const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  //   const selectedSettingId = e.target.value;
+  //   setSettingId(selectedSettingId);
+  //   setValue("id", selectedSettingId); // Update the form field with the selected setting ID
+  // };
   return (
     <>
       <form onSubmit={handleSubmit(onsubmit)}>
@@ -80,29 +78,17 @@ const Page = () => {
                     <label className="label-style" htmlFor="product-title">
                       Name<span className="text-red-500">*</span>{" "}
                     </label>
-                    <select {...register("name")}
-                     onChange={(e)=>handleSelectChange(e)} 
-                    className="input-style bg-white text-black">
-                      <option key="wer" value="notFind">
-                        Select
-                      </option>
-                   
-                      {name.map(
-                        (setting) => {
-                          //   console.log("cat id -------", category.id);
-                          return (
-                            <option key={setting.name} value={setting.id}>
-                              {setting.name}
-                            </option>
-                          );
-                        }
+                    <input
+                      {...register("name")}
+                      className="input-style"
+                      placeholder="Enter Title"
+                    />
+
+                    <span className="text-[0.8rem] font-medium text-destructive">
+                      {errors.name?.message && (
+                        <p>{errors.name?.message}</p>
                       )}
-                    </select>
-                    {/* <span className="text-[0.8rem] font-medium text-destructive">
-                      {errors.setting.id?.message && (
-                        <p>{errors.setting.name?.message}</p>
-                      )}
-                    </span> */}
+                    </span>
                   </div>
 
                   <div className="flex flex-col gap-1 w-full">
@@ -120,14 +106,13 @@ const Page = () => {
                       )}
                     </span>
                   </div>
-                  <button className="form-btn-style" type="submit">Save </button>
+                  <button className="form-btn-style" type="submit">
+                    Save{" "}
+                  </button>
                 </div>
               </div>
-           
             </div>
             {/* End of left box */}
-
-           
           </div>
         </div>
       </form>

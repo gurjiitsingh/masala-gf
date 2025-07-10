@@ -1,7 +1,7 @@
 import React from "react";
 import { Bebas_Neue } from "next/font/google";
+import { UseSiteContext } from "@/SiteContext/SiteContext";
 import { TEXT } from "@/config/languages";
-import { useSafeSetting } from "@/hooks/useSafeSetting"; // ✅ use hook
 
 const bebas = Bebas_Neue({
   subsets: ["latin"],
@@ -9,8 +9,12 @@ const bebas = Bebas_Neue({
 });
 
 export default function HeroText() {
-  const homePageOffer = useSafeSetting("home_page_offer");
-  const offerInstruction = useSafeSetting("offer_instruction");
+  const { settings } = UseSiteContext();
+
+  const homePageOffer = settings?.home_page_offer || TEXT.home_page_offer;
+  const offerInstruction = settings?.offer_instruction || TEXT.offer_instruction;
+  const deliveryNote = settings?.delivery_note || TEXT.delivery_note;
+  const disclaimer = settings?.disclaimer || TEXT.home_page_disclaimer;
 
   return (
     <div>
@@ -22,15 +26,15 @@ export default function HeroText() {
           )}
         </h2>
 
-        {TEXT.delivery_note && (
+        {deliveryNote && (
           <div className="p-2 bg-amber-200 text-sky-600 w-fit h-fit font-semibold rounded-xl mb-2">
-            {TEXT.delivery_note}
+            {deliveryNote}
           </div>
         )}
       </div>
 
-      {TEXT.home_page_disclaimer && (
-        <p className="text-sm text-slate-500">{TEXT.home_page_disclaimer}</p>
+      {disclaimer && (
+        <p className="text-sm text-slate-500">{disclaimer}</p>
       )}
     </div>
   );

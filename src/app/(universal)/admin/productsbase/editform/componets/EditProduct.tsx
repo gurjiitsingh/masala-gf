@@ -17,7 +17,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { fetchCategories } from "@/app/(universal)/action/category/dbOperations";
 import { categoryType } from "@/lib/types/categoryType";
 
-const PageComp = () => {
+const EditProduct = () => {
   const [categoryData, setCategoryData] = useState<categoryType[]>([]);
   const searchParams = useSearchParams();
   const id = searchParams.get("id") || "";
@@ -54,6 +54,7 @@ const PageComp = () => {
       setValue("price", priceS);
      
       setValue("discountPrice", discountPriceS);
+     setValue("status", productData.status ?? "published");
      if(productData.sortOrder! !== undefined){
       setValue("sortOrder", productData.sortOrder!.toString());
      }
@@ -94,13 +95,14 @@ const PageComp = () => {
     formData.append("productDesc", data.productDesc!);
     formData.append("image", data.image[0]);
     formData.append("oldImgageUrl", data.oldImgageUrl!);
+    formData.append("status", data.status ?? "published");
     // formData.append("isFeatured",data.isFeatured)
     formData.append("id", data.id!);
 
     const result = await editProduct(formData);
 
     if (!result?.errors) {
-      router.push("/admin/productsbase");
+      router.push(`/admin/productsbase?productId=${data.id}`);
     } else {
       alert("Some thing went wrong");
     }
@@ -294,6 +296,18 @@ const PageComp = () => {
                   </span>
                 </div>
 
+                <div className="flex flex-col gap-1">
+  <label className="label-style">Status</label>
+  <select {...register("status")} className="input-style">
+    <option value="published">Published</option>
+    <option value="draft">Draft</option>
+    <option value="out_of_stock">Out of Stock</option>
+  </select>
+  <span className="text-[0.8rem] font-medium text-destructive">
+    {errors.status?.message && <span>{errors.status?.message}</span>}
+  </span>
+</div>
+
                 <div className="flex    items-center gap-4">
                   <label className="label-style">Featured Product</label>
                   <input {...register("isFeatured")} type="checkbox" />
@@ -316,4 +330,4 @@ const PageComp = () => {
   );
 };
 
-export default PageComp;
+export default EditProduct;

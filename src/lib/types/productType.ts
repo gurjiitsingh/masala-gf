@@ -34,8 +34,9 @@ export type ProductType = {
   isFeatured: boolean;
   purchaseSession: string | null;
   quantity: number | null;
-  status: string | null;
+  
   flavors: boolean;
+  status: 'published' | 'draft' | 'out_of_stock' | undefined;
 };
 
 export type ProductTypeArr = {
@@ -71,7 +72,10 @@ const productSchema = z.object({
   featured: z.string().optional(),
   image: typeof window === "undefined" ? z.any() : z.any(),
   baseProductId: z.string().optional(),
-
+  status: z
+    .enum(['published', 'draft', 'out_of_stock'])
+    .optional()
+    .nullable(),
   // image:z.object({
   //   size: z.number(),
   // type: z.string(),
@@ -88,7 +92,8 @@ export const newPorductSchema = z.object({
     .string()
     // .refine((value) => /^\d+$/.test(value), "Invalid product price"), // Refinement
     .refine((value) => /[.,\d]+/.test(value), "Invalid product price"),
-    discountPrice:z.string().optional(),  
+    discountPrice:z.string().optional().default("0"),  
+    
   //categoryId: z.string().min(1, { message: "Please select category" }),
   categoryId:z.string().optional(),
   sortOrder: z.string().min(1, { message: "Please add sort order" }),
@@ -104,6 +109,10 @@ export const newPorductSchema = z.object({
   image: z.any().optional(),
   baseProductId: z.string().optional(),
   flavors: z.boolean().optional(),
+    status: z
+    .enum(['published', 'draft', 'out_of_stock'])
+    .optional()
+    .nullable(),
   // .refine((file) => file.size < MAX_FILE_SIZE, "Max size is 5MB.")
   // .refine(
   //   (file) => checkFileType(file),
@@ -148,6 +157,10 @@ export const editPorductSchema = z.object({
 
   image: z.any().optional(),
   oldImgageUrl: z.string().optional(),
+    status: z
+    .enum(['published', 'draft', 'out_of_stock'])
+    .optional()
+    .nullable(),
   // .refine((file) => file.size < MAX_FILE_SIZE, "Max size is 5MB.")
   // .refine(
   //   (file) => checkFileType(file),

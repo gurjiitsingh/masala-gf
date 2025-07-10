@@ -10,18 +10,24 @@ import {
 } from "@/components/ui/table";
 
 import TableRows from "./TableRows";
-import { fetchProductByCategoryId, fetchProducts } from "@/app/(universal)/action/productsbase/dbOperation";
+import {
+  fetchProductByCategoryId,
+  fetchProducts,
+} from "@/app/(universal)/action/productsbase/dbOperation";
 import { fetchCategories } from "@/app/(universal)/action/category/dbOperations";
 import { ProductType } from "@/lib/types/productType";
 import { categoryType } from "@/lib/types/categoryType";
-import CategoryComp from "./CategoryComp";
+import { useSearchParams } from "next/navigation";
 
 const ListView = ({ title }: { title?: string }) => {
+  const searchParams = useSearchParams();
+  const productIdFromQuery = searchParams.get("productId");
+
   const [productData, setProductData] = useState<ProductType[]>([]);
   const [allProducts, setAllProducts] = useState<ProductType[]>([]);
   const [categoryData, setCategoryData] = useState<categoryType[]>([]);
-  const [cateId, setCateId] = useState<string>('');
-  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [cateId, setCateId] = useState<string>("");
+  const [searchTerm, setSearchTerm] = useState<string>("");
 
   useEffect(() => {
     async function fetchInitialData() {
@@ -30,36 +36,34 @@ const ListView = ({ title }: { title?: string }) => {
         categories.sort((a, b) => a.sortOrder! - b.sortOrder!);
         setCategoryData(categories);
 
-        const allProds = await fetchProducts(); // all products
+        const allProds = await fetchProducts();
         allProds.sort((a, b) => a.sortOrder - b.sortOrder);
-        setProductData(allProds);
         setAllProducts(allProds);
+
+        // If productId is provided in URL, filter only that
+        if (productIdFromQuery) {
+          const matched = allProds.find((p) => p.id === productIdFromQuery);
+          if (matched) {
+            setProductData([matched]);
+          } else {
+            setProductData([]); // Not found
+          }
+        } else {
+          setProductData(allProds);
+        }
       } catch (error) {
         console.log(error);
       }
     }
 
     fetchInitialData();
-  }, []);
-
-     async function fetchInitialData1() {
-      try {
-      
-setCateId("");
-        const allProds = await fetchProducts(); // all products
-        allProds.sort((a, b) => a.sortOrder - b.sortOrder);
-        setProductData(allProds);
-        setAllProducts(allProds);
-      } catch (error) {
-        console.log(error);
-      }
-    }
+  }, [productIdFromQuery]);
 
   useEffect(() => {
     async function fetchProductsByCategory() {
       try {
         if (cateId === "") {
-          setProductData(allProducts); // show all
+          setProductData(allProducts);
         } else {
           const filteredProds = await fetchProductByCategoryId(cateId);
           filteredProds.sort((a, b) => a.sortOrder - b.sortOrder);
@@ -73,46 +77,44 @@ setCateId("");
     fetchProductsByCategory();
   }, [cateId]);
 
-  const fetchServiceHandler = (id: string) => {
-    setCateId(id);
-    setSearchTerm(""); // reset search on category change
-  };
-
-  const filteredProducts = productData.filter(product =>
+  const filteredProducts = productData.filter((product) =>
     product.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
     <div className="mt-2">
-      <h3 className="text-xl mb-4 font-semibold">Select Category</h3>
-      <div className="flex flex-wrap gap-3">
-          <button
-    onClick={() => fetchInitialData1()}
-    className={`px-4 py-2 rounded border text-sm font-medium ${
-      cateId === "" ? "bg-blue-600 text-white" : "bg-white text-gray-700"
-    }`}
-  >
-    All
-  </button>
-        {categoryData.map((cate) => (
-          <CategoryComp
-            name={cate.name}
-            id={cate.id}
-            key={cate.name}
-            cateId={cateId}
-            fetchServiceHandler={fetchServiceHandler}
-          />
-        ))}
-      </div>
+      <div className="flex flex-col md:flex-row md:items-center gap-4 mb-4">
+        <div className="w-full md:w-1/2">
+          <label className="block text-sm font-medium mb-1">
+            Select Category
+          </label>
+          <select
+            value={cateId}
+            onChange={(e) => {
+              setCateId(e.target.value);
+              setSearchTerm("");
+            }}
+            className="w-full border border-gray-300 rounded px-3 py-2"
+          >
+            <option value="">All</option>
+            {categoryData.map((cate) => (
+              <option key={cate.id} value={cate.id}>
+                {cate.name}
+              </option>
+            ))}
+          </select>
+        </div>
 
-      <div className="my-4">
-        <input
-          type="text"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          placeholder="Search by name"
-          className="p-2 border border-gray-300 rounded w-full md:w-1/2"
-        />
+        <div className="w-full md:w-1/2">
+          <label className="block text-sm font-medium mb-1">Search</label>
+          <input
+            type="text"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            placeholder="Search by name"
+            className="w-full p-2 border border-gray-300 rounded"
+          />
+        </div>
       </div>
 
       <h3 className="text-2xl mb-4 font-semibold">{title || "Products"}</h3>
@@ -124,6 +126,7 @@ setCateId("");
               <TableHead className="hidden md:table-cell">Name</TableHead>
               <TableHead className="hidden md:table-cell">Price</TableHead>
               <TableHead className="hidden md:table-cell">Discount Price</TableHead>
+              <TableHead>Status</TableHead>
               <TableHead>Desc</TableHead>
               <TableHead className="hidden md:table-cell">Action</TableHead>
             </TableRow>

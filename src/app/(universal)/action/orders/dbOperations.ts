@@ -183,6 +183,32 @@ export async function createNewOrder(purchaseData: orderDataType) {
     noOfferEmails: noOffers,
   });
 
+if (noOffers) {
+  const normalizedEmail = email.toLowerCase();
+
+  const ref = collection(db, 'campaignEmailListFinal');
+  const q = query(ref, where('email', '==', normalizedEmail));
+  const snapshot = await getDocs(q);
+
+  if (!snapshot.empty) {
+    const docRef = snapshot.docs[0].ref;
+    await updateDoc(docRef, {
+      unsubscribed: true,
+      source: 'app',
+      updatedAt: serverTimestamp(),
+    });
+  } else {
+    await addDoc(ref, {
+      email: normalizedEmail,
+      unsubscribed: true,
+      source: 'app',
+      createdAt: serverTimestamp(),
+    });
+  }
+}
+
+
+
   return orderMasterId;
 
   //  const toBeDeleted = cartData[0].purchaseSession;

@@ -20,6 +20,7 @@ export default function Products() {
   // Set initial category
   useEffect(() => {
     const fallbackCategory = settings.display_category as string;
+    console.log("displaying cat--------------",settings)
     setCategoryId(productCategoryIdG || fallbackCategory || "");
   }, [settings, productCategoryIdG]);
 
@@ -32,13 +33,20 @@ export default function Products() {
           fetchProducts(),
         ]);
 
-        const sortedProducts = fetchedProducts.sort(
+        // ✅ Filter for only published products
+        const publishedProducts = fetchedProducts.filter(
+          (p) => p.status === "published"
+        );
+
+        // ✅ Sort
+        const sortedProducts = publishedProducts.sort(
           (a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0)
         );
 
         setAddOns(fetchedAddOns);
         setAllProductsC(sortedProducts);
-        setAllProduct(fetchedProducts);
+        setAllProduct(sortedProducts);
+
         if (categoryId) {
           const filtered = sortedProducts.filter(
             (p) => p.categoryId === categoryId
@@ -61,26 +69,16 @@ export default function Products() {
   }, [allProducts, categoryId]);
 
   // Search filter
-
-  useEffect(()=>{
-
-   if(productToSearchQuery === "") return;  
+  useEffect(() => {
+    if (productToSearchQuery === "") return;
     const filtered = allProducts.filter((p) =>
       p.name.toLowerCase().includes(productToSearchQuery.toLowerCase())
     );
     setProducts(filtered);
-  
-  },[productToSearchQuery])
+  }, [productToSearchQuery]);
 
   return (
-    <div className="container mx-auto  flex flex-col md:flex-row md:flex-wrap gap-1 md:gap-2 w-full ">
-      
-
-
-
-
-
-
+    <div className="container mx-auto flex flex-col md:flex-row md:flex-wrap gap-1 md:gap-2 w-full">
       <div className="flex flex-col md:flex-row md:flex-wrap md:mt-3 gap-3 md:gap-5 w-full">
         {products.map((product, i) => (
           <PageProductDetailComponent

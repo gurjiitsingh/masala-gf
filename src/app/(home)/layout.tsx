@@ -1,25 +1,28 @@
-import type { Metadata } from "next";
-import { Toaster } from "react-hot-toast";
 import "../globals.css";
-
+import { Toaster } from "react-hot-toast";
+import type { Metadata } from "next";
 import { CartProvider } from "@/store/CartProvider";
 import { SiteProvider } from "@/SiteContext/SiteProvider";
+import { getSeoMetadata } from "@/utils/getSeoMetadata";
 import Header from "@/components/Custom/Header";
-
+import Footer from "@/components/Custom/Footer";
 import { SideCart } from "@/components/MiniCart/SideCart";
 import { BargerMenu } from "@/components/Bargermenu/Menu";
-import Footer from "@/components/Custom/Footer";
 import CartBottom from "@/components/CartBottom/CartBottom";
 import Modal from "./components/Modal";
 import UTMInitializer from "../UTMInitializer";
 
-export const metadata: Metadata = {
-  title:   "Masala Taste of India, Germany ",
-  description: "Masala Taste of India, Indian Restaurant in German , Gifhorn,  Lower Saxony ",
-  other: {
-    google: "notranslate",
-  },
-};
+
+// ✅ Dynamic SEO fallback logic here
+export const metadata: Metadata = getSeoMetadata();
+
+// export const metadata: Metadata = {
+//   title:   "Masala Taste of India, Germany ",
+//   description: "Masala Taste of India, Indian Restaurant in German , Gifhorn,  Lower Saxony ",
+//   other: {
+//     google: "notranslate",
+//   },
+// };
 
 
 

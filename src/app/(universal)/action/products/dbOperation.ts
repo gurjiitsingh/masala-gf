@@ -27,17 +27,12 @@ import {
 } from "@firebase/firestore"; //doc, getDoc,
 
 
-import {
- 
+import { 
   ProductType,
-
-
 } from "@/lib/types/productType";
 
 
-//productT,productTs, productTsArr, TproductSchemaArr
 
-//from "@/lib/firestore/products/write";
 
 export async function addNewProduct(formData: FormData) {
   let featured_img: boolean = false;
@@ -117,17 +112,6 @@ export async function addNewProduct(formData: FormData) {
 
   return { message: "Product saved" };
 }
-
-
-
-
-type rt = {
-  errors:string;
-}
-
-
-
-
 
 export async function deleteProduct(id: string, oldImageUrl: string) {
   const docRef = doc(db, "product", id);
@@ -249,10 +233,7 @@ export async function editProduct(formData: FormData) {
   }
 }
 
-
-
 export async function fetchProductById(id: string): Promise<ProductType> {
-  console.log("tis is sauce action-------------",id)
   const docRef = doc(db, "product", id);
   const docSnap = await getDoc(docRef);
   let productData = {} as ProductType;
@@ -279,14 +260,3 @@ export async function fetchProductById(id: string): Promise<ProductType> {
 
 
 
-
- //console.log("Foorm data ---------",formData.get("oldImgageUrl"));
-  // console.log(formData.get("price"));
-  // console.log(formData.get("productCat"));
-  // console.log(formData.get("productDesc"));
-  // console.log(formData.get("image"));
-  // console.log("is featured =======",formData.get("isFeatured"));
-  // featured_img = formData.get("isFeatured");
-  // if (formData.get("isFeatured").toString() === "true") {
-  //   featured_img = true;
-  // }
