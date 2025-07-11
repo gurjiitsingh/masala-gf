@@ -3,10 +3,9 @@ import { z } from "zod";
 
 
 export const settingSchema = z.object({
-  id: z.string().optional(),
   name: z.string().min(1, "Setting name is required"),
-  value: z.string(),
-  key:z.string(),
+  value: z.string().optional(),
+  key:z.string().optional(),
   type:z.string().optional(),
 });
 

@@ -37,7 +37,7 @@ const Page = () => {
   async function loadSettings() {
     try {
       const data = await fetchSettings();
-      console.log("data------------", data)
+      
       setSettings(data);
     } catch (err) {
       console.error("Failed to fetch settings:", err);
@@ -54,11 +54,11 @@ const Page = () => {
   });
 
   async function onsubmit(data: settingSchemaType) {
-    if (!data.value.trim()) return;
+    if (!data.value!.trim()) return;
 
     const formData = new FormData();
     formData.append("name", data.name!.trim());
-    formData.append("value", data.value);
+    formData.append("value", data.value!);
 
     const result = await addNewsetting(formData);
 
@@ -83,7 +83,7 @@ const Page = () => {
     try {
       await deleteSettingById(key);
       await loadSettings();
-      alert("✅ Setting deleted successfully.");
+    
     } catch (error) {
       console.error("Delete failed:", error);
       alert("Failed to delete setting.");
@@ -91,8 +91,22 @@ const Page = () => {
   }
 
   return (
+    <div className="flex flex-col">
+
+<div className="mb-6">
+  <button
+    type="button"
+    onClick={() => router.push("/admin/setting/default")}
+    className="form-btn-style bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+  >
+    ⚙️ Default Setting
+  </button>
+</div>
+
+   
     <form onSubmit={handleSubmit(onsubmit)} className="p-6">
       <h1 className="text-2xl font-bold mb-4">⚙️ Manage Settings</h1>
+
 
       {/* Form Section */}
       <div className="flex flex-col md:flex-row gap-4 mb-8">
@@ -174,7 +188,7 @@ const Page = () => {
                       </button>
                       <button
                         type="button"
-                        onClick={() => handleDelete(setting.key)}
+                        onClick={() => handleDelete(setting.key!)}
                         className="text-red-600 hover:text-red-800"
                         title="Delete"
                       >
@@ -187,6 +201,7 @@ const Page = () => {
         </Table>
       </div>
     </form>
+     </div>
   );
 };
 

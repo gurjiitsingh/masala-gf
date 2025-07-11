@@ -32,7 +32,7 @@ export async function addNewsetting(formData: FormData) {
   const name = formData.get("name")?.toString().trim();
   const value = formData.get("value")?.toString().trim();
 
-  if (!name || !value) {
+  if (!name) {
     return { errors: { value: "Value is required" } };
   }
 
@@ -53,18 +53,24 @@ export async function addNewsetting(formData: FormData) {
   const docRef = doc(db, "settings", docId);
   const existingDoc = await getDoc(docRef);
 
+  if (existingDoc.exists()) {
+    return {
+      errors: {
+        name: "A setting with this name already exists.",
+      },
+    };
+  }
+
   try {
     await setDoc(docRef, {
-      name:name,   // Human readable
-      value:value,  // Actual value
-      type:"settings"
+      name: name,    // Human readable
+      value: value,  // Actual value
+      type: "settings",
     });
 
     return {
       message: {
-        success: existingDoc.exists()
-          ? "Setting updated successfully"
-          : "Setting created successfully",
+        success: "Setting created successfully",
       },
     };
   } catch (error) {
