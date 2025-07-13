@@ -2,8 +2,10 @@
 
 import React, { useContext } from "react";
 import CartContext from "@/store/CartContext";
+import { useLanguage } from '@/store/LanguageContext';
 
 export const MiniCartSubtotal = () => {
+  const { TEXT } = useLanguage();
   const { cartData } = useContext(CartContext);
   //console.log("in the subtoal");
   //console.log(cartData);
@@ -27,7 +29,7 @@ export const MiniCartSubtotal = () => {
           <div>Total</div>
           <div className=" text-red-600"> &euro;{total.toFixed(2)} </div>
           <div className="text-sm">
-          Rabatt in der Kasse ansehen
+           {TEXT.discount_hint_checkout || "See discount at checkout"}
             {/* line-through */}
             {/* &euro;{discountedPrice.toFixed(2)} */}
           </div>

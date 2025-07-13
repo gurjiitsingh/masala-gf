@@ -6,12 +6,19 @@ import CategorySlider from "./components/CategorySlider";
 import SearchForm from "./components/SearchForm";
 import HeroText from "@/components/Custom/HeroText";
 import Title from "@/components/Custom/Title";
+import { useLanguage } from "@/store/LanguageContext";
 
 //import { TnewProductSchema } from '@/lib/types';
 // import {  TnewProductSchema } from '@/lib/type/productType';
 
 export default function Page() {
   // const products = await fetchProducts();
+
+    const { lang } = useLanguage();
+
+  if (!lang) {
+    return <div className="text-center p-4 text-gray-500">Loading language...</div>;
+  }
 
   return (
     <>
@@ -36,7 +43,6 @@ export default function Page() {
           </div>
 
           <CategorySlider />
-          {/* <Categories /> */}
           <Products />
         </div>
       </div>

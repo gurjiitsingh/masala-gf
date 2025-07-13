@@ -7,6 +7,7 @@ import { SideCart } from '@/components/MiniCart/SideCart';
 import { BargerMenu } from '@/components/Bargermenu/Menu'
 import Footer from "./Custom/Footer";
 import CartBottom from "./CartBottom/CartBottom";
+import { Providers } from "@/app/Providers";
 
 
 
@@ -18,19 +19,19 @@ export default function Comcomp({
 }>) {
   return (
    <>
-      
-     <SiteProvider >
-      <CartProvider>
+      <Providers>
+     
         <BargerMenu />
       
       <SideCart />
      
-      <Header />
+      <div className="container mx-auto  top-0 px-2 md:px-0 inset-0 z-50">
+                <Header />
+              </div>
     {children}
     <Footer />
 <div className="fixed bottom-8 right-4 z-50 w-fit"><CartBottom /></div> 
-      </CartProvider>
-      </SiteProvider>
+      </Providers>
       </>
      
      

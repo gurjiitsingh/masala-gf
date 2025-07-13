@@ -19,10 +19,11 @@ import { createNewOrderCustomerAddress } from "@/app/(universal)/action/orders/d
 import { purchaseDataT } from "@/lib/types/cartDataType";
 import { fetchdeliveryByZip } from "@/app/(universal)/action/delivery/dbOperation";
 import { UseSiteContext } from "@/SiteContext/SiteContext";
+import { useLanguage } from '@/store/LanguageContext';
 
 const Address = () => {
   // const { endTotalG, cartData, totalDiscountG } = useCartContext();
-
+const { TEXT } = useLanguage();
   const {
     //deliveryDis,
 
@@ -151,33 +152,26 @@ const Address = () => {
     // end of ok order condition
   }
 
-  return (
-    <div className="w-full  md:border border-slate-300 md:rounded-2xl p-5">
+ return (
+    <div className="w-full md:border border-slate-300 md:rounded-2xl p-5">
       <div className="flex flex-col gap-3">
         <div className="flex flex-col gap-2">
-          <h2 className="text-xl font-semibold text-slate-600  uppercase">
-            {/* Shipping address */}
-            Adresse
-            {/* -- {session?.user?.id} --- {session?.user?.name} */}
+          <h2 className="text-xl font-semibold text-slate-600 uppercase">
+            {TEXT.address_section_title || "Address"}
           </h2>
-          {/* <p className="text-sm">
-            Enter the address where you want your order delivered.
-          </p> */}
         </div>
         <form onSubmit={handleSubmit(onSubmit)}>
           <input {...register("userId")} hidden />
-          {/* <input {...register("orderDetail")} hidden /> */}
-          <div className="flex w-full flex-col gap-2  ">
+
+          <div className="flex w-full flex-col gap-2">
             <div className="flex flex-col gap-1">
               <label className="label-style">
-                Email<span className="text-red-500">*</span>{" "}
+                {TEXT.email_label || "Email"}
+                <span className="text-red-500">*</span>
               </label>
               <input
                 {...register("email", {
-                  onChange: () => {
-                    changeEmailHandler();
-                  },
-                  // onBlur: () => {},
+                  onChange: () => changeEmailHandler(),
                 })}
                 className="input-style"
               />
@@ -187,15 +181,15 @@ const Address = () => {
                 )}
               </span>
             </div>
+
             <div className="flex flex-col gap-1">
               <label className="label-style">
-                Mob no.<span className="text-red-500">*</span>{" "}
+                {TEXT.mobile_label || "Mobile Number"}
+                <span className="text-red-500">*</span>
               </label>
               <input
                 {...register("mobNo", {
-                  onChange: () => {
-                    changeHandler();
-                  },
+                  onChange: () => changeHandler(),
                 })}
                 className="input-style"
               />
@@ -205,183 +199,122 @@ const Address = () => {
                 )}
               </span>
             </div>
+
             <input {...register("password", { value: "123456" })} hidden />
-            {/* {!session && (
-              <div className="flex flex-col gap-1">
-                <label className="label-style">
-                  Password.<span className="text-red-500">Optional</span>{" "}
-                </label>
-                <input {...register("password")} className="input-style" />
-                <span className="text-[0.8rem] font-medium text-destructive">
-                  {errors.password?.message && (
-                    <span>{errors.password?.message}</span>
-                  )}
-                </span>
-              </div>
-            )} */}
+
             <div className="w-full flex flex-row gap-2">
               <div className="flex flex-col gap-1">
                 <label className="label-style">
-                  First name<span className="text-red-500">*</span>{" "}
+                  {TEXT.first_name_label || "First Name"}
+                  <span className="text-red-500">*</span>
                 </label>
                 <input
                   {...register("firstName", {
-                    onChange: () => {
-                      changeHandler();
-                    },
+                    onChange: () => changeHandler(),
                   })}
                   className="input-style"
                 />
                 <span className="text-[0.8rem] font-medium text-destructive">
                   {errors.firstName?.message && (
-                    <span className="text-red-500">
-                      {errors.firstName?.message}
-                    </span>
+                    <span className="text-red-500">{errors.firstName?.message}</span>
                   )}
                 </span>
               </div>
 
               <div className="flex flex-col gap-1">
                 <label className="label-style">
-                  Last name<span className="text-red-500">*</span>{" "}
+                  {TEXT.last_name_label || "Last Name"}
+                  <span className="text-red-500">*</span>
                 </label>
                 <input
                   {...register("lastName", {
-                    onChange: () => {
-                      changeHandler();
-                    },
+                    onChange: () => changeHandler(),
                   })}
                   className="input-style"
                 />
                 <span className="text-[0.8rem] font-medium text-destructive">
                   {errors.lastName?.message && (
-                    <span className="text-red-500">
-                      {errors.lastName?.message}
-                    </span>
+                    <span className="text-red-500">{errors.lastName?.message}</span>
                   )}
                 </span>
               </div>
             </div>
+
             <div className="flex flex-col gap-1 w-full">
               <label className="label-style">
-                Straße<span className="text-red-500">*</span>{" "}
+                {TEXT.street_label || "Street"}
+                <span className="text-red-500">*</span>
               </label>
               <input
                 {...register("addressLine1", {
-                  onChange: () => {
-                    changeHandler();
-                  },
+                  onChange: () => changeHandler(),
                 })}
                 className="input-style"
               />
               <span className="text-[0.8rem] font-medium text-destructive">
                 {errors.addressLine1?.message && (
-                  <span className="text-red-500">
-                    {errors.addressLine1?.message}
-                  </span>
+                  <span className="text-red-500">{errors.addressLine1?.message}</span>
                 )}
               </span>
             </div>
+
             <div className="flex flex-col gap-1 w-full">
               <label className="label-style">
-                {/* Address line 2 */}
-                Straße Hausnr
-                <span className="text-red-500">*</span>{" "}
+                {TEXT.street_number_label || "Street + House No."}
+                <span className="text-red-500">*</span>
               </label>
               <input
                 {...register("addressLine2", {
-                  onChange: () => {
-                    changeHandler();
-                  },
+                  onChange: () => changeHandler(),
                 })}
                 className="input-style"
               />
               <span className="text-[0.8rem] font-medium text-destructive">
                 {errors.addressLine2?.message && (
-                  <span className="text-red-500">
-                    {errors.addressLine2?.message}
-                  </span>
+                  <span className="text-red-500">{errors.addressLine2?.message}</span>
                 )}
               </span>
             </div>
+
             <input {...register("city", { value: "gf" })} hidden />
-            {/* <div className="flex flex-col gap-1">
-              <label className="label-style">
-                City<span className="text-red-500">*</span>{" "}
-              </label>
-              <input {...register("city")} className="input-style" />
-              <span className="text-[0.8rem] font-medium text-destructive">
-                {errors.city?.message && <span>{errors.city?.message}</span>}
-              </span>
-            </div> */}
-            {/* <div className="flex flex-col gap-1">
-              <label className="label-style">
-                State<span className="text-red-500">*</span>{" "}
-              </label>
-              <input {...register("state")} className="input-style" />
-              <span className="text-[0.8rem] font-medium text-destructive">
-                {errors.state?.message && <span>{errors.state?.message}</span>}
-              </span>
-            </div> */}
+
             <div className="flex flex-col gap-1">
               <label className="label-style">
-                Postleitzahl<span className="text-red-500">*</span>{" "}
+                {TEXT.postal_code_label || "Postal Code"}
+                <span className="text-red-500">*</span>
               </label>
               <input
                 {...register("zipCode", {
-                  onChange: (e) => {
-                    handleZipcodeChange(e);
-                  },
+                  onChange: (e) => handleZipcodeChange(e),
                 })}
                 className="input-style"
               />
               <span className="text-[0.8rem] font-medium text-destructive">
                 {errors.zipCode?.message && (
-                  <span className="text-red-500">
-                    {errors.zipCode?.message}
-                  </span>
+                  <span className="text-red-500">{errors.zipCode?.message}</span>
                 )}
               </span>
             </div>
-            {/* <div className="flex  justify-start gap-8 border rounded-full w-full py-2 px-2 items-center">
-              <div className="px-2 py-2 bg-slate-700 rounded-full flex justify-center items-center">
-                <input
-                  {...register("payment")}
-                  type="radio"
-                  value="paypal"
-                  //  checked
-                />{" "}
-              </div>
-              <div>Paypal</div>
-            </div>
-            <div className="flex  justify-start gap-8 border rounded-full w-full py-2 px-2 items-center">
-              <div className="px-2 py-2 bg-slate-700 rounded-full flex justify-center items-center">
-                <input {...register("payment")} type="radio" value="cod" />{" "}
-              </div>
-              <div>Cash on delivery</div>
-            </div> */}
+
             <div className="flex justify-start items-center gap-2">
-              
               <div className="w-fit">
                 <button className="w-fit px-2 py-1 text-center bg-amber-400 text-blue-900 font-bold rounded-xl text-[1.2rem] z-50">
-               
-                  <span className=" text-blue-900">Use </span>
-                  <span className=" text-sky-500">Address</span>
+                  <span className="text-blue-900">{TEXT.use_address_button_prefix || "Use"}</span>{" "}
+                  <span className="text-sky-500">{TEXT.use_address_button_suffix || "Address"}</span>
                 </button>
               </div>
-
               <div className="h-5 flex justify-center">
-                { customerAddressIsComplete && (
+                {customerAddressIsComplete && (
                   <FaCheck className="text-green-300 " size={24} />
                 )}
               </div>
             </div>
-            
           </div>
         </form>
       </div>
     </div>
   );
+
 
   // async function getAddressByEmail(inputEmail: string) {
   //   const addressRes = await searchAddressEmail(inputEmail);

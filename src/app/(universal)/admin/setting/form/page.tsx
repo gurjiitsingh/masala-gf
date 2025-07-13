@@ -37,11 +37,11 @@ const Page = () => {
   });
 
   async function onsubmit(data: settingSchemaType) {
-    if (!data.value.trim()) return;
+    if (!data.value!.trim()) return;
 
     const formData = new FormData();
     formData.append("name", data.name.trim());
-    formData.append("value", data.value);
+    formData.append("value", data.value!);
 
     const result = await addNewsetting(formData);
 

@@ -1,6 +1,6 @@
 import React from "react";
 import { Sour_Gummy } from "next/font/google";
-import { TEXT } from "@/config/languages";
+import { useLanguage } from '@/store/LanguageContext';
 
 const sourGummy = Sour_Gummy({
   subsets: ["latin"],
@@ -8,6 +8,7 @@ const sourGummy = Sour_Gummy({
 });
 
 export default function Title() {
+   const { TEXT } = useLanguage();
   return (
     <div className="flex gap-2 my-5">
       <div className="flex items-center">

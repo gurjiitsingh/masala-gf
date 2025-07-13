@@ -2,8 +2,10 @@
 
 import { useState } from "react";
 import { UseSiteContext } from "@/SiteContext/SiteContext";
+import { useLanguage } from '@/store/LanguageContext';
 
 const PaymentSelector = () => {
+  const { TEXT } = useLanguage();
   const { setPaymentType } = UseSiteContext();
   const [selected, setSelected] = useState<string>("");
 
@@ -15,8 +17,10 @@ const PaymentSelector = () => {
   return (
     <div className="flex flex-col p-5 rounded-2xl border border-slate-300 bg-white">
       <h3 className="text-xl font-semibold text-slate-600 pt-3 pb-4 uppercase">
-        Zahlungsart auswählen
+        {/* Zahlungsart auswählen */}
+        {TEXT.payment_method_title || "Select Payment Method"}
       </h3>
+
 
       <div className="flex flex-col gap-4">
         {/* Stripe */}
@@ -58,7 +62,10 @@ const PaymentSelector = () => {
             ${selected === "cod" ? "border-amber-400" : "border-gray-400"}`}>
             {selected === "cod" && <div className="w-2.5 h-2.5 bg-amber-400 rounded-full"></div>}
           </div>
-          <span className="text-slate-700 font-semibold">Cash on Delivery</span>
+          <span className="text-slate-700 font-semibold">
+            {/* Cash on Delivery */}
+            {TEXT.payment_method_cod || "Cash on Delivery"}
+            </span>
         </div>
       </div>
     </div>

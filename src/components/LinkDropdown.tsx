@@ -1,7 +1,6 @@
 "use client";
 
-import React from "react";
-import { FaRegUser } from "react-icons/fa";
+import { useEffect, useState } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,18 +8,39 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
-import { CustomSessionType } from "@/lib/types/auth"; 
+import dynamic from "next/dynamic";
 
-const LinkDropdown = ({ session }: { session: CustomSessionType | null }) => {
-  return (
-    <DropdownMenu>
-      <DropdownMenuTrigger className="flex items-center text-white-700 hover:text-red-600 transition">
-        <FaRegUser className="text-xl" />
+// Dynamically import the icon to avoid SSR mismatch
+// let FaRegUser: any = null;
+// if (typeof window !== "undefined") {
+//   FaRegUser = require("react-icons/fa").FaRegUser;
+// }
+
+const FaRegUser = dynamic(() => import("react-icons/fa").then((mod) => mod.FaRegUser), {
+  ssr: false,
+});
+
+const LinkDropdown = () => {
+  const { data: session, status } = useSession();
+  const [hasMounted, setHasMounted] = useState(false);
+
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
+
+  if (!hasMounted || status === "loading") return null;
+
+  const role = session?.user?.role;
+
+  return (<>
+  {typeof window !== 'undefined' && <DropdownMenu>
+      <DropdownMenuTrigger className="flex items-center text-white hover:text-red-600 transition">
+        {FaRegUser && <FaRegUser className="text-xl" />}
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent className="bg-[#64870d] text-white shadow-lg rounded-md">
+      <DropdownMenuContent className="bg-[#64870d] text-white shadow-lg rounded-md min-w-[160px]">
         <DropdownMenuSeparator />
 
         {!session && (
@@ -38,7 +58,7 @@ const LinkDropdown = ({ session }: { session: CustomSessionType | null }) => {
           </>
         )}
 
-        {session?.user?.role === "admin" && (
+        {role === "admin" && (
           <DropdownMenuItem>
             <Link href="/admin/" className="w-full block">
               Admin Dashboard
@@ -46,7 +66,7 @@ const LinkDropdown = ({ session }: { session: CustomSessionType | null }) => {
           </DropdownMenuItem>
         )}
 
-        {session?.user?.role === "user" && (
+        {role === "user" && (
           <DropdownMenuItem>
             <Link href="/user/" className="w-full block">
               My Dashboard
@@ -60,7 +80,7 @@ const LinkDropdown = ({ session }: { session: CustomSessionType | null }) => {
             <DropdownMenuItem>
               <button
                 onClick={() => signOut()}
-                className="w-full text-left text-sm text-gray-700 hover:text-red-600"
+                className="w-full text-left text-sm text-white hover:text-red-500"
               >
                 Logout
               </button>
@@ -68,7 +88,8 @@ const LinkDropdown = ({ session }: { session: CustomSessionType | null }) => {
           </>
         )}
       </DropdownMenuContent>
-    </DropdownMenu>
+    </DropdownMenu>}
+    </>
   );
 };
 

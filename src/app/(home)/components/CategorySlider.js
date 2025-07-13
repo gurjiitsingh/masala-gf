@@ -6,6 +6,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { fetchCategories } from "@/app/(universal)/action/category/dbOperations";
 import { UseSiteContext } from "@/SiteContext/SiteContext";
+import { TEXT } from "@/config/languages";
 
 export default function CategorySlider() {
   const [width, setWidth] = useState(0); // Start with 0, safe for SSR
@@ -62,17 +63,17 @@ export default function CategorySlider() {
 
   const slidesToShow = useMemo(() => {
     const breakpoints = [
-      [1500, 14],
-      [1400, 13],
-      [1300, 12],
-      [1200, 11],
-      [1100, 10],
-      [1000, 9],
-      [900, 8],
-      [800, 7],
-      [700, 6],
-      [600, 5],
-      [500, 4],
+      [1500, 9],
+      [1400, 9],
+      [1300, 8],
+      [1200, 8],
+      [1100, 7],
+      [1000, 7],
+      [900, 6],
+      [800, 6],
+      [700, 5],
+      [650, 5],
+      [550, 4],
       [400, 3],
     ];
     for (const [breakpoint, count] of breakpoints) {
@@ -95,7 +96,8 @@ export default function CategorySlider() {
 <div className="relative z-10 mt-10 mb-7 container mx-auto ">
    <div className="container mx-auto w-full flex justify-end ">
     <div className=" w-fit  text-zinc-500 light-bg rounded-t-2xl py-1 px-2 text-sm font-light md:font-normal">
-          Gericht suchen oder Kategorie auswählen
+          {TEXT.search_dish_or_category}
+          
         </div>
 </div>
     <div className="mx-auto max-w-[1700px] min-h-[100px] bg-white/70 backdrop-blur-md rounded-b-xl rounded-tl-xl shadow-md p-3">

@@ -1,37 +1,21 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { UseSiteContext } from "@/SiteContext/SiteContext";
-
-import dynamic from "next/dynamic";
-
-// Dynamically import FaBars icon
-const FaBars = dynamic(
-  () => import("react-icons/fa6").then((mod) => mod.FaBars),
-  {
-    ssr: false,
-  }
-);
-
 import Navbar from "@/components/Navbar";
 import Login from "../Login";
-import { LanguageSwitcher } from "../common/LanguageSwitcher";
+import { SessionProvider } from "next-auth/react";
+import { UseSiteContext } from "@/SiteContext/SiteContext";
+import { FaBars } from "react-icons/fa6";
+import Link from "next/link";
 
 const Header = () => {
   const { bargerMenuToggle } = UseSiteContext();
-  const [hasMounted, setHasMounted] = useState(false);
-
-  useEffect(() => {
-    setHasMounted(true);
-  }, []);
-
-  if (!hasMounted) return null;
-
+// #eafad6
   return (
-    <header className="bg-[#64870d] px-3 opacity-70 z-50 shadow-md w-full mx-auto rounded-xl mt-3">
-      <div className="flex items-center justify-between">
-        {/* Left Side */}
+    <header className="bg-[#64870d] px-3 opacity-70 z-50 shadow-md  w-full mx-auto  rounded-xl  mt-3">
+      <div className=" flex items-center justify-between">
+        {/* Left Side: Logo and Navbar */}
         <div className="flex items-center gap-4">
+
           <button
             onClick={() => bargerMenuToggle(false)}
             className="lg:hidden p-2 rounded-md hover:bg-gray-100 focus:outline-none"
@@ -39,8 +23,6 @@ const Header = () => {
           >
             <FaBars size={28} />
           </button>
-
-          {/* Uncomment when needed */}
           {/* <Link href="/">
             <img
               src="/logo.webp"
@@ -48,15 +30,16 @@ const Header = () => {
               className="h-12 w-auto"
             />
           </Link> */}
-
-         
           <Navbar />
         </div>
 
-        {/* Right Side */}
+        {/* Right Side: Login and Menu Button */}
         <div className="flex items-center gap-3">
-           <LanguageSwitcher />
-          <Login />
+          <SessionProvider>
+            <Login />
+          </SessionProvider>
+
+          
         </div>
       </div>
     </header>

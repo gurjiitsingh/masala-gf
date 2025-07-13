@@ -7,8 +7,8 @@ export const TEXT = {
   brand: "Masala",
   tag_line: "Taste of India",
   brand_name: "Masala Taste of India",
- 
-   menu_list: [
+
+  menu_list: [
     { name: "Home", link: "/" },
     { name: "About Us", link: "/about" },
     { name: "Contact", link: "/contact" },
@@ -21,6 +21,7 @@ export const TEXT = {
     { name: "Contact", link: "/contact" },
     { name: "Table Reservation", link: "/reservation" },
   ],
+
   sections: {
     links: {
       title: "Links",
@@ -44,6 +45,7 @@ export const TEXT = {
       title: "Social media",
     },
   },
+
   footer_bottom: {
     poweredBy: "Powered by",
     poweredByUrl: "http://www.gstadeveloper.com",
@@ -53,14 +55,60 @@ export const TEXT = {
       company: "Masala Taste of India",
     },
   },
+
+  // Text from cart component
+  cart_heading: "Cart Total",
+  add_coupon_button: "Add a coupon",
+  subtotal_label: "Subtotal",
+  pickup_button: "Pickup",
+  delivery_button: "Delivery",
+  total_label: "Total",
+  no_offers_checkbox:
+    "I do not want to receive emails about new offers and discounts.",
+  no_offers_alert_line1:
+    "You have chosen not to receive emails about new offers and discounts. If you wish to receive emails, please uncheck the box.",
+  no_offers_alert_line2:
+    "You have selected not to receive emails about new offers and discounts. If you want to receive such emails, please uncheck the box.",
+  place_order_button: "Place",
+  order_button_suffix: "Order",
+  placing_order_text: "Placing Order...",
+
+  // Text from address form component
+  address_section_title: "Address",
+  email_label: "Email",
+  mobile_label: "Mob no.",
+  first_name_label: "First name",
+  last_name_label: "Last name",
+  street_label: "Street",
+  street_number_label: "Street + House No.",
+  postal_code_label: "Postal Code",
+  use_address_button_prefix: "Use",
+  use_address_button_suffix: "Address",
+
+  // Payment method section
+  payment_method_title: "Select Payment Method",
+  payment_method_cod: "Cash on Delivery",
+
+  // Search section
+  search_dish_or_category: "Search dish or select category",
+
+  // Mini cart sidebar
+  cart_sidebar_title: "Your Cart",
+  checkout_button: "Checkout",
+  empty_cart_message: "Cart is empty",
+  shop_more_button: "Shop More",
+  discount_hint_checkout: "See discount at checkout",
+
+  // Order complete
+
+  order_complete_heading: "Your order is complete",
+  pickup_time: "Pickup: 20–25 minutes",
+  delivery_time: "Delivery time: 40–55 minutes",
+
 };
-
-
-
 
 export const SEO = {
   title: "Masala – Indian Restaurant in Gifhorn, Lower Saxony",
   description:
     "Authentic Indian food at Masala Gifhorn. Order online for delivery or visit us in Lower Saxony.",
-  //ogImage: "/images/og.jpg", // Optional: used for social sharing
 };

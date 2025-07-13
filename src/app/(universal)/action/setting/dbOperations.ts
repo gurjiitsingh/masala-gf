@@ -351,7 +351,7 @@ export async function fetchsettingById(id: string): Promise<settingSchemaType> {
     //   docSnap.data() //will be undefined in this case
     //  console.log("No such document!");
   }
-  const setting = { id: docSnap.id, ...docSnap.data() } as settingSchemaType;
+  const setting = { key: docSnap.id, ...docSnap.data() } as settingSchemaType;
 
   return setting;
   // const docRef = doc(db, "product", id);
