@@ -3,7 +3,6 @@
 import React, { useEffect, useState } from "react";
 import { fetchProductAddOnByBaseProductId } from "@/app/(universal)/action/productsaddon/dbOperation";
 import { ProductType } from "@/lib/types/productType";
-import Productvariant from "./components/productvariant";
 import { fetchProductById } from "@/app/(universal)/action/productsbase/dbOperation";
 //import { ButtonAddToCartButton } from "@/components/CartPageComponent/ButtonAddToCart";
 import { fetchProductSauces } from "@/app/(universal)/action/productsauces/dbOperation";
@@ -11,8 +10,6 @@ import { fetchProductSauces } from "@/app/(universal)/action/productsauces/dbOpe
 import { UseSiteContext } from "@/SiteContext/SiteContext";
 import { IoClose } from "react-icons/io5";
 import { IoMdAdd, IoMdRemove } from "react-icons/io";
-//import { ButtonDecCartProduct } from "../CartPageComponent/ButtonDecCartProduct";
-import { useCartContext } from '@/store/CartContext';
 import { fetchflavorsProductG } from "@/app/(universal)/action/flavorsProductG/dbOperation";
 import { flavorsProductGType } from "@/lib/types/flavorsProductGType";
 import { sauceProductType } from "@/lib/types/productSaucesType";

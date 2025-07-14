@@ -14,7 +14,7 @@ const CartBottom = () => {
     >
       <div className="flex items-center gap-2">
         <IoCartOutline size={28} />
-        <CartCount />
+        <CartCount /> 
       </div>
     </button>
   );

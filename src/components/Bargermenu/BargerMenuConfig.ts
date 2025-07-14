@@ -1,9 +1,4 @@
-import {
-  BiHomeSmile,
-  BiUser
-} from "react-icons/bi";
-import { HiOutlineChatBubbleBottomCenterText } from "react-icons/hi2";
-import { TbBrandBooking } from "react-icons/tb";
+
 
 // Icon Mapping
 // export const iconMap: Record<string, React.ElementType> = {

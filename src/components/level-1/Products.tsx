@@ -5,8 +5,9 @@ import { fetchProducts } from "@/app/(universal)/action/productsbase/dbOperation
 import { fetchAddOnProducts } from "@/app/(universal)/action/productsaddon/dbOperation";
 import { ProductType } from "@/lib/types/productType";
 import { addOnType } from "@/lib/types/addOnType";
-import PageProductDetailComponent from "./PageProductDetailComponent";
+
 import { UseSiteContext } from "@/SiteContext/SiteContext";
+import ProductCard from "../level-2/ProductCard";
 
 export default function Products() {
   const { productCategoryIdG, settings, setAllProduct, productToSearchQuery } =
@@ -20,7 +21,6 @@ export default function Products() {
   // Set initial category
   useEffect(() => {
     const fallbackCategory = settings.display_category as string;
-    console.log("displaying cat--------------",settings)
     setCategoryId(productCategoryIdG || fallbackCategory || "");
   }, [settings, productCategoryIdG]);
 
@@ -81,7 +81,7 @@ export default function Products() {
     <div className="container mx-auto flex flex-col md:flex-row md:flex-wrap gap-1 md:gap-2 w-full">
       <div className="flex flex-col md:flex-row md:flex-wrap md:mt-3 gap-3 md:gap-5 w-full">
         {products.map((product, i) => (
-          <PageProductDetailComponent
+          <ProductCard
             key={product.id ?? `${product.name}-${i}`}
             product={product}
             allAddOns={addOns}

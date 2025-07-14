@@ -13,9 +13,9 @@ const FaBars = dynamic(
   }
 );
 
-import Navbar from "@/components/Navbar";
-import Login from "../Login";
-import { LanguageSwitcher } from "../common/LanguageSwitcher";
+import Navbar from "@/components/level-2/Navbar";
+import Login from "../buttons/Login";
+import { LanguageSwitcher } from "../../languages/LanguageSwitcher";
 
 const Header = () => {
   const { bargerMenuToggle } = UseSiteContext();

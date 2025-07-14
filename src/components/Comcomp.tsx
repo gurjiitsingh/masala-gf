@@ -1,11 +1,9 @@
 
-import { CartProvider } from "@/store/CartProvider";
-import { SiteProvider } from "@/SiteContext/SiteProvider";
-import Header from "@/components/Custom/Header";
+import Header from "@/components/level-1/Header";
 
 import { SideCart } from '@/components/MiniCart/SideCart';
 import { BargerMenu } from '@/components/Bargermenu/Menu'
-import Footer from "./Custom/Footer";
+import Footer from "@/components/level-1/Footer";
 import CartBottom from "./CartBottom/CartBottom";
 import { Providers } from "@/app/Providers";
 

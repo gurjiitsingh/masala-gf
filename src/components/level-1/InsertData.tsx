@@ -1,4 +1,4 @@
-import CartButton from '@/components/Custom/AddToCart/CartButton'
+import CartButton from '@/components/AddToCart/CartButton'
 import { cartProductType } from '@/lib/types/cartDataType'
 
 import { addOnType } from '@/lib/types/addOnType';

@@ -7,10 +7,12 @@ import CartBottom from "@/components/CartBottom/CartBottom";
 import UTMInitializer from "../UTMInitializer";
 import { Providers } from "../Providers";
 import SafeSideCart from "./SafeSideCart";
-import Footer from "@/components/Custom/Footer";
+
 import { BargerMenu } from "@/components/Bargermenu/Menu";
-import Modal from "./components/Modal";
-import Header from "@/components/Custom/Header";
+import Modal from "@/components/level-1/Modal";
+import Header from "@/components/level-1/Header";
+import Footer from "@/components/level-1/Footer";
+
 
 // ✅ Dynamic SEO fallback logic here
 export const metadata: Metadata = getSeoMetadata();

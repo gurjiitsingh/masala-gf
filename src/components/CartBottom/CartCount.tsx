@@ -8,4 +8,4 @@ const totalProcuts = cartData.length;
   return (
     <div className='text-white text-xl'>{totalProcuts}</div>
   )
-}
+} 
