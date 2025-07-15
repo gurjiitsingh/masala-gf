@@ -13,17 +13,8 @@ import Modal from "@/components/level-1/Modal";
 import Header from "@/components/level-1/Header";
 import Footer from "@/components/level-1/Footer";
 
-
 // ✅ Dynamic SEO fallback logic here
 export const metadata: Metadata = getSeoMetadata();
-
-// export const metadata: Metadata = {
-//   title:   "Masala Taste of India, Germany ",
-//   description: "Masala Taste of India, Indian Restaurant in German , Gifhorn,  Lower Saxony ",
-//   other: {
-//     google: "notranslate",
-//   },
-// };
 
 export default function RootLayout({
   children,
@@ -32,7 +23,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="de" translate="no">
-      {/* <html suppressHydrationWarning lang="en"> */}
       <body>
         <div translate="no">
           <UTMInitializer />
@@ -40,18 +30,17 @@ export default function RootLayout({
             <BargerMenu />
             <Modal />
 
-            <div className="relative w-full h-screen overflow-x-hidden bg-[#ebf1ec] md:bg-green-100 m-0 p-0">
+            <div className="layout-bg relative w-full h-screen overflow-x-hidden m-0 p-0">
               <div
                 className="absolute top-0 inset-0 z-0 bg-cover bg-center bg-no-repeat"
                 style={{ backgroundImage: "url('/hero-bg.jpg')" }}
               ></div>
 
               <div className="z-50">
-                {/* <SideCart /> */}
                 <SafeSideCart />
               </div>
-              {/* left-0 w-full z-50 bg-white shadow-md */}
-              <div className="container mx-auto  top-0 px-2 md:px-0 inset-0 z-50">
+
+              <div className="container mx-auto top-0 px-2 md:px-0 inset-0 z-50">
                 <Header />
               </div>
 
@@ -67,34 +56,16 @@ export default function RootLayout({
 
           <Toaster
             position="top-center"
-            containerStyle={{
-              top: "30%",
-            }}
+            containerStyle={{ top: "30%" }}
             toastOptions={{
               style: {
                 borderRadius: "10px",
                 padding: "12px 16px",
-                background: "#1e293b", // slate-800
-                color: "#f8fafc", // slate-50
               },
-              success: {
-                style: {
-                  background: "#10b981", // emerald-500
-                  color: "#ffffff",
-                },
-              },
-              error: {
-                style: {
-                  background: "#ef4444", // red-500
-                  color: "#ffffff",
-                },
-              },
-              loading: {
-                style: {
-                  background: "#f59e0b", // amber-500
-                  color: "#ffffff",
-                },
-              },
+              className: "toast-default",
+              success: { className: "toast-success" },
+              error: { className: "toast-error" },
+              loading: { className: "toast-loading" },
             }}
             reverseOrder={false}
           />

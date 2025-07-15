@@ -15,10 +15,10 @@ export default function Title() {
         <img src="/logo.webp" alt={TEXT.logo_alt} className="h-12 w-auto" />
       </div>
       <div>
-        <h1 className={`${sourGummy.className} rounded-2xl text-5xl w-full font-bold text-[#496208]`}>
+        <h1 className={`${sourGummy.className} rounded-2xl text-5xl w-full font-bold text-brand-heading`}>
           <div>
             {TEXT.brand}
-            <span className="text-xl font-light pl-1">{TEXT.tag_line}</span>
+            <span className="text-xl font-light pl-1 text-brand-subheading">{TEXT.tag_line}</span>
           </div>
         </h1>
       </div>
