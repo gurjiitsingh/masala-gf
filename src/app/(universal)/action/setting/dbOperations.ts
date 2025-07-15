@@ -83,6 +83,70 @@ export async function addNewsetting(formData: FormData) {
 
 
 
+export async function upsertLocaleCurrencySetting1(name: "currency" | "locale", value: string) {
+  const trimmedName = name.trim();
+  const trimmedValue = value.trim();
+
+  if (!trimmedName || !trimmedValue) {
+    return { errors: { value: "Both name and value are required." } };
+  }
+
+  const validated = settingSchema.safeParse({
+    name: trimmedName,
+    value: trimmedValue,
+  });
+
+  if (!validated.success) {
+    const zodErrors = validated.error.issues.reduce((acc, issue) => {
+      acc[issue.path[0]] = issue.message;
+      return acc;
+    }, {} as Record<string, string>);
+    return { errors: zodErrors };
+  }
+
+  const docId = slugify(trimmedName); // Example: "currency" → "currency"
+  const docRef = doc(db, "settings", docId);
+  const existingDoc = await getDoc(docRef);
+
+  try {
+    await setDoc(docRef, {
+      name: trimmedName,
+      value: trimmedValue,
+      type: "settings",
+    }, { merge: true }); // merge allows update if it exists
+
+    return {
+      message: {
+        success: existingDoc.exists()
+          ? "Setting updated successfully."
+          : "Setting created successfully.",
+      },
+    };
+  } catch (error) {
+    console.error("Firestore error:", error);
+    return {
+      errors: { firebase: "Failed to save setting." },
+    };
+  }
+}
+
+export async function upsertLocaleCurrencySetting(name: string, value: string) {
+  try {
+    const docRef = doc(db, "settings", name);
+    const existing = await getDoc(docRef);
+
+    if (existing.exists()) {
+      await setDoc(docRef, { name, value, type: "country" }, { merge: true });
+    } else {
+      await setDoc(docRef, { name, value, type: "country" });
+    }
+
+    return { message: "Setting saved" };
+  } catch (error) {
+    console.error("Error saving setting:", error);
+    return { errors: { firebase: "Error saving setting." } };
+  }
+}
 export async function fetchSettings(): Promise<settingSchemaType[]> {
   const settingsSnapshot = await getDocs(collection(db, "settings"));
 

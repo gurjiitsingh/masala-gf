@@ -11,6 +11,8 @@ import ListHead from "./ListHead";
 import { addressResT } from "@/lib/types/addressType";
 import { orderProductsT } from "@/lib/types/orderType";
 import { orderMasterDataT } from "@/lib/types/orderMasterType";
+import { formatCurrencyNumber } from '@/utils/formatCurrency';
+import { UseSiteContext } from "@/SiteContext/SiteContext";
 
 const OrderDetail = () => {
   const searchParams = useSearchParams();
@@ -24,6 +26,10 @@ const OrderDetail = () => {
   const [orderProducts, setOrderProducts] = useState<orderProductsT[]>([]);
   const [customerAddress, setCustomerAddress] = useState<addressResT>();
   const [orderMasterData, setOrderMasterData] = useState<orderMasterDataT | null>(null);
+
+  const { settings } = UseSiteContext();
+
+ 
 
   useEffect(() => {
     async function getOrderProducts() {
@@ -48,10 +54,25 @@ const OrderDetail = () => {
     // console.log("addre ins use efferxt-----", customerAddress);
   }, [customerAddress]);
   const endTotalG = orderMasterData?.endTotalG;
-  const endTotalGS = endTotalG?.toFixed(2).toString().replace(/\./g, ",");
+  //const endTotalGS = endTotalG?.toFixed(2).toString().replace (/\./g, ",");
+  
+  const endTotalGS = formatCurrencyNumber(
+    Number(endTotalG?.toFixed(2)) ?? 0,
+    (settings.currency || 'EUR') as string,
+    (settings.locale || 'de-DE') as string
+  );
+
+
 
   const itemTotal = orderMasterData?.itemTotal;
-  const itemTotalS = itemTotal?.toFixed(2).toString().replace(/\./g, ",");
+  //const itemTotalS = itemTotal?.toFixed(2).toString().replace (/\./g, ",");
+  const itemTotalS = formatCurrencyNumber(
+    Number(itemTotal?.toFixed(2)) ?? 0,
+    (settings.currency || 'EUR') as string,
+    (settings.locale || 'de-DE') as string
+  );
+
+
 
   return (
     <div className="flex flex-col gap-4 bg-white px-3 flex-1 mb-12">

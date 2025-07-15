@@ -11,12 +11,29 @@ import Image from "next/image";
 import Link from "next/link";
 import { deleteProduct } from "@/app/(universal)/action/products/dbOperation";
 import { ProductType } from "@/lib/types/productType";
+import { formatCurrencyNumber } from '@/utils/formatCurrency';
+import { UseSiteContext } from "@/SiteContext/SiteContext";
 
 function TableRows({ product }: { product: ProductType }) {
-  const price = product.price.toString().replace(/\./g, ",");
+
+    const { settings } = UseSiteContext();
+  
+    //const price = product.price.toString().replace (/\./g, ",");
+    const price = formatCurrencyNumber(
+      Number(product.price) ?? 0,
+      (settings.currency || 'EUR') as string,
+      (settings.locale || 'de-DE') as string
+    );
+
+  
   let discountedPrice = "";
   if (product.discountPrice !== undefined) {
-    discountedPrice = product.discountPrice.toString().replace(/\./g, ",");
+    //discountedPrice = product.discountPrice.toString().replace (/\./g, ",");
+       discountedPrice = formatCurrencyNumber(
+      Number(product.discountPrice) ?? 0,
+      (settings.currency || 'EUR') as string,
+      (settings.locale || 'de-DE') as string
+    );
   }
 
   const statusLabel = product.status ?? "draft";

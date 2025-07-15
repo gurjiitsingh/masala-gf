@@ -1,5 +1,6 @@
-import { UseSiteContext } from "@/SiteContext/SiteContext";
 import React from "react";
+import { formatCurrencyNumber } from '@/utils/formatCurrency';
+import { UseSiteContext } from "@/SiteContext/SiteContext";
 
 export default function Pickup({
   pickupDiscountPersent,
@@ -8,7 +9,14 @@ export default function Pickup({
   pickupDiscountPersent: number;
   calculatedPickUpDiscount: number;
 }) {
-  const { deliveryType } = UseSiteContext();
+  const { deliveryType, settings } = UseSiteContext();
+ 
+  
+    const calculatedPickUpDiscountCUR = formatCurrencyNumber(
+      calculatedPickUpDiscount ?? 0,
+      (settings.currency || 'EUR') as string,
+      (settings.locale || 'de-DE') as string
+    );
 
   return (
     <>
@@ -21,10 +29,11 @@ export default function Pickup({
             </p>
           </div>
           <div className="flex gap-1">
-            - <span>&#8364;</span>{" "}
+            {calculatedPickUpDiscountCUR}
+            {/* - <span>&#8364;</span>{" "}
             <span>
-              {calculatedPickUpDiscount.toString().replace(/\./g, ",")}
-            </span>
+              {calculatedPickUpDiscount.toString().replace (/\./g, ",")-}
+            </span> */}
           </div>
         </div>
       )}

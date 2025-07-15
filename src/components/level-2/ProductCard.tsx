@@ -11,6 +11,7 @@ import { IoMdAdd } from "react-icons/io";
 import toast from "react-hot-toast";
 import CartButton from "../AddToCart/CartButton";
 import AddOn from "../level-1/AddOn";
+import { formatCurrencyNumber } from '@/utils/formatCurrency';
 
 export default function PageProductDetailComponent({
   product,
@@ -22,7 +23,7 @@ export default function PageProductDetailComponent({
 
   
   const [addOnData, setAddOnData] = useState<addOnType[]>([]);
-  const { productCategoryIdG } = UseSiteContext();
+  const { productCategoryIdG, settings } = UseSiteContext();
  
   useEffect(() => {
     if (allAddOns.length !== 0 && product.flavors) {
@@ -35,14 +36,22 @@ export default function PageProductDetailComponent({
   }, [product.id, allAddOns, product.flavors]);
 
   //common code start
-  //const priceRegular = product.price.toString().replace(/\./g, ",");
-  const priceRegular = product.price?.toString().replace(/\./g, ",") ?? "0,00";
-  
+ 
+
+  //const priceRegular = product.price?.toString().replace (/\./g, ",") ?? "0,00";
+const priceRegular = formatCurrencyNumber(
+  product.price ?? 0,
+  (settings.currency || 'EUR') as string,
+  (settings.locale || 'de-DE') as string
+);
   let priceDiscounted;
   let priceTarget = product.price ?? 0;
   if (product.discountPrice && product.discountPrice > 0) {
     priceTarget = product.discountPrice;
-    priceDiscounted = product.discountPrice.toString().replace(/\./g, ",");
+   // priceDiscounted = product.discountPrice.toString().replace (/\./g, ",");
+priceDiscounted = formatCurrencyNumber(product.discountPrice,  (settings.currency || 'EUR') as string,
+  (settings.locale || 'de-DE') as string);
+    
   }
 
   const cartProduct: cartProductType = {
@@ -99,11 +108,11 @@ export default function PageProductDetailComponent({
               product.discountPrice > 0 ? (
                 <div className="flex justify-between gap-3 items-center">
                   {" "}
-                  <div className="line-through">&euro;{priceRegular}</div>{" "}
-                  <div>&euro;{priceDiscounted}</div>
+                  <div className="line-through">{priceRegular}</div>{" "}
+                  <div>{priceDiscounted}</div>
                 </div>
               ) : (
-                <div>&euro;{priceRegular}</div>
+                <div>{priceRegular}</div>
               )}
               {/* common code end */}
               <div>

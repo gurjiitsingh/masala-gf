@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { settingSchemaType } from "@/lib/types/settingType";
 import { addNewsetting } from "@/app/(universal)/action/setting/dbOperations";
 import { createTempDir } from "@/app/(universal)/action/setting/createDir";
+import InitialCurrencyLocaleSetup from "../components/InitialCurrencyLocaleSetup";
 
 const DEFAULT_SETTINGS: settingSchemaType[] = [
   { name: "home_page_offer", value: " " },
@@ -49,6 +50,9 @@ const Page = () => {
       <h1 className="text-2xl font-bold">⚙️ Initial Setup</h1>
 
       {/* ⚙️ Install Default Settings */}
+
+<InitialCurrencyLocaleSetup />
+
       <div>
         <button
           type="button"
@@ -74,6 +78,8 @@ const Page = () => {
         </button>
         {folderMsg && <p className="mt-2 text-green-600">{folderMsg}</p>}
       </div>
+
+      
     </div>
   );
 };

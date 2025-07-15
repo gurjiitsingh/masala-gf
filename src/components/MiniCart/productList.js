@@ -1,15 +1,18 @@
 "use client";
 import React, { useContext } from "react";
 import CartContext from "@/store/CartContext";
-import Image from "next/image";
 import { IoMdAdd } from "react-icons/io";
 import { IoMdRemove } from "react-icons/io";
+import { formatCurrencyNumber } from '@/utils/formatCurrency';
+import { UseSiteContext } from "@/SiteContext/SiteContext";
+
 
 const ProductList = ({ item }) => {
   const { addProductToCart, decCartProduct, removeCartProduct } =
     useContext(CartContext);
-
-  //   console.log("cart item", item)
+const  { settings } = UseSiteContext();
+        
+   //   console.log("cart item", item)
 
   function addProductToCartNew() {
     //console.log("llll")
@@ -17,15 +20,29 @@ const ProductList = ({ item }) => {
     addProductToCart(newProductToAdd);
   }
 
+
   let total = parseInt(item.quantity) * parseFloat(item.price);
   total = total.toFixed(2);
   //let totalS = total.toString;
-  const totalSComma = total.replace(/\./g, ",");
+ // const totalSComma = total.replace(/\./g, ",");
+
+     const totalSComma = formatCurrencyNumber(
+      total ?? 0,
+      (settings.currency || 'EUR'),
+      (settings.locale || 'de-DE')
+    );
+
   //  const price = item.price.replace(/\./g, ',')
 
   const priceFloat = parseFloat(item.price).toFixed(2);
 
-  const priceS = priceFloat.replace(/\./g, ",");
+ // const priceS = priceFloat.replace(/\./g, ",");
+
+     const priceS = formatCurrencyNumber(
+      priceFloat ?? 0,
+      (settings.currency || 'EUR'),
+      (settings.locale || 'de-DE')
+    );
 
   return (
     <div className="flex flex-row gap-2 bg-amber-300   justify-between  mt-2 rounded-2xl ">

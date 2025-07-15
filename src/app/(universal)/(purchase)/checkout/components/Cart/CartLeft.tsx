@@ -12,6 +12,7 @@ import { createNewOrder } from "@/app/(universal)/action/orders/dbOperations";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { useLanguage } from '@/store/LanguageContext';
+import { formatCurrencyNumber } from '@/utils/formatCurrency';
 
 export default function CartLeft() {
     const { TEXT } = useLanguage();
@@ -84,7 +85,16 @@ export default function CartLeft() {
 
     const roundedTotal = parseFloat(total.toFixed(2));
     setitemTotal(roundedTotal);
-    setitemTotalComa(roundedTotal.toFixed(2).replace(".", ","));
+    
+
+  const roundedTotalCU = formatCurrencyNumber(
+      roundedTotal ?? 0,
+      (settings.currency || 'EUR') as string,
+      (settings.locale || 'de-DE') as string
+    );
+
+    //setitemTotalComa(roundedTotal.toFixed(2).replace(".", ","));
+    setitemTotalComa(roundedTotalCU);
 
     const pickupDiscountAmount = calculateDiscount(
       filteredTotal,
@@ -172,7 +182,7 @@ export default function CartLeft() {
           setcouponDiscountPercentL(
             parseFloat(((price / itemTotal) * 100).toFixed(2))
           );
-          console.log("discount on pickup appll----------");
+     
         } else {
           const percent = +couponDisc.discount;
           const totalDis = parseFloat(((itemTotal * percent) / 100).toFixed(2));
@@ -205,7 +215,14 @@ export default function CartLeft() {
     ).toFixed(2);
 
     setDeliveryCost(deliveryCost);
-    setEndTotalComma(netPay.replace(".", ","));
+
+     const netPayCU = formatCurrencyNumber(
+      Number(netPay) ?? 0,
+      (settings.currency || 'EUR') as string,
+      (settings.locale || 'de-DE') as string
+    );
+
+    setEndTotalComma(netPayCU);
     setEndTotalG(parseFloat(netPay));
     setTotalDiscountG(parseFloat(netDiscount));
   }, [
@@ -398,7 +415,7 @@ return (
             {TEXT.subtotal_label}
           </div>
           <div className="flex gap-1">
-            {itemTotalComa && <span>&#8364;</span>} <span>{itemTotalComa}</span>
+            {itemTotalComa && <span> </span>} <span>{itemTotalComa}</span>
           </div>
         </div>
 
@@ -452,7 +469,7 @@ return (
             {TEXT.total_label}
           </div>
           <div className="flex gap-1">
-            {endTotalComma && <span>&#8364;</span>} <span>{endTotalComma}</span>
+            {endTotalComma && <span></span>} <span>{endTotalComma}</span>
           </div>
         </div>
       </div>

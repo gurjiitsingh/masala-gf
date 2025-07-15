@@ -8,7 +8,6 @@ import { UseSiteContext } from "@/SiteContext/SiteContext";
 import MiniCartContent from "./MiniCartcontent";
 import { MiniCartSubtotal } from "./MiniSubtotal";
 import ProccedWithEmail from "./components/ProccedWithEmail";
-import { SessionProvider } from "next-auth/react";
 import { useCartContext } from "@/store/CartContext";
 import { useRouter } from "next/navigation";
 import { useLanguage } from "@/store/LanguageContext";

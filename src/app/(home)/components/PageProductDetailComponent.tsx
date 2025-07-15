@@ -1,8 +1,6 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { UseSiteContext } from "@/SiteContext/SiteContext";
-
 import { cartProductType } from "@/lib/types/cartDataType";
 import { ProductType } from "@/lib/types/productType";
 import { addOnType } from "@/lib/types/addOnType";
@@ -10,6 +8,8 @@ import { IoMdAdd } from "react-icons/io";
 import toast from "react-hot-toast";
 import CartButton from "@/components/AddToCart/CartButton";
 import AddOn from "@/components/level-1/AddOn";
+import { formatCurrencyNumber } from '@/utils/formatCurrency';
+import { UseSiteContext } from "@/SiteContext/SiteContext";
 
 export default function PageProductDetailComponent({
   product,
@@ -19,9 +19,12 @@ export default function PageProductDetailComponent({
   allAddOns: addOnType[];
 }) {
   const [addOnData, setAddOnData] = useState<addOnType[]>([]);
-  const { productCategoryIdG } = UseSiteContext();
+  const { productCategoryIdG, settings } = UseSiteContext();
   const [isMounted, setIsMounted] = useState(false);
   const [isCartDisabled, setIsCartDisabled] = useState(false);
+
+     
+   
 
   useEffect(() => {
     setIsMounted(true);
@@ -54,8 +57,20 @@ export default function PageProductDetailComponent({
 
   if (!isMounted) return null;
 
-  const priceRegular = product.price?.toString().replace(/\./g, ",") ?? "0,00";
-  const priceDiscounted = product.discountPrice?.toString().replace(/\./g, ",");
+  //const priceRegular = product.price?.toString().replace (/\./g, ",") ?? "0,00";
+   const priceRegular = formatCurrencyNumber(
+      Number(product.price) ?? 0,
+      (settings.currency || 'EUR') as string,
+      (settings.locale || 'de-DE') as string
+    );
+
+  //const priceDiscounted = product.discountPrice?.toString().replace (/\./g, ",");
+   const priceDiscounted = formatCurrencyNumber(
+    Number(product.discountPrice) ?? 0,
+      (settings.currency || 'EUR') as string,
+      (settings.locale || 'de-DE') as string
+    );
+
 
   const cartProduct: cartProductType = {
     id: product.id,

@@ -1,9 +1,7 @@
 "use client";
 // import { fetchProductByBaseProductId } from "@/app/(universal)/action/productsaddon/dbOperation";
 // import { AddOnProductSchemaType } from "@/lib/types/productAddOnType";
-import { UseSiteContext } from "@/SiteContext/SiteContext";
 import React, { useEffect, useState } from "react";
-
 import { cartProductType } from "@/lib/types/cartDataType";
 import { ProductType } from "@/lib/types/productType";
 import { addOnType } from "@/lib/types/addOnType";
@@ -11,6 +9,8 @@ import { IoMdAdd } from "react-icons/io";
 import toast from "react-hot-toast";
 import CartButton from "@/components/AddToCart/CartButton";
 import AddOn from "@/components/level-1/AddOn";
+import { formatCurrencyNumber } from '@/utils/formatCurrency';
+import { UseSiteContext } from "@/SiteContext/SiteContext";
 
 export default function PageProductDetailComponent({
   product,
@@ -22,7 +22,7 @@ export default function PageProductDetailComponent({
 
   
   const [addOnData, setAddOnData] = useState<addOnType[]>([]);
-  const { productCategoryIdG } = UseSiteContext();
+  const { productCategoryIdG, settings } = UseSiteContext();
  
   useEffect(() => {
     if (allAddOns.length !== 0 && product.flavors) {
@@ -35,14 +35,25 @@ export default function PageProductDetailComponent({
   }, [product.id, allAddOns, product.flavors]);
 
   //common code start
-  //const priceRegular = product.price.toString().replace(/\./g, ",");
-  const priceRegular = product.price?.toString().replace(/\./g, ",") ?? "0,00";
+  // const priceRegular = product.price?.toString().replace (/\./g, ",") ?? "0,00";
   
+  const priceRegular = formatCurrencyNumber(
+    Number(product.price) ?? 0,
+    (settings.currency || 'EUR') as string,
+    (settings.locale || 'de-DE') as string
+  );
+
+
   let priceDiscounted;
   let priceTarget = product.price ?? 0;
   if (product.discountPrice && product.discountPrice > 0) {
     priceTarget = product.discountPrice;
-    priceDiscounted = product.discountPrice.toString().replace(/\./g, ",");
+    //priceDiscounted = product.discountPrice.toString().replace (/\./g, ",");
+    priceDiscounted = formatCurrencyNumber(
+    Number(product.discountPrice) ?? 0,
+    (settings.currency || 'EUR') as string,
+    (settings.locale || 'de-DE') as string
+  );
   }
 
   const cartProduct: cartProductType = {
