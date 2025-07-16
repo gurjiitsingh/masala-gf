@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/lib/firebaseConfig";
-import { addressResT, addressResType, addressSchima, addressSchimaCheckout } from "@/lib/types/addressType"; //, TaddressSchema
+import { addressResT, addressResType, addressSchima, addressSchimaCheckout, addressWithId } from "@/lib/types/addressType"; //, TaddressSchema
 import {
   addDoc,
   collection,
@@ -140,8 +140,29 @@ export async function searchAddressEmail(email: string): Promise<addressResType 
   return result;
 }
 
+export async function searchAddressByAddressId(id: string): Promise<addressWithId> {
+  const docRef = doc(db, "address", id);
+  const docSnap = await getDoc(docRef);
 
-export async function searchAddressByAddressId(
+  if (!docSnap.exists()) {
+    console.log("No such document!");
+    throw new Error("No such address document");
+  }
+
+  const raw = docSnap.data() as addressResT;
+
+  const createdAtStr =
+    raw.createdAt instanceof Timestamp
+      ? raw.createdAt.toDate().toISOString()
+      : new Date().toISOString();
+
+  return {
+    ...raw,
+    createdAt: createdAtStr,
+    id: docSnap.id,
+  };
+}
+export async function searchAddressByAddressId1(
   id: string
 ): Promise<addressResT> {
  // console.log("---- search address by addressid ---", id);
@@ -151,11 +172,50 @@ export async function searchAddressByAddressId(
  //   console.log("Document data:", docSnap.data());
   } else {
     // docSnap.data() will be undefined in this case
-    console.log("No such document!");
+    console.log("No such document!"); 
   }
 
-  return docSnap.data() as addressResT;
+   const raw = docSnap.data() as addressResT;
+
+  const createdAtStr =
+    raw.createdAt instanceof Timestamp
+      ? raw.createdAt.toDate().toISOString()
+      : new Date().toISOString();
+
+       return {
+    ...raw,
+    createdAt: createdAtStr,
+    id: docSnap.id,
+  } as addressResT;
+
+ 
 }
+
+export async function fetchOrderMasterById(id: string) {
+  const docRef = doc(db, "orderMaster", id);
+  const docSnap = await getDoc(docRef);
+
+  if (!docSnap.exists()) {
+    console.log("No such document!");
+    return null;
+  }
+
+  const raw = docSnap.data() as orderMasterDataT;
+
+  const createdAtStr =
+    raw.createdAt instanceof Timestamp
+      ? raw.createdAt.toDate().toISOString()
+      : new Date().toISOString();
+
+  return {
+    ...raw,
+    createdAt: createdAtStr,
+    id: docSnap.id,
+  } as orderMasterDataSafeT;
+}
+
+
+
 
 
 

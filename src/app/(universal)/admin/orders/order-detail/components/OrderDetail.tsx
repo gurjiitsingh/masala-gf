@@ -113,7 +113,7 @@ const OrderDetail = () => {
 
           <div className="flex gap-2">
             <div className="font-semibold">Item total:</div>{" "}
-            <div className="">&euro;{itemTotalS}</div>
+            <div className="">{itemTotalS}</div>
           </div>
 
           
@@ -140,7 +140,7 @@ const OrderDetail = () => {
           </div>
           <div className="flex gap-2">
             <div className="font-semibold">Subtotal:</div>{" "}
-            <div className="">&euro;{endTotalGS}</div>
+            <div className="">{endTotalGS}</div>
           </div>
 
 

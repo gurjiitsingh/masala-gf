@@ -11,6 +11,7 @@ import {
   limit,
   orderBy,
   query,
+  startAfter,
   updateDoc,
   where,
 } from "@firebase/firestore";
@@ -343,6 +344,68 @@ type orderMasterDataSafeT = Omit<orderMasterDataT, "createdAt"> & {
   createdAt: string; // ISO string
 };
 
+
+
+
+type FetchOrdersOptions = {
+  afterId?: string;
+  pageSize?: number;
+};
+
+export async function fetchOrdersPaginated({ afterId, pageSize = 10 }: FetchOrdersOptions) {
+  const collectionRef = collection(db, 'orderMaster');
+  let q;
+
+  if (afterId) {
+    const docRef = await getDoc(doc(db, 'orderMaster', afterId));
+    q = query(collectionRef, orderBy('createdAt', 'desc'), startAfter(docRef), limit(pageSize));
+  } else {
+    q = query(collectionRef, orderBy('createdAt', 'desc'), limit(pageSize));
+  }
+
+  const snapshot = await getDocs(q);
+
+  const orders = snapshot.docs.map((doc) => {
+    
+    const data = doc.data();
+    const date = data.createdAt?.toDate?.();
+    const formattedDate = date?.toLocaleString('en-GB', {
+      year: 'numeric',
+      month: 'long',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+
+    return {
+      id: doc.id,
+      customerName: data.customerName || '',
+      email: data.email || '',
+      paymentType: data.paymentType || '',
+      status: data.status || '',
+      time: data.time || '',
+      couponCode: data.couponCode || '',
+      userId: data.userId || '',
+      addressId: data.addressId || '',
+      endTotalG: data.endTotalG || 0,
+      itemTotal: data.itemTotal || 0,
+      totalDiscountG: data.totalDiscountG || 0,
+      flatDiscount: data.flatDiscount || 0,
+      srno: data.srno || 0,
+      timeId: data.timeId || '',
+      deliveryCost: data.deliveryCost || 0,
+      calculatedPickUpDiscountL: data.calculatedPickUpDiscountL || 0,
+      calCouponDiscount: data.calCouponDiscount || 0,
+      couponDiscountPercentL: data.couponDiscountPercentL || 0,
+      pickUpDiscountPercentL: data.pickUpDiscountPercentL || 0,
+      createdAt: data.createdAt?.toDate?.().toISOString() || '',
+    } as orderMasterDataT;
+  });
+
+  const lastDoc = snapshot.docs[snapshot.docs.length - 1];
+  return { orders, lastId: lastDoc?.id || null };
+}
+
 export async function fetchOrdersMaster(): Promise<orderMasterDataSafeT[]> {
   const data: orderMasterDataSafeT[] = [];
 
@@ -363,12 +426,86 @@ export async function fetchOrdersMaster(): Promise<orderMasterDataSafeT[]> {
       id: doc.id,
       createdAt: createdAtStr,
     };
+  //  console.log(pData)
 
     data.push(pData);
   });
 
   return data;
 }
+
+
+const ORDERS_PER_PAGE = 10;
+
+export async function fetchOrdersMaster1(cursorId: string | null = null) {
+  const collectionRef = collection(db, "orderMaster");
+
+  let q;
+  if (cursorId) {
+    const cursorDoc = await getDoc(doc(collectionRef, cursorId));
+    if (cursorDoc.exists()) {
+      q = query(
+        collectionRef,
+        orderBy("createdAt", "desc"),
+        startAfter(cursorDoc),
+        limit(ORDERS_PER_PAGE)
+      );
+    } else {
+      throw new Error("Cursor document not found");
+    }
+  } else {
+    q = query(collectionRef, orderBy("createdAt", "desc"), limit(ORDERS_PER_PAGE));
+  }
+
+  const snapshot = await getDocs(q);
+
+  const orders: orderMasterDataT[] = snapshot.docs.map((doc) => {
+    const data = doc.data();
+    const date = data.createdAt?.toDate?.();
+    const formattedDate = date?.toLocaleString("en-GB", {
+      year: "numeric",
+      month: "long",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+
+    return {
+      id: doc.id,
+      customerName: data.customerName || "",
+      email: data.email || "",
+      paymentType: data.paymentType || "",
+      status: data.status || "",
+      time: formattedDate || "",
+      couponCode: data.couponCode || "",
+      userId: data.userId || "",
+      addressId: data.addressId || "",
+      endTotalG: data.endTotalG || 0,
+      itemTotal: data.itemTotal || 0,
+      totalDiscountG: data.totalDiscountG || 0,
+      flatDiscount: data.flatDiscount || 0,
+      srno: data.srno || 0,
+      timeId: data.timeId || "",
+      deliveryCost: data.deliveryCost || 0,
+      calculatedPickUpDiscountL: data.calculatedPickUpDiscountL || 0,
+      calCouponDiscount: data.calCouponDiscount || 0,
+      couponDiscountPercentL: data.couponDiscountPercentL || 0,
+      pickUpDiscountPercentL: data.pickUpDiscountPercentL || 0,
+      createdAt: data.createdAt,
+    } as orderMasterDataT;
+  });
+
+  return {
+    orders,
+    firstDocId: snapshot.docs[0]?.id || null,
+    lastDocId: snapshot.docs[snapshot.docs.length - 1]?.id || null,
+  };
+}
+
+
+
+
+
 
 
 export async function deleteOrderMasterRec(id: string) {
