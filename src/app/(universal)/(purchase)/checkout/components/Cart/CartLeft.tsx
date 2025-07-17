@@ -11,11 +11,11 @@ import { cartProductType, orderDataType } from "@/lib/types/cartDataType";
 import { createNewOrder } from "@/app/(universal)/action/orders/dbOperations";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-import { useLanguage } from '@/store/LanguageContext';
-import { formatCurrencyNumber } from '@/utils/formatCurrency';
+import { useLanguage } from "@/store/LanguageContext";
+import { formatCurrencyNumber } from "@/utils/formatCurrency";
 
 export default function CartLeft() {
-    const { TEXT } = useLanguage();
+  const { TEXT } = useLanguage();
   const {
     couponDisc,
     deliveryDis,
@@ -85,12 +85,11 @@ export default function CartLeft() {
 
     const roundedTotal = parseFloat(total.toFixed(2));
     setitemTotal(roundedTotal);
-    
 
-  const roundedTotalCU = formatCurrencyNumber(
+    const roundedTotalCU = formatCurrencyNumber(
       roundedTotal ?? 0,
-      (settings.currency || 'EUR') as string,
-      (settings.locale || 'de-DE') as string
+      (settings.currency || "EUR") as string,
+      (settings.locale || "de-DE") as string
     );
 
     //setitemTotalComa(roundedTotal.toFixed(2).replace(".", ","));
@@ -153,7 +152,7 @@ export default function CartLeft() {
 
   useEffect(() => {
     if (itemTotal <= 0) return;
-   // console.log("applyDelivery, applyPickup-------", couponDisc?.applyDelivery,couponDisc?.applyPickup)
+    // console.log("applyDelivery, applyPickup-------", couponDisc?.applyDelivery,couponDisc?.applyPickup)
 
     if (deliveryType === "pickup" && !couponDisc?.applyPickup) {
       setCalCouponDisscount(0);
@@ -182,7 +181,6 @@ export default function CartLeft() {
           setcouponDiscountPercentL(
             parseFloat(((price / itemTotal) * 100).toFixed(2))
           );
-     
         } else {
           const percent = +couponDisc.discount;
           const totalDis = parseFloat(((itemTotal * percent) / 100).toFixed(2));
@@ -216,10 +214,10 @@ export default function CartLeft() {
 
     setDeliveryCost(deliveryCost);
 
-     const netPayCU = formatCurrencyNumber(
+    const netPayCU = formatCurrencyNumber(
       Number(netPay) ?? 0,
-      (settings.currency || 'EUR') as string,
-      (settings.locale || 'de-DE') as string
+      (settings.currency || "EUR") as string,
+      (settings.locale || "de-DE") as string
     );
 
     setEndTotalComma(netPayCU);
@@ -279,17 +277,52 @@ export default function CartLeft() {
         return;
       }
 
-      if (deliveryType === "delivery" && deliveryDis === undefined) {
+      // if (
+      //   deliveryType === "delivery" &&
+      //   (!deliveryDis || deliveryDis.price === undefined)
+      // ) {
+      //   canCompleteOrder = true;
+
+      //   if (deliveryDis && !isNaN(Number(deliveryDis.price))) {
+      //     const cost = Number(deliveryDis.price);
+      //     setdeliveryCostL(cost);
+      //   }
+
+      //   if (!allReadyAlerted) {
+      //     toast.error(
+      //       "Wir können nicht an diese Adresse liefern. Bitte wählen Sie Abholung."
+      //     );
+      //     allReadyAlerted = true;
+      //   }
+
+      //   return;
+      // }
+
+      if (
+        deliveryType === "delivery" &&
+        (!deliveryDis || deliveryDis.price === undefined)
+      ) {
         canCompleteOrder = true;
+
         if (!allReadyAlerted) {
           toast.error(
             "Wir können nicht an diese Adresse liefern. Bitte wählen Sie Abholung."
           );
-          //We cannot deliver to this address. Please select pickup.
           allReadyAlerted = true;
         }
+
         return;
       }
+
+      // if (deliveryType === "delivery" && deliveryDis?.price !== undefined) {
+      //   const cost = Number(deliveryDis.price);
+      //   if (!isNaN(cost)) {
+      //     setdeliveryCostL(cost);
+      //   } else {
+      //     console.warn("Delivery price is invalid", deliveryDis.price);
+      //     setdeliveryCostL(0); // Safe fallback
+      //   }
+      // }
 
       if (couponDisc?.minSpend && itemTotal < couponDisc.minSpend) {
         canCompleteOrder = true;
@@ -333,6 +366,22 @@ export default function CartLeft() {
         localStorage.getItem("customer_email") || ""
       );
       const couponCode = "KJKKS"; // couponDisc?.code?.trim() ? couponDisc.code : "NA";
+
+      if (typeof deliveryCost !== "number" || Number.isNaN(deliveryCost)) {
+        toast.error(
+          "Unexpected error calculating order total. Please refresh or try again."
+        );
+
+        return;
+      }
+
+      if (typeof endTotalG !== "number" || Number.isNaN(endTotalG)) {
+        toast.error(
+          "Unexpected error calculating order total. Please refresh or try again."
+        );
+
+        return;
+      }
 
       const purchaseData = {
         userId: order_user_Id,
@@ -382,163 +431,164 @@ export default function CartLeft() {
     }
   }
 
-return ( 
-  <div className="flex flex-col gap-4 w-full ">
-    <div className="flex flex-col bg-slate-50 p-5 h-full w-full gap-7 rounded-2xl">
-      <div className="flex flex-col gap-2 items-center">
-        <h2 className="text-xl font-semibold border-b border-slate-200 py-3 w-full uppercase">
-          {TEXT.cart_heading}
-        </h2>
+  return (
+    <div className="flex flex-col gap-4 w-full ">
+      <div className="flex flex-col bg-slate-50 p-5 h-full w-full gap-7 rounded-2xl">
+        <div className="flex flex-col gap-2 items-center">
+          <h2 className="text-xl font-semibold border-b border-slate-200 py-3 w-full uppercase">
+            {TEXT.cart_heading}
+          </h2>
 
-        <div className="font-semibold border-b border-slate-200 py-3 w-full flex flex-col justify-between gap-4">
-          <div className="w-fit">
-            <button
-              onClick={() => setAddCoupon(!addCoupon)}
-              className="flex gap-2 items-center text-sm text-slate-600 bg-green-200 rounded-2xl px-3 font-semibold py-1 w-full text-left "
-            >
-              <span>{TEXT.add_coupon_button}</span>
-              <span>
-                <FaChevronDown />
-              </span>
-            </button>
+          <div className="font-semibold border-b border-slate-200 py-3 w-full flex flex-col justify-between gap-4">
+            <div className="w-fit">
+              <button
+                onClick={() => setAddCoupon(!addCoupon)}
+                className="flex gap-2 items-center text-sm text-slate-600 bg-green-200 rounded-2xl px-3 font-semibold py-1 w-full text-left "
+              >
+                <span>{TEXT.add_coupon_button}</span>
+                <span>
+                  <FaChevronDown />
+                </span>
+              </button>
+            </div>
+
+            {addCoupon && (
+              <>
+                <CouponDiscForm />
+              </>
+            )}
           </div>
 
-          {addCoupon && (
-            <>
-              <CouponDiscForm />
-            </>
+          <div className="font-semibold border-b border-slate-200 py-3 w-full flex justify-between">
+            <div className="text-sm font-semibold py-3 w-full text-left">
+              {TEXT.subtotal_label}
+            </div>
+            <div className="flex gap-1">
+              {itemTotalComa && <span> </span>} <span>{itemTotalComa}</span>
+            </div>
+          </div>
+
+          <div className="font-semibold border-b border-slate-200 py-3 w-full flex  justify-start gap-4">
+            <div className="flex flex-col gap-2">
+              <div className="h-5 flex justify-center">
+                {deliveryType === "pickup" && (
+                  <FaCheck className="text-green-300 " size={24} />
+                )}
+              </div>
+              <div className="w-fit">
+                <button
+                  disabled={disablePickUpBtn}
+                  onClick={() => chageDeliveryType("pickup")}
+                  className="flex gap-2  items-center text-sm text-slate-600 bg-green-200 border border-slate-200 rounded-2xl px-3 font-semibold py-1 w-full text-left "
+                >
+                  <span>{TEXT.pickup_button}</span>
+                </button>
+              </div>
+            </div>
+            <div className="flex flex-col gap-2">
+              <div className="h-5 flex justify-center">
+                {deliveryType === "delivery" && (
+                  <FaCheck className="text-green-300 " size={24} />
+                )}
+              </div>
+
+              <div className="w-fit">
+                <button
+                  disabled={disableDeliveryBtn}
+                  onClick={() => chageDeliveryType("delivery")}
+                  className="flex gap-2 items-center text-sm text-slate-600 bg-green-200 border border-slate-50 rounded-2xl px-3 font-semibold py-1 w-full text-left "
+                >
+                  <span>{TEXT.delivery_button}</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <DeliveryCost />
+
+          <Pickup
+            pickupDiscountPersent={pickUpDiscountPercentL}
+            calculatedPickUpDiscount={calculatedPickUpDiscountL}
+          />
+
+          {onlyItemsWithDisabledCouponCode &&
+            flatCouponDiscount + calCouponDiscount !== 0 && (
+              <CouponDisc total={itemTotal} />
+            )}
+
+          <div className="font-semibold border-b border-slate-200 py-3 w-full flex justify-between items-center">
+            <div className="text-md font-semibold py-3 w-full text-left">
+              {TEXT.total_label}
+            </div>
+            <div className="flex gap-1">
+              {endTotalComma && <span></span>} <span>{endTotalComma}</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <div className="flex items-center space-x-2 text-sm text-gray-700">
+            <input
+              id="noOffersCheckbox"
+              type="checkbox"
+              checked={noOffers}
+              onChange={(e) => {
+                const checked = e.target.checked;
+                setNoOffers(checked);
+                setShowAlert(checked);
+              }}
+              className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+            />
+            <label htmlFor="noOffersCheckbox">{TEXT.no_offers_checkbox}</label>
+          </div>
+
+          {showAlert && (
+            <div className="bg-yellow-100 text-yellow-800 p-3 rounded-md text-sm border border-yellow-300">
+              <p>{TEXT.no_offers_alert_line1}</p>
+              <p className="mt-1">{TEXT.no_offers_alert_line2}</p>
+            </div>
           )}
         </div>
 
-        <div className="font-semibold border-b border-slate-200 py-3 w-full flex justify-between">
-          <div className="text-sm font-semibold py-3 w-full text-left">
-            {TEXT.subtotal_label}
-          </div>
-          <div className="flex gap-1">
-            {itemTotalComa && <span> </span>} <span>{itemTotalComa}</span>
-          </div>
-        </div>
-
-        <div className="font-semibold border-b border-slate-200 py-3 w-full flex  justify-start gap-4">
-          <div className="flex flex-col gap-2">
-            <div className="h-5 flex justify-center">
-              {deliveryType === "pickup" && (
-                <FaCheck className="text-green-300 " size={24} />
-              )}
-            </div>
-            <div className="w-fit">
-              <button
-                disabled={disablePickUpBtn}
-                onClick={() => chageDeliveryType("pickup")}
-                className="flex gap-2  items-center text-sm text-slate-600 bg-green-200 border border-slate-200 rounded-2xl px-3 font-semibold py-1 w-full text-left "
-              >
-                <span>{TEXT.pickup_button}</span>
-              </button>
-            </div>
-          </div>
-          <div className="flex flex-col gap-2">
-            <div className="h-5 flex justify-center">
-              {deliveryType === "delivery" && (
-                <FaCheck className="text-green-300 " size={24} />
-              )}
-            </div>
-
-            <div className="w-fit">
-              <button
-                disabled={disableDeliveryBtn}
-                onClick={() => chageDeliveryType("delivery")}
-                className="flex gap-2 items-center text-sm text-slate-600 bg-green-200 border border-slate-50 rounded-2xl px-3 font-semibold py-1 w-full text-left "
-              >
-                <span>{TEXT.delivery_button}</span>
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <DeliveryCost />
-
-        <Pickup
-          pickupDiscountPersent={pickUpDiscountPercentL}
-          calculatedPickUpDiscount={calculatedPickUpDiscountL}
-        />
-
-        {onlyItemsWithDisabledCouponCode && (flatCouponDiscount+calCouponDiscount) !== 0 && <CouponDisc total={itemTotal} />}
-
-        <div className="font-semibold border-b border-slate-200 py-3 w-full flex justify-between items-center">
-          <div className="text-md font-semibold py-3 w-full text-left">
-            {TEXT.total_label}
-          </div>
-          <div className="flex gap-1">
-            {endTotalComma && <span></span>} <span>{endTotalComma}</span>
-          </div>
-        </div>
+        <button
+          onClick={proceedToOrder}
+          disabled={isLoading}
+          className="w-full px-4 py-2 font-bold rounded-xl text-[1.2rem] bg-amber-400 text-blue-900 hover:bg-amber-500 disabled:opacity-50 flex items-center justify-center gap-2"
+        >
+          {isLoading && (
+            <svg
+              className="animate-spin h-5 w-5 text-white"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle
+                className="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                strokeWidth="4"
+              ></circle>
+              <path
+                className="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8v8H4z"
+              ></path>
+            </svg>
+          )}
+          {isLoading ? (
+            TEXT.placing_order_text
+          ) : (
+            <>
+              {TEXT.place_order_button}
+              <span className="text-sky-500">{TEXT.order_button_suffix}</span>
+            </>
+          )}
+        </button>
       </div>
-
-      <div className="flex flex-col gap-2">
-        <div className="flex items-center space-x-2 text-sm text-gray-700">
-          <input
-            id="noOffersCheckbox"
-            type="checkbox"
-            checked={noOffers}
-            onChange={(e) => {
-              const checked = e.target.checked;
-              setNoOffers(checked);
-              setShowAlert(checked);
-            }}
-            className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-          />
-          <label htmlFor="noOffersCheckbox">
-            {TEXT.no_offers_checkbox}
-          </label>
-        </div>
-
-        {showAlert && (
-          <div className="bg-yellow-100 text-yellow-800 p-3 rounded-md text-sm border border-yellow-300">
-            <p>{TEXT.no_offers_alert_line1}</p>
-            <p className="mt-1">{TEXT.no_offers_alert_line2}</p>
-          </div>
-        )}
-      </div>
-
-      <button
-        onClick={proceedToOrder}
-        disabled={isLoading}
-        className="w-full px-4 py-2 font-bold rounded-xl text-[1.2rem] bg-amber-400 text-blue-900 hover:bg-amber-500 disabled:opacity-50 flex items-center justify-center gap-2"
-      >
-        {isLoading && (
-          <svg
-            className="animate-spin h-5 w-5 text-white"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-          >
-            <circle
-              className="opacity-25"
-              cx="12"
-              cy="12"
-              r="10"
-              stroke="currentColor"
-              strokeWidth="4"
-            ></circle>
-            <path
-              className="opacity-75"
-              fill="currentColor"
-              d="M4 12a8 8 0 018-8v8H4z"
-            ></path>
-          </svg>
-        )}
-        {isLoading ? (
-          TEXT.placing_order_text
-        ) : (
-          <>
-            {TEXT.place_order_button}<span className="text-sky-500">{TEXT.order_button_suffix}</span>
-          </>
-        )}
-      </button>
     </div>
-  </div>
-);
-
+  );
 
   // return (
   //   <div className="flex flex-col gap-4 w-full ">
