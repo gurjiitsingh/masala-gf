@@ -95,6 +95,17 @@ export const TEXT = {
    order_complete_heading: "ਤੁਹਾਡਾ ਆਰਡਰ ਪੂਰਾ ਹੋ ਗਿਆ ਹੈ",
   pickup_time: "ਪਿਕਅੱਪ: 20–25 ਮਿੰਟ",
   delivery_time: "ਡਿਲੀਵਰੀ ਸਮਾਂ: 40–55 ਮਿੰਟ",
+
+   // toast error message
+error_select_payment_type: "ਭੁਗਤਾਨ ਦੀ ਕਿਸਮ ਚੁਣੋ",
+    error_select_address: "ਪਤਾ ਚੁਣੋ",
+    error_address_not_deliverable: "ਅਸੀਂ ਇਸ ਪਤੇ ਤੇ ਡਿਲੀਵਰੀ ਨਹੀਂ ਕਰ ਸਕਦੇ। ਕਿਰਪਾ ਕਰਕੇ ਪਿਕਅਪ ਚੁਣੋ।",
+    error_min_purchase_coupon: "ਛੂਟ ਪ੍ਰਾਪਤ ਕਰਨ ਲਈ ਘੱਟੋ ਘੱਟ ਖਰੀਦ ਰਕਮ ਹੈ",
+    error_min_purchase_suffix: ", ਕੂਪਨ ਹਟਾਓ ਜਾਂ ਕਾਰਟ ਵਿੱਚ ਹੋਰ ਆਈਟਮ ਸ਼ਾਮਲ ਕਰੋ",
+    error_min_order_delivery: "ਡਿਲੀਵਰੀ ਲਈ ਘੱਟੋ ਘੱਟ ਆਰਡਰ ਰਕਮ ਹੈ",
+    error_unexpected_total: "ਆਰਡਰ ਦਾ ਕੁੱਲ ਗਿਣਣ ਵਿੱਚ ਅਣਅਪੇक्षित ਗਲਤੀ। ਕਿਰਪਾ ਕਰਕੇ ਰੀਫ੍ਰੈਸ਼ ਕਰੋ ਜਾਂ ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ।",
+    error_empty_cart: "ਕਾਰਟ ਖਾਲੀ ਹੈ, ਕੁਝ ਖਾਣ ਪਦਾਰਥ ਸ਼ਾਮਲ ਕਰੋ",
+
  
 };
 

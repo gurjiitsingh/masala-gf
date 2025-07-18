@@ -40,14 +40,9 @@ const ListView = ({ title }: { title?: string }) => {
         allProds.sort((a, b) => a.sortOrder - b.sortOrder);
         setAllProducts(allProds);
 
-        // If productId is provided in URL, filter only that
         if (productIdFromQuery) {
           const matched = allProds.find((p) => p.id === productIdFromQuery);
-          if (matched) {
-            setProductData([matched]);
-          } else {
-            setProductData([]); // Not found
-          }
+          setProductData(matched ? [matched] : []);
         } else {
           setProductData(allProds);
         }
@@ -120,7 +115,7 @@ const ListView = ({ title }: { title?: string }) => {
       <h3 className="text-2xl mb-4 font-semibold">{title || "Products"}</h3>
       <div className="bg-slate-50 rounded-lg p-1">
         <Table>
-          <TableHeader>
+          <TableHeader className="bg-gray-100 dark:bg-zinc-800">
             <TableRow>
               <TableHead className="hidden md:table-cell">Image</TableHead>
               <TableHead className="hidden md:table-cell">Name</TableHead>

@@ -1,8 +1,16 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { getReservations } from '../../action/reservations/dbOperations';
-
+import {
+  Table,
+  TableBody,
+  TableHead,
+  TableHeader,
+  TableRow,
+  TableCell,
+} from '@/components/ui/table';
+import { getReservations, deleteReservation } from '@/app/(universal)/action/reservations/dbOperations';
+import { MdDeleteForever } from 'react-icons/md';
 
 interface Reservation {
   id: string;
@@ -17,95 +25,120 @@ interface Reservation {
   createdAt: string;
 }
 
+const RESERVATIONS_PER_PAGE = 10;
+
 export default function ReservationListPage() {
   const [reservations, setReservations] = useState<Reservation[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+
+  const fetchData = async () => {
+    setLoading(true);
+    const data = await getReservations();
+    setReservations(data);
+    setLoading(false);
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      const data = await getReservations();
-      setReservations(data);
-      setLoading(false);
-    };
-
     fetchData();
   }, []);
 
-  const totalPages = Math.ceil(reservations.length / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const currentData = reservations.slice(startIndex, startIndex + itemsPerPage);
+  const handleDelete = async (id: string) => {
+    if (confirm('Do you want to delete this reservation?')) {
+      await deleteReservation(id);
+      fetchData();
+    }
+  };
+
+  const totalPages = Math.ceil(reservations.length / RESERVATIONS_PER_PAGE);
+  const startIndex = (currentPage - 1) * RESERVATIONS_PER_PAGE;
+  const currentData = reservations.slice(startIndex, startIndex + RESERVATIONS_PER_PAGE);
 
   return (
-    <div className="max-w-7xl mx-auto p-6">
-      <h1 className="text-2xl font-bold text-indigo-700 mb-4">
-        📝 All Reservations ({reservations.length})
-      </h1>
+    <div className="mt-4">
+      <div className="overflow-x-auto bg-white dark:bg-zinc-900 shadow rounded-xl border border-gray-200 dark:border-zinc-700">
+        <Table className="min-w-[1000px] text-sm text-left text-gray-700 dark:text-zinc-200">
+          <TableHeader className="bg-gray-100 dark:bg-zinc-800">
+            <TableRow>
+              <TableHead>#</TableHead>
+              <TableHead>Name</TableHead>
+              <TableHead>Email</TableHead>
+              <TableHead>Phone</TableHead>
+              <TableHead>Date</TableHead>
+              <TableHead>Time</TableHead>
+              <TableHead>Guests</TableHead>
+              <TableHead>Message</TableHead>
+              <TableHead>Created</TableHead>
+              <TableHead>Action</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {loading ? (
+              <TableRow>
+                <TableCell colSpan={10} className="text-center py-4">
+                  Loading...
+                </TableCell>
+              </TableRow>
+            ) : currentData.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={10} className="text-center py-4">
+                  No reservations found.
+                </TableCell>
+              </TableRow>
+            ) : (
+              currentData.map((rsv, i) => (
+                <TableRow
+                  key={rsv.id}
+                  className="hover:bg-amber-50 dark:hover:bg-zinc-700 transition duration-200"
+                >
+                  <TableCell>{startIndex + i + 1}</TableCell>
+                  <TableCell>{rsv.firstName} {rsv.lastName}</TableCell>
+                  <TableCell>{rsv.email}</TableCell>
+                  <TableCell>{rsv.phone}</TableCell>
+                  <TableCell>{rsv.reservationDate}</TableCell>
+                  <TableCell>{rsv.reservationTime}</TableCell>
+                  <TableCell>{rsv.numberOfPersons}</TableCell>
+                  <TableCell>{rsv.message}</TableCell>
+                  <TableCell className="text-gray-500 dark:text-gray-400">
+                    {new Date(rsv.createdAt).toLocaleString('de-DE', {
+                      dateStyle: 'medium',
+                      timeStyle: 'short',
+                    })}
+                  </TableCell>
+                  <TableCell>
+                    <button
+                      onClick={() => handleDelete(rsv.id)}
+                      className="p-2 rounded-full bg-red-600 hover:bg-red-700 transition"
+                      aria-label="Delete Reservation"
+                    >
+                      <MdDeleteForever size={18} className="text-white" />
+                    </button>
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
+          </TableBody>
+        </Table>
+      </div>
 
-      {loading ? (
-        <p className="text-gray-600">Loading...</p>
-      ) : currentData.length === 0 ? (
-        <p className="text-gray-500">No reservations found.</p>
-      ) : (
-        <>
-          <div className="overflow-x-auto border rounded shadow-sm mb-4">
-            <table className="w-full border text-sm text-left">
-              <thead className="bg-indigo-100 text-indigo-700">
-                <tr>
-                  <th className="py-2 px-3 border">#</th>
-                  <th className="py-2 px-3 border">Name</th>
-                  <th className="py-2 px-3 border">Email</th>
-                  <th className="py-2 px-3 border">Phone</th>
-                  <th className="py-2 px-3 border">Date</th>
-                  <th className="py-2 px-3 border">Time</th>
-                  <th className="py-2 px-3 border">Guests</th>
-                  <th className="py-2 px-3 border">Message</th>
-                  <th className="py-2 px-3 border">Created At</th>
-                </tr>
-              </thead>
-              <tbody>
-                {currentData.map((rsv, index) => (
-                  <tr key={rsv.id} className="hover:bg-indigo-50">
-                    <td className="py-2 px-3 border">{startIndex + index + 1}</td>
-                    <td className="py-2 px-3 border">{rsv.firstName} {rsv.lastName}</td>
-                    <td className="py-2 px-3 border">{rsv.email}</td>
-                    <td className="py-2 px-3 border">{rsv.phone}</td>
-                    <td className="py-2 px-3 border">{rsv.reservationDate}</td>
-                    <td className="py-2 px-3 border">{rsv.reservationTime}</td>
-                    <td className="py-2 px-3 border">{rsv.numberOfPersons}</td>
-                    <td className="py-2 px-3 border">{rsv.message}</td>
-                    <td className="py-2 px-3 border text-gray-500">
-                      {new Date(rsv.createdAt).toLocaleString('de-DE', {
-                        dateStyle: 'medium',
-                        timeStyle: 'short',
-                      })}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+      {/* Pagination */}
+      <div className="flex justify-between mt-4">
+        <button
+          onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
+          disabled={currentPage === 1}
+          className="px-4 py-2 rounded bg-gray-200 hover:bg-gray-300 dark:bg-zinc-800 dark:hover:bg-zinc-700 disabled:opacity-50"
+        >
+          ⬅️ Newer
+        </button>
 
-          {/* Pagination Controls */}
-          <div className="flex justify-center gap-2">
-            {Array.from({ length: totalPages }, (_, i) => (
-              <button
-                key={i + 1}
-                onClick={() => setCurrentPage(i + 1)}
-                className={`px-3 py-1 border rounded ${
-                  currentPage === i + 1
-                    ? 'bg-indigo-600 text-white'
-                    : 'bg-white text-indigo-600 hover:bg-indigo-100'
-                }`}
-              >
-                {i + 1}
-              </button>
-            ))}
-          </div>
-        </>
-      )}
+        <button
+          onClick={() => setCurrentPage((prev) => prev + 1)}
+          disabled={startIndex + RESERVATIONS_PER_PAGE >= reservations.length}
+          className="px-4 py-2 rounded bg-gray-200 hover:bg-gray-300 dark:bg-zinc-800 dark:hover:bg-zinc-700 disabled:opacity-50"
+        >
+          Older ➡️
+        </button>
+      </div>
     </div>
   );
 }

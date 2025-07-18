@@ -266,13 +266,14 @@ export default function CartLeft() {
 
       if (paymentType === "" || paymentType === undefined) {
         canCompleteOrder = true;
-        toast.error("Select Payment type");
+       toast.error(TEXT.error_select_payment_type);
+
         allReadyAlerted = true;
         return;
       }
 
       if (!customerAddressIsComplete) {
-        toast.error("Select Address");
+        toast.error(TEXT.error_select_address);
         allReadyAlerted = true;
         return;
       }
@@ -305,9 +306,7 @@ export default function CartLeft() {
         canCompleteOrder = true;
 
         if (!allReadyAlerted) {
-          toast.error(
-            "Wir können nicht an diese Adresse liefern. Bitte wählen Sie Abholung."
-          );
+         toast.error(TEXT.error_address_not_deliverable);
           allReadyAlerted = true;
         }
 
@@ -327,9 +326,8 @@ export default function CartLeft() {
       if (couponDisc?.minSpend && itemTotal < couponDisc.minSpend) {
         canCompleteOrder = true;
         if (!allReadyAlerted) {
-          toast.error(
-            `Minimun purchase amount to get discount is € ${couponDisc?.minSpend} , Remove coupon or add more item to cart`
-          );
+          toast.error(`${TEXT.error_min_purchase_coupon} : ${couponDisc?.minSpend} ${TEXT.error_min_purchase_suffix}`);
+
           allReadyAlerted = true;
         }
         return;
@@ -338,9 +336,8 @@ export default function CartLeft() {
       if (orderAmountIsLowForDelivery && deliveryType !== "pickup") {
         canCompleteOrder = true;
         if (!allReadyAlerted) {
-          toast.error(
-            `Minimum order amount for delivery is € ${deliveryDis?.minSpend}`
-          );
+          toast.error(`${TEXT.error_min_order_delivery} € ${deliveryDis?.minSpend}`);
+
           allReadyAlerted = true;
         }
         return;
@@ -368,17 +365,13 @@ export default function CartLeft() {
       const couponCode = "KJKKS"; // couponDisc?.code?.trim() ? couponDisc.code : "NA";
 
       if (typeof deliveryCost !== "number" || Number.isNaN(deliveryCost)) {
-        toast.error(
-          "Unexpected error calculating order total. Please refresh or try again."
-        );
+       toast.error(TEXT.error_unexpected_total);
 
         return;
       }
 
       if (typeof endTotalG !== "number" || Number.isNaN(endTotalG)) {
-        toast.error(
-          "Unexpected error calculating order total. Please refresh or try again."
-        );
+        toast.error(TEXT.error_unexpected_total);
 
         return;
       }
@@ -421,7 +414,8 @@ export default function CartLeft() {
           );
         }
       } else {
-        toast.error(`Cart is empty, add some foods`);
+       toast.error(TEXT.error_empty_cart);
+
       }
     } catch (error) {
       console.error("Order submission error:", error);

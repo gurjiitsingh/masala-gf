@@ -15,21 +15,17 @@ import { formatCurrencyNumber } from '@/utils/formatCurrency';
 import { UseSiteContext } from "@/SiteContext/SiteContext";
 
 function TableRows({ product }: { product: ProductType }) {
+  const { settings } = UseSiteContext();
 
-    const { settings } = UseSiteContext();
-  
-    //const price = product.price.toString().replace (/\./g, ",");
-    const price = formatCurrencyNumber(
-      Number(product.price) ?? 0,
-      (settings.currency || 'EUR') as string,
-      (settings.locale || 'de-DE') as string
-    );
+  const price = formatCurrencyNumber(
+    Number(product.price) ?? 0,
+    (settings.currency || 'EUR') as string,
+    (settings.locale || 'de-DE') as string
+  );
 
-  
   let discountedPrice = "";
   if (product.discountPrice !== undefined) {
-    //discountedPrice = product.discountPrice.toString().replace (/\./g, ",");
-       discountedPrice = formatCurrencyNumber(
+    discountedPrice = formatCurrencyNumber(
       Number(product.discountPrice) ?? 0,
       (settings.currency || 'EUR') as string,
       (settings.locale || 'de-DE') as string
@@ -65,12 +61,12 @@ function TableRows({ product }: { product: ProductType }) {
   }
 
   return (
-    <TableRow key={product.id} className="bg-slate-50 rounded-lg">
+    <TableRow key={product.id} className="whitespace-nowrap hover:bg-green-50 dark:hover:bg-zinc-800 transition rounded-xl">
       <TableCell>
         <div className="px-3 py-1 text-center min-w-[100px]">
           {product.image && (
             <Image
-              className="h-12 w-12 object-cover rounded-md border p-1"
+              className="h-12 w-12 object-cover rounded-md"
               src={product.image}
               width={100}
               height={100}
@@ -87,7 +83,6 @@ function TableRows({ product }: { product: ProductType }) {
       <TableCell>{price}</TableCell>
       <TableCell>{discountedPrice}</TableCell>
 
-      {/* ✅ Status column directly after discount price */}
       <TableCell>
         <span
           className={`text-xs px-2 py-1 rounded-full capitalize font-semibold ${
@@ -112,7 +107,6 @@ function TableRows({ product }: { product: ProductType }) {
 
       <TableCell>
         <div className="flex gap-3">
-        
           <Link
             href={{
               pathname: "/admin/productsbase/editform",
@@ -124,7 +118,7 @@ function TableRows({ product }: { product: ProductType }) {
             </Button>
           </Link>
 
-            <Link
+          <Link
             href={{
               pathname: "/admin/productsaddon",
               query: { id: product.id },
@@ -134,7 +128,6 @@ function TableRows({ product }: { product: ProductType }) {
               Variants
             </Button>
           </Link>
-
 
           <Button
             onClick={() => handleDelete(product)}

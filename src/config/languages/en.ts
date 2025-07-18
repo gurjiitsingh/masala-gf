@@ -105,6 +105,16 @@ export const TEXT = {
   pickup_time: "Pickup: 20–25 minutes",
   delivery_time: "Delivery time: 40–55 minutes",
 
+  // toast error message
+  error_select_payment_type: "Select payment type",
+  error_select_address: "Select address",
+  error_address_not_deliverable: "We cannot deliver to this address. Please choose pickup.",
+  error_min_purchase_coupon: "Minimum purchase amount to get the discount is",
+  error_min_purchase_suffix: ", remove the coupon or add more items to the cart",
+  error_min_order_delivery: "Minimum order amount for delivery is",
+  error_unexpected_total: "Unexpected error calculating order total. Please refresh or try again.",
+  error_empty_cart: "The cart is empty, please add some items",
+
 };
 
 export const SEO = {

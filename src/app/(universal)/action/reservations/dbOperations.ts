@@ -1,6 +1,6 @@
 // src/actions/reservationsActions.ts
 import { db } from '@/lib/firebaseConfig';
-import { collection, getDocs, query, orderBy } from 'firebase/firestore';
+import { collection, getDocs, query, orderBy, doc, deleteDoc } from 'firebase/firestore';
 
 export interface Reservation {
   id: string;
@@ -32,4 +32,10 @@ export async function getReservations(): Promise<Reservation[]> {
       createdAt: data.createdAt || '',
     };
   });
+}
+
+
+export async function deleteReservation(id: string): Promise<void> {
+  const reservationRef = doc(db, 'reservations', id);
+  await deleteDoc(reservationRef);
 }

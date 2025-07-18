@@ -95,6 +95,16 @@ export const TEXT = {
   pickup_time: "À emporter : 20–25 minutes",
   delivery_time: "Délai de livraison : 40–55 minutes",
 
+ // toast error message
+  error_select_payment_type: "Sélectionnez le mode de paiement",
+  error_select_address: "Sélectionnez l'adresse",
+  error_address_not_deliverable: "Nous ne pouvons pas livrer à cette adresse. Veuillez choisir le retrait.",
+  error_min_purchase_coupon: "Le montant minimum d'achat pour obtenir la remise est",
+  error_min_purchase_suffix: ", supprimez le coupon ou ajoutez plus d'articles au panier",
+  error_min_order_delivery: "Le montant minimum de commande pour la livraison est",
+  error_unexpected_total: "Erreur inattendue lors du calcul du total de la commande. Veuillez actualiser ou réessayer.",
+  error_empty_cart: "Le panier est vide, veuillez ajouter des articles",
+
 };
 
 

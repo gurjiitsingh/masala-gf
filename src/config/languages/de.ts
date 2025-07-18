@@ -103,6 +103,18 @@ export const TEXT = {
   pickup_time: "Abholen: 20–25 Minuten",
   delivery_time: "Lieferzeit: 40–55 Minuten",
 shop_more_button_order_complete: "Mehr einkaufen",
+
+//toas errors
+
+  error_select_payment_type: "Zahlungsart auswählen",
+  error_select_address: "Adresse auswählen",
+  error_address_not_deliverable: "Wir können nicht an diese Adresse liefern. Bitte wählen Sie Abholung.",
+  error_min_purchase_coupon: "Mindestbestellwert für den Rabatt ist",
+  error_min_purchase_suffix: ", Gutschein entfernen oder mehr Artikel in den Warenkorb legen",
+  error_min_order_delivery: "Mindestbestellwert für die Lieferung ist",
+  error_unexpected_total: "Unerwarteter Fehler bei der Berechnung des Bestellbetrags. Bitte aktualisieren oder erneut versuchen.",
+  error_empty_cart: "Der Warenkorb ist leer, bitte fügen Sie Lebensmittel hinzu",
+
 };
 
 export const SEO = {

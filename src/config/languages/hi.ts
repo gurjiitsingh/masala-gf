@@ -94,7 +94,16 @@ export const TEXT = {
 order_complete_heading: "आपका ऑर्डर पूरा हो गया है",
   pickup_time: "पिकअप: 20–25 मिनट",
   delivery_time: "डिलीवरी समय: 40–55 मिनट",
- 
+  // toast error message
+
+   error_select_payment_type: "भुगतान का प्रकार चुनें",
+    error_select_address: "पता चुनें",
+    error_address_not_deliverable: "हम इस पते पर डिलीवर नहीं कर सकते। कृपया पिकअप चुनें।",
+    error_min_purchase_coupon: "छूट पाने के लिए न्यूनतम खरीद राशि है",
+    error_min_purchase_suffix: ", कूपन हटाएँ या कार्ट में और आइटम जोड़ें",
+    error_min_order_delivery: "डिलीवरी के लिए न्यूनतम ऑर्डर राशि है",
+    error_unexpected_total: "ऑर्डर का कुल योग निकालने में अप्रत्याशित त्रुटि। कृपया रिफ्रेश करें या पुनः प्रयास करें।",
+    error_empty_cart: "कार्ट खाली है, कुछ खाद्य पदार्थ जोड़ें",
 
 };
 

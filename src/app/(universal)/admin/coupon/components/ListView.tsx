@@ -1,85 +1,63 @@
 "use client";
 
-
-
 import React, { useEffect, useState } from "react";
 import {
   Table,
   TableBody,
-  // TableCell,
   TableHead,
   TableHeader,
   TableRow,
-  // TableCaption,
 } from "@/components/ui/table";
 
 import TableRows from "./TableRows";
-import {  fetchcoupon } from "@/app/(universal)/action/coupon/dbOperation";
+import { fetchcoupon } from "@/app/(universal)/action/coupon/dbOperation";
 import { couponType } from "@/lib/types/couponType";
-//import FeaturcouponUpdate from "./FeaturcouponUpdate";
 
 const ListView = () => {
-
- 
-  //console.log("coupon addon view ----", id)
-  const [couponData, setcouponData] = useState<couponType[]>([]);
-  // var pageNo = 1;
-  // var limit = 10
+  const [couponData, setCouponData] = useState<couponType[]>([]);
 
   useEffect(() => {
-    async function fetchcouponL() {
+    async function fetchCoupons() {
       try {
-          const result = await fetchcoupon();
-       console.log("resutl---------------",result)
-        setcouponData(result);
+        const result = await fetchcoupon();
+        setCouponData(result);
       } catch (error) {
-        console.log(error);
+        console.error("Error fetching coupons:", error);
       }
     }
-    fetchcouponL();
-    
+    fetchCoupons();
   }, []);
 
-
   return (
-    <>
-      <div className="mt-2">
-      <h3 className="text-2xl mb-4 font-semibold">
-        Coupon
-        </h3>
-        <div className="bg-slate-50 rounded-lg p-1">
-          <Table>
-            {/* <TableCaption>coupon List</TableCaption> */}
-            <TableHeader>
-              <TableRow>
-                <TableHead className="hidden md:table-cell">
-                   Code
-                </TableHead>
-                <TableHead className="hidden md:table-cell"> 
-                  Discount
-                </TableHead>
-                {/* <TableHead className="hidden md:table-cell">Image</TableHead> */}
+    <div className="mt-6">
+      <h3 className="text-2xl font-bold text-gray-800 dark:text-white mb-4">
+        Coupon List
+      </h3>
 
-                <TableHead>Min spend</TableHead>
-                {/* <TableHead>Status</TableHead> */}
-               
-                 <TableHead>Expiry</TableHead>
-                 <TableHead>Date</TableHead>
-                <TableHead className=" md:table-cell">Edit</TableHead>
-                 <TableHead>Exclude food</TableHead>
-                <TableHead>Message</TableHead>
-                <TableHead className=" md:table-cell">Delete</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {couponData?.map((coupon) => {
-                return <TableRows key={coupon.id} coupon={coupon} />;
-              })}
-            </TableBody>
-          </Table>
-        </div>
+      <div className="rounded-xl bg-white dark:bg-zinc-800 shadow-sm p-2 overflow-x-auto">
+        <Table>
+          <TableHeader>
+            <TableRow className="bg-gray-100 dark:bg-zinc-800 text-gray-800 dark:text-gray-200">
+              <TableHead className="hidden md:table-cell">Code</TableHead>
+              <TableHead className="hidden md:table-cell">Discount</TableHead>
+              <TableHead>Min Spend</TableHead>
+              <TableHead>Expiry</TableHead>
+              <TableHead>Date</TableHead>
+              <TableHead className="md:table-cell">Edit</TableHead>
+              <TableHead>Exclude Food</TableHead>
+              <TableHead>Message</TableHead>
+              <TableHead className="md:table-cell">Delete</TableHead>
+            </TableRow>
+          </TableHeader>
+
+          <TableBody>
+            {couponData?.map((coupon) => (
+              <TableRows key={coupon.id} coupon={coupon} />
+            ))}
+          </TableBody>
+        </Table>
       </div>
-    </>
+    </div>
   );
 };
 
