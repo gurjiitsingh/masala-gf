@@ -12,6 +12,8 @@ if (!process.env.CLOUDINARY_API_SECRET) {
   throw new Error('CLOUDINARY_API_SECRET is not set');
 }
 
+const folder = process.env.CLOUDINARY_FOLDER || 'masala-food';
+
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
@@ -25,8 +27,9 @@ export async function upload(image) {
   const base64Data = Buffer.from(imageData).toString('base64');
   const fileUri = 'data:' + mime + ';' + encoding + ',' + base64Data;
   const result = await cloudinary.uploader.upload(fileUri, {
-    folder: 'masala-food',
+    folder,
   });
+
   return result.secure_url;
 }
 
