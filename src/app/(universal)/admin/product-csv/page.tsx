@@ -2,7 +2,9 @@
 
 import { useState } from 'react'
 import { ProductType } from '@/lib/types/productType'
-import { fetchAllProducts } from '../../action/productsbase/dbOperation'
+import { fetchAllProducts } from '../../action/products/dbOperation'
+
+
 
 export default function ProductCSVExportPage() {
   const [loading, setLoading] = useState(false)

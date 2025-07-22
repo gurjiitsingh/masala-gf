@@ -15,6 +15,8 @@ const firebaseConfig = {
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID!,
 };
 
+
+
 // Only initialize if not already initialized
 const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
 

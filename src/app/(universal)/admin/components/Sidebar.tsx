@@ -80,7 +80,7 @@ const Sidebar = () => {
         <div className="mt-6 pt-4">
           <button
             onClick={() => signOut()}
-            className="flex items-center gap-3 px-4 py-2 w-full text-sm font-medium rounded-md bg-rose-600 text-white hover:bg-rose-700 transition"
+            className="flex items-center gap-3 px-4 py-2 w-full text-sm font-medium rounded-md bg-amber-600 text-white hover:bg-rose-700 transition"
           >
             <IoIosLogOut size={20} />
             Logout

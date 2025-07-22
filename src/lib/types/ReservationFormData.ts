@@ -14,3 +14,17 @@ export const reservationSchema = z.object({
 
 // Automatically create TypeScript type from schema
 export type ReservationFormDataType = z.infer<typeof reservationSchema>;
+
+
+export interface Reservation {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  message: string;
+  numberOfPersons: string;
+  reservationDate: string;
+  reservationTime: string;
+  createdAt: string;
+}

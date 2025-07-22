@@ -1,245 +1,129 @@
 "use server";
 
-//import { z } from "zod";
-import { deleteImage, upload } from "@/lib/cloudinary";
-import { db } from "@/lib/firebaseConfig";
 
-import {
-  addDoc,
-  collection,
-  deleteDoc,
-  doc,
-  getDoc,
-  getDocs,
-  query,
-  setDoc,
-  where,
-} from "@firebase/firestore"; //doc, getDoc,
-import { deliveryType, newPorductSchema, editPorductSchema, } from "@/lib/types/deliveryType";
+import { adminDb } from "@/lib/firebaseAdmin";
+import { deliveryType, newPorductSchema, editPorductSchema } from "@/lib/types/deliveryType";
+import { formatPriceStringToNumber } from "@/utils/formatters";
 
 
 export async function addNewdelivery(formData: FormData) {
- 
-//   console.log(formData.get("name"));
-//   console.log(formData.get("price"));
-//    console.log(formData.get("minSpend"));
-//    console.log(formData.get("productCat"));
-//   console.log(formData.get("deliveryDesc"));
-//  // console.log(formData.get("image"));
-//   console.log(formData.get("deliveryDistance"));
-const MinSpend = formData.get("minSpend") as string;
-   const receivedData = {
+  const receivedData = {
     name: formData.get("name"),
     price: formData.get("price"),
-    minSpend:  MinSpend,
+    minSpend: formData.get("minSpend"),
     productCat: formData.get("productCat"),
     deliveryDesc: formData.get("deliveryDesc"),
     deliveryDistance: formData.get("deliveryDistance"),
-    //image: formData.get("image"),
-   
   };
 
   const result = newPorductSchema.safeParse(receivedData);
-  console.log("zod result", result);
-  let zodErrors = {};
   if (!result.success) {
-    result.error.issues.forEach((issue) => {
-      zodErrors = { ...zodErrors, [issue.path[0]]: issue.message };
-    });
-
-    return Object.keys(zodErrors).length > 0
-      ? { errors: zodErrors }
-      : { success: true };
+    const zodErrors = Object.fromEntries(
+      result.error.issues.map((issue) => [issue.path[0], issue.message])
+    );
+    return { errors: zodErrors };
   }
 
-  //const image = formData.get("image");
- // let imageUrl;
-  // try {
-  //   imageUrl = await upload(image);
-  //   console.log(imageUrl);
-  // } catch (error) {
-  //  // throw new Error("error");
-  //   console.log(error);
-  //   return { errors: "image cannot uploaded" };
-  // }
-
- // imageUrl = "/public/com.jpg";
-
-  // const name = formData.get("name");
-  // const price = formData.get("price");
-  // const productCat = formData.get("productCat");
-  // const deliveryDesc = formData.get("deliveryDesc");
-  // const featured = formData.get("deliveryDistance");
-  const MinSpendN = parseFloat( MinSpend);
   const data = {
-    name: formData.get("name"),
-    price: formData.get("price"),
-    productCat: formData.get("productCat"),
-    deliveryDesc: formData.get("deliveryDesc"),
-    minSpend: MinSpendN,
-    deliveryDistance: formData.get("deliveryDistance"),
+    name: receivedData.name,
+    price: formatPriceStringToNumber(receivedData.price),
+    productCat: receivedData.productCat,
+    deliveryDesc: receivedData.deliveryDesc,
+    minSpend: formatPriceStringToNumber(receivedData.minSpend),
+    deliveryDistance: receivedData.deliveryDistance,
   };
-  //console.log("data to be saved ---", data)
 
   try {
-    const docRef = await addDoc(collection(db, "delivery"), data);
-    console.log("Document written with ID: ", docRef.id);
-    // Clear the form
-  } catch (e) {
-    console.error("Error adding document: ", e);
+    const docRef = await adminDb.collection("delivery").add(data);
+    console.log("Delivery added with ID:", docRef.id);
+    return { message: "Delivery saved" };
+  } catch (error) {
+    console.error("Error adding delivery:", error);
+    return { errors: "Failed to save delivery" };
   }
-  return { message: "delivery saved" };
-
-} //end of add new delivery
-
-
-
-type rt = {
-  success: string;
- 
-  
-};
-
-export async function deletedelivery(id: string): Promise<rt> {
-  const docRef = doc(db, "delivery", id);
-  await deleteDoc(docRef);
-  return { success: "Delete implimented" };
 }
 
-
+export async function deletedelivery(id: string): Promise<{ success: string }> {
+  await adminDb.collection("delivery").doc(id).delete();
+  return { success: "Delete implemented" };
+}
 
 export async function editdelivery(formData: FormData) {
   const id = formData.get("id") as string;
-  // const image = formData.get("image");
-  // const oldImgageUrl = formData.get("oldImgageUrl") as string;
-  // const featured_img: boolean = false;
-  // featured_img = formData.get("oldImgageUrl");
-
   const receivedData = {
     name: formData.get("name"),
     price: formData.get("price"),
     productCat: formData.get("productCat"),
     deliveryDesc: formData.get("deliveryDesc"),
     minSpend: formData.get("minSpend"),
-   // image: formData.get("image"),
     deliveryDistance: formData.get("deliveryDistance"),
   };
 
   const result = editPorductSchema.safeParse(receivedData);
-
-  let zodErrors = {};
   if (!result.success) {
-    result.error.issues.forEach((issue) => {
-      zodErrors = { ...zodErrors, [issue.path[0]]: issue.message };
-    });
-
-    return Object.keys(zodErrors).length > 0
-      ? { errors: zodErrors }
-      : { success: true };
+    const zodErrors = Object.fromEntries(
+      result.error.issues.map((issue) => [issue.path[0], issue.message])
+    );
+    return { errors: zodErrors };
   }
 
-  // let imageUrl;
-  // if (image === "undefined" || image === null) {
-  //   imageUrl = oldImgageUrl;
-  //   //  console.log("----------------not change image")
-  // } else {
-  //   //  console.log("---------------- change image")
-  //   try {
-  //     imageUrl = (await upload(image)) as string;
-  //     console.log(imageUrl);
-  //   } catch (error) {
-  //     //  throw new Error("error")
-  //     console.log(error);
-  //     return { errors: "image cannot uploaded" };
-  //   }
-  //   const d = false;
-  //   if (d) {
-  //     const imageUrlArray = oldImgageUrl?.split("/");
-  //     console.log("old image url", imageUrlArray);
-  //     const imageName =
-  //       imageUrlArray[imageUrlArray.length - 2] +
-  //       "/" +
-  //       imageUrlArray[imageUrlArray.length - 1];
-
-  //     const image_public_id = imageName.split(".")[0];
-  //     console.log("image_public_id ---", image_public_id);
-  //     try {
-  //       const deleteResult = await deleteImage(image_public_id);
-  //       console.log(deleteResult);
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   }
-  // }
-
-  const deliveryUpdtedData = {
-    name: formData.get("name"),
-    price: formData.get("price"),
-    productCat: formData.get("productCat"),
-    deliveryDesc: formData.get("deliveryDesc"),
-   // image: imageUrl,
-   minSpend: formData.get("minSpend"),
-    deliveryDistance: formData.get("deliveryDistance"),
+  const updateData = {
+    name: receivedData.name,
+    price: formatPriceStringToNumber(receivedData.price),
+    productCat: receivedData.productCat,
+    deliveryDesc: receivedData.deliveryDesc,
+    minSpend: formatPriceStringToNumber(receivedData.minSpend),
+    deliveryDistance: receivedData.deliveryDistance,
   };
-  //console.log("update data ------------", deliveryUpdtedData)
-  // update database
+
   try {
-    const docRef = doc(db, "delivery", id);
-    await setDoc(docRef, deliveryUpdtedData);
+    await adminDb.collection("delivery").doc(id).set(updateData);
+    return { message: "Delivery updated" };
   } catch (error) {
-    console.log("error", error);
-    return { errors: "Cannot update" };
+    console.error("Error updating delivery:", error);
+    return { errors: "Cannot update delivery" };
   }
 }
 
 export async function fetchdelivery(): Promise<deliveryType[]> {
-  // const result = await getDocs(collection(db, "delivery"))
-  // let data = [];
-  // result.forEach((doc) => {
-  //   data.push({id:doc.id, ...doc.data()});
-  // });
-  //  return data;
-
-  const result = await getDocs(collection(db, "delivery"));
-
-  const data = [] as deliveryType[];
-  result.forEach((doc) => {
-    const pData = { id: doc.id, ...doc.data() } as deliveryType;
-    data.push(pData);
-  });
-  return data;
+  const snapshot = await adminDb.collection("delivery").get();
+  return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() } as deliveryType));
 }
 
 export async function fetchdeliveryById(id: string): Promise<deliveryType> {
-  //console.log("--------- id", id)
-  const docRef = doc(db, "delivery", id);
-  const docSnap = await getDoc(docRef);
-  let deliveryData = {} as deliveryType;
-  if (docSnap.exists()) {
-    console.log("Document data:", docSnap.data());
-  } else {
-    //   docSnap.data() //will be undefined in this case
-    console.log("No such document!");
-  }
-  deliveryData = docSnap.data() as deliveryType;
-  return deliveryData;
+  const docSnap = await adminDb.collection("delivery").doc(id).get();
+  if (!docSnap.exists) throw new Error("Delivery not found");
+  return { id: docSnap.id, ...docSnap.data() } as deliveryType;
 }
 
-export async function fetchdeliveryByZip(
-  zipname: string
-): Promise<deliveryType> {
- // console.log("insider delivery action------", zipname)
-  const data = [] as deliveryType[];
-  const q = query(
-    collection(db, "delivery"),
-    where("name", "==", zipname)
-  );
-  const querySnapshot = await getDocs(q);
+export async function fetchdeliveryByZip(zipname: string): Promise<deliveryType> {
+  const querySnapshot = await adminDb.collection("delivery")
+    .where("name", "==", zipname)
+    .get();
 
-  querySnapshot.forEach((doc) => {
-    const datas = doc.data() as deliveryType;
-    data.push(datas);
-  });
-  //console.log("email -------- ", data)
-  return data[0];
+ if (querySnapshot.empty){
+  return querySnapshot.docs[0].data() as deliveryType;
+ } //throw new Error("No delivery data found for the provided zip");
+  return querySnapshot.docs[0].data() as deliveryType;
+ // return { id: querySnapshot.docs[0].id, ...querySnapshot.docs[0].data() } as deliveryType;
 }
+
+
+// export async function fetchdeliveryByZip1(
+//   zipname: string
+// ): Promise<deliveryType> {
+//  // console.log("insider delivery action------", zipname)
+//   const data = [] as deliveryType[];
+//   const q = query(
+//     collection(db, "delivery"),
+//     where("name", "==", zipname)
+//   );
+//   const querySnapshot = await getDocs(q);
+
+//   querySnapshot.forEach((doc) => {
+//     const datas = doc.data() as deliveryType;
+//     data.push(datas);
+//   });
+//   //console.log("email -------- ", data)
+//   return data[0];
+// }

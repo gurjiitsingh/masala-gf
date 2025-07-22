@@ -1,207 +1,92 @@
-'use server'
+'use server';
+
 import { hashPassword } from "@/lib/auth";
-import { db } from "@/lib/firebaseConfig";
-import {   TuserSchem, userType } from "@/lib/types/userType";
+import { adminDb } from "@/lib/firebaseAdmin";
+import { TuserSchem, userType } from "@/lib/types/userType";
+import { FieldValue } from "firebase-admin/firestore";
 
-import { addDoc, collection, deleteDoc, doc, getDocs, query, serverTimestamp, setDoc, where } from "@firebase/firestore";
-
-
-// export async function addUserDirect(formData: FormData) {
-//  const email = formData.get("email") as string;
-// const password = formData.get("password") as string;
-// const firstName = formData.get("firstName") as string;
-// const lastName = formData.get("lastName") as string;
-// let username = (formData.get("username") || undefined) as string | undefined;
-//   //const confirmPassword = formData.get("confirmPassword");
-//   // const recievedData = {
-//   //   email,
-//   //   password,
-//   //   username,
-//   //   confirmPassword,
-//   // };
-
-//   const q = query(collection(db, "user"), where("email", "==", email));
-//   const querySnapshot = await getDocs(q);
-//   let recordId = undefined;
-//   querySnapshot.forEach((doc) => {
-//     recordId = doc.id;
-//     // doc.data() is never undefined for query doc snapshots
-//     //console.log("User allready exist ------", doc.id);
-//     return doc.id;
-//   });
-
-//   if (recordId === undefined) {
-//     // console.log("start adding user -----")
-//     //also add data in user/cutomer table
-//     if (username === undefined) {
-//       username = firstName + " " + lastName;
-//     }
-//     let userDocRef = "" as string;
-
-//     const date = new Date();
-//     // toLocaleString, default format for language de
-//    // console.log(date.toLocaleString('de',{timeZone:'Europe/Berlin', timeZoneName: 'long'}));
-//     // DateTimeFormat.format with specific options
-//     const f = new Intl.DateTimeFormat('de', {
-//       year: 'numeric',
-//       month: 'short',
-//       day: 'numeric',
-//       hour: '2-digit',
-//       hour12: false,
-//       minute: '2-digit',
-//       // timeZone: 'Europe/Berlin',
-//       // timeZoneName: 'short'
-//     });
-//     const time = f.format(date)
-
-//     try {
-//       const hashedPassword = await hashPassword(password);
-//       const newuser = {
-//         username,
-//         firstName,
-//         lastName,
-//         email,
-//         hashedPassword,
-//         role: "user",
-//         isVerified: true,
-//         isAdmin: false,
-//         time,
-//       };
-
-//       userDocRef = (await addDoc(collection(db, "user"), newuser)).id ;
-//       console.log("User added with ID: ", userDocRef);
-//       recordId = userDocRef;
-//       return userDocRef;
-//       // Clear the form
-//     } catch (e) {
-//       console.error("Error adding document: ", e);
-//     }
-//   }
-
-//   return recordId;
-  
-// } // end of add user
-
-
-export async function addUserDirect(formData: FormData) {
+/**
+ * Add a new user if email isn't already in use.
+ * Returns the new or existing user ID.
+ */
+export async function addUserDirect(formData: FormData): Promise<string | undefined> {
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
   const firstName = formData.get("firstName") as string;
   const lastName = formData.get("lastName") as string;
   let username = (formData.get("username") || undefined) as string | undefined;
 
-  const q = query(collection(db, "user"), where("email", "==", email));
-  const querySnapshot = await getDocs(q);
-  let recordId: string | undefined = undefined;
+  const existing = await adminDb
+    .collection("user")
+    .where("email", "==", email)
+    .get();
 
-  querySnapshot.forEach((doc) => {
-    recordId = doc.id;
-    return;
-  });
-
-  if (recordId === undefined) {
-    if (username === undefined) {
-      username = `${firstName} ${lastName}`;
-    }
-
-    try {
-      const hashedPassword = await hashPassword(password);
-
-      const newuser = {
-        username,
-        firstName,
-        lastName,
-        email,
-        hashedPassword,
-        role: "user",
-        isVerified: true,
-        isAdmin: false,
-        time: new Intl.DateTimeFormat("de", {
-          year: "numeric",
-          month: "short",
-          day: "numeric",
-          hour: "2-digit",
-          hour12: false,
-          minute: "2-digit",
-        }).format(new Date()),
-        createdAt: serverTimestamp(), // ✅ Add server timestamp here
-      };
-
-      const userDocRef = await addDoc(collection(db, "user"), newuser);
-      console.log("User added with ID: ", userDocRef.id);
-      return userDocRef.id;
-    } catch (e) {
-      console.error("Error adding document: ", e);
-    }
+  if (!existing.empty) {
+    return existing.docs[0].id;
   }
 
-  return recordId;
+  username ??= `${firstName} ${lastName}`;
+
+  try {
+    const hashedPassword = await hashPassword(password);
+
+    const newUser = {
+      username,
+      firstName,
+      lastName,
+      email,
+      hashedPassword,
+      role: "user",
+      isVerified: true,
+      isAdmin: false,
+      time: new Intl.DateTimeFormat("de", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+        hour: "2-digit",
+        hour12: false,
+        minute: "2-digit",
+      }).format(new Date()),
+      createdAt: FieldValue.serverTimestamp(),
+    };
+
+    const docRef = await adminDb.collection("user").add(newUser);
+    return docRef.id;
+  } catch (e) {
+    console.error("Error adding user:", e);
+    return undefined;
+  }
 }
 
-
+/**
+ * Search a user by userId field (custom key).
+ */
 export async function searchUserById(id: string | undefined): Promise<TuserSchem> {
-  //console.log("searchUserById -----------------", id);
-  // if (id !== undefined) {
-  //   const docRef = doc(db, "user", id);
-  //   const docSnap = await getDoc(docRef);
-  //   if (docSnap.exists()) {
-  //     console.log("Document data inside user by id:", docSnap.data());
-  //   } else {
-  //     // docSnap.data() will be undefined in this case
-  //     console.log("No such document!");
-  //   }
+  let data = {} as TuserSchem;
+  if (id) {
+    const snapshot = await adminDb
+      .collection("user")
+      .where("userId", "==", id)
+      .get();
 
-  //   return docSnap.data();
-  // }else{
-  //   return {};
-  // }
- let data = {} as TuserSchem;
-  if (id !== undefined) {
-    const q = query(collection(db, "user"), where("userId", "==", id));
-    const querySnapshot = await getDocs(q);
-
-    querySnapshot.forEach((doc) => {
-      data = doc.data() as TuserSchem;
-    });
-    return data;
-  }else{
-    return data;
+    if (!snapshot.empty) {
+      data = snapshot.docs[0].data() as TuserSchem;
+    }
   }
-
-
-
-
-
+  return data;
 }
 
-
-
-  // export async function fetchAllUsers(): Promise<userType[]>{
-
-
-  //    const data = [] as userType[];
-  //    const q = query(collection(db, "user"));
-  //    const querySnapshot = await getDocs(q);
-  //    querySnapshot.forEach((doc) => {
-  //    const  userData = {id:doc.id, ...doc.data()} as userType;
-  //    data.push(userData)
-  //    });
-  //    return data;
-  //   }
-  
- 
-
-
+/**
+ * Retrieve all users from Firestore.
+ */
 export async function fetchAllUsers(): Promise<userType[]> {
   const data: userType[] = [];
+  const snapshot = await adminDb.collection("user").get();
 
-  const q = query(collection(db, "user"));
-  const querySnapshot = await getDocs(q);
-
-  querySnapshot.forEach((doc) => {
+  snapshot.forEach((doc) => {
     const docData = doc.data();
-    
-    const userData: userType = {
+
+    data.push({
       id: doc.id,
       email: docData.email || "",
       hashedPassword: docData.hashedPassword || "",
@@ -210,65 +95,34 @@ export async function fetchAllUsers(): Promise<userType[]> {
       role: docData.role || "user",
       username: docData.username || "",
       time: docData.time || "",
-
-      // ✅ convert Timestamp to string
       createdAt: docData.createdAt?.toDate().toISOString() || undefined,
-    };
-
-    data.push(userData);
+    });
   });
 
   return data;
 }
 
+/**
+ * Delete a user document by its Firestore ID.
+ */
+export async function deleteUser(id: string): Promise<{ message: { success: string } }> {
+  await adminDb.collection("user").doc(id).delete();
+  return { message: { success: "ok" } };
+}
 
-
-
-  export async function deleteUser(id: string, oldImgageUrl: string) {
-    const docRef = doc(db, "user", id);
-    await deleteDoc(docRef);
-
-
-      
-    // const imageUrlArray = oldImgageUrl.split("/");
-    // console.log(imageUrlArray[imageUrlArray.length - 1]);
-    // const imageName =
-    //   imageUrlArray[imageUrlArray.length - 2] +
-    //   "/" +
-    //   imageUrlArray[imageUrlArray.length - 1];
-  
-    // const image_public_id = imageName.split(".")[0];
-    // console.log(image_public_id);
-    // try {
-    //   const deleteResult = await deleteImage(image_public_id);
-    //   console.log("image delete data", deleteResult);
-    // } catch (error) {
-    //   console.log(error);
-    //   return { errors: "Somthing went wrong, can not delete product picture" };
-    // }
-  
-    return {
-      message: { success: "ok" },
-    };
-    // }else{
-    //   return {errors:"Somthing went wrong, can not delete product"}
-    // }
-  }
-
-
-  
-  export async function unsbscribeUser(email: string): Promise<boolean> {
+/**
+ * Add an email to the unsubscribe collection.
+ */
+export async function unsubscribeUser(email: string): Promise<boolean> {
+  if (!email) return false;
   try {
-    if (!email) return false;
-
-    await setDoc(doc(db, "unsubscribedEmails", email), {
+    await adminDb.collection("unsubscribedEmails").doc(email).set({
       email,
-      unsubscribedAt: serverTimestamp(),
+      unsubscribedAt: FieldValue.serverTimestamp(),
     });
-
     return true;
   } catch (error) {
-    console.error("❌ Failed to unsubscribe user:", error);
+    console.error("Failed to unsubscribe:", error);
     return false;
   }
 }

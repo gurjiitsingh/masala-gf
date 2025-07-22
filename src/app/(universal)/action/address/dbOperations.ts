@@ -1,127 +1,80 @@
-"use server";
+'use server';
 
-import { db } from "@/lib/firebaseConfig";
-import { addressResT, addressResType, addressSchima, addressSchimaCheckout, addressWithId } from "@/lib/types/addressType"; //, TaddressSchema
+import { adminDb } from "@/lib/firebaseAdmin";
 import {
-  addDoc,
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-  query,
-  serverTimestamp,
-  Timestamp,
-  updateDoc,
-  where,
-} from "@firebase/firestore";
+  addressResT,
+  addressResType,
+  addressSchima,
+  addressSchimaCheckout,
+  addressWithId,
+} from "@/lib/types/addressType";
+import { FieldValue, Timestamp } from "firebase-admin/firestore";
 
+// ✅ Add new address (basic)
 export async function addNewAddress(formData: FormData) {
-  const name = formData.get("name");
-  const userId = formData.get("userId");
-  const mobNo = formData.get("mobNo");
-  const addressLine1 = formData.get("addressLine1");
-  const addressLine2 = formData.get("addressLine2");
-  const city = formData.get("city");
-  const state = formData.get("state");
-  const zipCode = formData.get("zipCode");
-
-  const recievedData = {
-    name,
-    userId,
-    mobNo,
-    addressLine1,
-    addressLine2,
-    city,
-    state,
-    zipCode,
+  const receivedData = {
+    name: formData.get("name")?.toString(),
+    userId: formData.get("userId")?.toString(),
+    mobNo: formData.get("mobNo")?.toString(),
+    addressLine1: formData.get("addressLine1")?.toString(),
+    addressLine2: formData.get("addressLine2")?.toString(),
+    city: formData.get("city")?.toString(),
+    state: formData.get("state")?.toString(),
+    zipCode: formData.get("zipCode")?.toString(),
   };
 
- 
+  const result = addressSchima.safeParse(receivedData);
+  if (!result.success) return;
 
-  const result = addressSchima.safeParse(recievedData);
-  console.log(result);
-  if (result) {
-    //  const row = await db.insert(address).values(recievedData);
-  }
+  await adminDb.collection("address").add({
+    ...receivedData,
+    createdAt: FieldValue.serverTimestamp(),
+  });
 }
 
+// ✅ Edit address by email
 export async function editCustomerAddress(formData: FormData) {
-  const email = formData.get("email");
-  const lastName = formData.get("lastName");
-  const firstName = formData.get("firstName");
-  const userId = formData.get("userId");
-  const mobNo = formData.get("mobNo");
-  const password = formData.get("password");
-  const addressLine1 = formData.get("addressLine1");
-  const addressLine2 = formData.get("addressLine2");
-  const city = formData.get("city");
-  const state = formData.get("state");
-  const zipCode = formData.get("zipCode");
-
-  const recievedData = {
-    email,
-    firstName,
-    lastName,
-    userId,
-    mobNo,
-    password,
-    addressLine1,
-    addressLine2,
-    city,
-    state,
-    zipCode,
+  const receivedData = {
+    email: formData.get("email")?.toString(),
+    firstName: formData.get("firstName")?.toString(),
+    lastName: formData.get("lastName")?.toString(),
+    userId: formData.get("userId")?.toString(),
+    mobNo: formData.get("mobNo")?.toString(),
+    password: formData.get("password")?.toString(),
+    addressLine1: formData.get("addressLine1")?.toString(),
+    addressLine2: formData.get("addressLine2")?.toString(),
+    city: formData.get("city")?.toString(),
+    state: formData.get("state")?.toString(),
+    zipCode: formData.get("zipCode")?.toString(),
   };
 
-  const result = addressSchimaCheckout.safeParse(recievedData);
+  const result = addressSchimaCheckout.safeParse(receivedData);
+  if (!result.success || !receivedData.email) return;
 
-  if (result) {
-    const addressData = {
-      // email,
-      firstName,
-      lastName,
-      // userId,
-      mobNo,
-      password,
-      addressLine1,
-      addressLine2,
-      city,
-      state,
-      zipCode,
-    };
-    // find address id from userId/email
-    // const q = query(collection(db, "address"), where("userId", "==", id));
-    const q = query(collection(db, "address"), where("email", "==", email));
-    const querySnapshot = await getDocs(q);
-    let data = null;
-    let docId = "";
-    //let i = 0;
-    querySnapshot.forEach((doc) => {
-      docId = doc.id;
-      // doc.data() is never undefined for query doc snapshots
-      data = doc.data();
-    });
+  const querySnapshot = await adminDb
+    .collection("address")
+    .where("email", "==", receivedData.email)
+    .get();
 
-    try {
-      const editDocRef = doc(db, "address", docId);
-      updateDoc(editDocRef, addressData);
-    } catch (e) {
-      console.error("Error adding document: ", e);
-    }
+  const docRefId = querySnapshot.docs[0]?.id;
+  if (docRefId) {
+    await adminDb.collection("address").doc(docRefId).update(result.data);
   }
 }
 
-
-
+// ✅ Search address by email
 export async function searchAddressEmail(email: string): Promise<addressResType | null> {
-  const q = query(collection(db, "address"), where("email", "==", email));
-  const querySnapshot = await getDocs(q);
+  const querySnapshot = await adminDb
+    .collection("address")
+    .where("email", "==", email)
+    .get();
 
   if (querySnapshot.empty) return null;
 
   const doc = querySnapshot.docs[0];
   const docData = doc.data();
 
-  const result: addressResType = {
+  return {
     id: doc.id,
     addressLine1: docData.addressLine1 || '',
     addressLine2: docData.addressLine2 || '',
@@ -133,22 +86,31 @@ export async function searchAddressEmail(email: string): Promise<addressResType 
     lastName: docData.lastName || '',
     mobNo: docData.mobNo || '',
     userId: docData.userId || '',
-    // ✅ Convert Firestore Timestamp to ISO string
     createdAt: docData.createdAt?.toDate().toISOString() || '',
   };
-
-  return result;
 }
 
+// ✅ Get address by ID (returns with ID)
 export async function searchAddressByAddressId(id: string): Promise<addressWithId> {
-  const docRef = doc(db, "address", id);
-  const docSnap = await getDoc(docRef);
+  const docSnap = await adminDb.collection("address").doc(id).get();
+  if (!docSnap.exists) throw new Error("No such address document");
 
-  if (!docSnap.exists()) {
-    console.log("No such document!");
-    throw new Error("No such address document");
-  }
+  const raw = docSnap.data() as addressResT;
+  const createdAtStr =
+    raw.createdAt instanceof Timestamp
+      ? raw.createdAt.toDate().toISOString()
+      : new Date().toISOString();
 
+  return {
+    ...raw,
+    createdAt: createdAtStr,
+    id: docSnap.id,
+  };
+}
+
+// ✅ Same as above, but returns addressResT only
+export async function searchAddressByAddressId1(id: string): Promise<addressResT> {
+  const docSnap = await adminDb.collection("address").doc(id).get();
   const raw = docSnap.data() as addressResT;
 
   const createdAtStr =
@@ -162,46 +124,13 @@ export async function searchAddressByAddressId(id: string): Promise<addressWithI
     id: docSnap.id,
   };
 }
-export async function searchAddressByAddressId1(
-  id: string
-): Promise<addressResT> {
- // console.log("---- search address by addressid ---", id);
-  const docRef = doc(db, "address", id);
-  const docSnap = await getDoc(docRef);
-  if (docSnap.exists()) {
- //   console.log("Document data:", docSnap.data());
-  } else {
-    // docSnap.data() will be undefined in this case
-    console.log("No such document!"); 
-  }
 
-   const raw = docSnap.data() as addressResT;
-
-  const createdAtStr =
-    raw.createdAt instanceof Timestamp
-      ? raw.createdAt.toDate().toISOString()
-      : new Date().toISOString();
-
-       return {
-    ...raw,
-    createdAt: createdAtStr,
-    id: docSnap.id,
-  } as addressResT;
-
- 
-}
-
+// ✅ Get order master by ID
 export async function fetchOrderMasterById(id: string) {
-  const docRef = doc(db, "orderMaster", id);
-  const docSnap = await getDoc(docRef);
+  const docSnap = await adminDb.collection("orderMaster").doc(id).get();
+  if (!docSnap.exists) return null;
 
-  if (!docSnap.exists()) {
-    console.log("No such document!");
-    return null;
-  }
-
-  const raw = docSnap.data() as orderMasterDataT;
-
+  const raw = docSnap.data();
   const createdAtStr =
     raw.createdAt instanceof Timestamp
       ? raw.createdAt.toDate().toISOString()
@@ -211,87 +140,57 @@ export async function fetchOrderMasterById(id: string) {
     ...raw,
     createdAt: createdAtStr,
     id: docSnap.id,
-  } as orderMasterDataSafeT;
+  };
 }
 
+// ✅ Search address by userId
+export const searchAddressByUserId = async (id: string | undefined): Promise<addressResT> => {
+  if (!id) return {} as addressResT;
 
+  const querySnapshot = await adminDb
+    .collection("address")
+    .where("userId", "==", id)
+    .get();
 
-
-
-
-
-export const searchAddressByUserId = async (
-  id: string | undefined
-): Promise<addressResT> => {
-  
-  let data = {} as addressResT;
-  if (id !== undefined) {
-    const q = query(collection(db, "address"), where("userId", "==", id));
-    const querySnapshot = await getDocs(q);
-
-   
-    querySnapshot.forEach((doc) => {
-      data = doc.data() as addressResT;
-    });
-    return data;
-  }else{
-    return data;
-  }
+  const data = querySnapshot.docs[0]?.data() as addressResT;
+  return data || ({} as addressResT);
 };
 
-
+// ✅ Add customer address if not exists
 export async function addCustomerAddressDirect(formData: FormData) {
-  const email = formData.get("email");
-  const lastName = formData.get("lastName");
-  const firstName = formData.get("firstName");
-  const userId = formData.get("userId");
-  const mobNo = formData.get("mobNo");
-  const password = formData.get("password");
-  const addressLine1 = formData.get("addressLine1");
-  const addressLine2 = formData.get("addressLine2");
-  const city = formData.get("city");
-  const state = formData.get("state");
-  const zipCode = formData.get("zipCode");
-
   const receivedData = {
-    email,
-    firstName,
-    lastName,
-    userId,
-    mobNo,
-    password,
-    addressLine1,
-    addressLine2,
-    city,
-    state,
-    zipCode,
+    email: formData.get("email")?.toString(),
+    firstName: formData.get("firstName")?.toString(),
+    lastName: formData.get("lastName")?.toString(),
+    userId: formData.get("userId")?.toString(),
+    mobNo: formData.get("mobNo")?.toString(),
+    password: formData.get("password")?.toString(),
+    addressLine1: formData.get("addressLine1")?.toString(),
+    addressLine2: formData.get("addressLine2")?.toString(),
+    city: formData.get("city")?.toString(),
+    state: formData.get("state")?.toString(),
+    zipCode: formData.get("zipCode")?.toString(),
   };
 
   const result = addressSchimaCheckout.safeParse(receivedData);
+  if (!result.success || !receivedData.email) return null;
 
-  const q = query(collection(db, "address"), where("email", "==", email));
-  const querySnapshot = await getDocs(q);
-  let recordId = null;
+  const querySnapshot = await adminDb
+    .collection("address")
+    .where("email", "==", receivedData.email)
+    .get();
 
-  querySnapshot.forEach((doc) => {
-    recordId = doc.id;
-  });
+  const recordId = querySnapshot.docs[0]?.id;
 
-  if (result.success && !recordId) {
+  if (!recordId) {
     const addressData = {
       ...receivedData,
-      createdAt: serverTimestamp(), // 🔥 Recommended
+      createdAt: FieldValue.serverTimestamp(),
     };
 
-    try {
-      const addDocRef = await addDoc(collection(db, "address"), addressData);
-      console.log("New address added ------", addDocRef.id);
-      return addDocRef.id;
-    } catch (e) {
-      console.error("Error adding document: ", e);
-    }
+    const docRef = await adminDb.collection("address").add(addressData);
+    return docRef.id;
   }
 
   return recordId;
 }
-

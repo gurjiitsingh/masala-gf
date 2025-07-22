@@ -11,7 +11,7 @@ import { MdDeleteForever } from "react-icons/md";
 import { CiEdit } from "react-icons/ci";
 import { categoryType } from "@/lib/types/categoryType";
 import { deleteCategory } from "@/app/(universal)/action/category/dbOperations";
-import { fetchProductByCategoryId } from "@/app/(universal)/action/productsbase/dbOperation";
+import { fetchProductByCategoryId } from "@/app/(universal)/action/products/dbOperation";
 
 function TableRows({ category }: { category: categoryType }) {
   async function handleDelete(category: categoryType) {

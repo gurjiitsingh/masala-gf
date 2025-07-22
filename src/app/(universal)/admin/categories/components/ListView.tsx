@@ -11,6 +11,7 @@ import {
 
 import TableRows from "./TableRows";
 import { fetchCategories } from "@/app/(universal)/action/category/dbOperations";
+import { fetchCategoriesClient } from "@/lib/firestore/categoryClient";
 import { categoryType } from "@/lib/types/categoryType";
 
 const ListView = () => {

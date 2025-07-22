@@ -9,13 +9,11 @@ import { editPorductSchema, TeditProductSchema } from "@/lib/types/productType";
 //import { Images } from "lucide-react";
 // import { fetchCategories } from "@/app/(universal)/action/category/dbOperations";
 //import { fetchbrands } from "@/app/(universal)/action/brads/dbOperations";
-import {
-  editProduct,
-  fetchProductById,
-} from "@/app/(universal)/action/productsbase/dbOperation";
+
 import { useRouter, useSearchParams } from "next/navigation";
 import { fetchCategories } from "@/app/(universal)/action/category/dbOperations";
 import { categoryType } from "@/lib/types/categoryType";
+import { editProduct, fetchProductById } from "@/app/(universal)/action/products/dbOperation";
 
 const EditProduct = () => {
   const [categoryData, setCategoryData] = useState<categoryType[]>([]);
@@ -34,33 +32,41 @@ const EditProduct = () => {
   });
   useEffect(() => {
     let productData;
-    async function prefetch() {
-      productData = await fetchProductById(id);
-      console.log("productData ----", productData);
-      let priceS = "";
-      if(productData.price! !== undefined){
-       priceS = productData.price.toString().replace(/\./g, ',');
-      }
-      let discountPriceS = "";
-      if(productData.discountPrice! !== undefined){
-       discountPriceS = productData.discountPrice!.toString().replace(/\./g, ',');
-    }
-   
-      setValue("id", id);
-      setValue("name", productData.name);
-      setValue("productDesc", productData.productDesc);
-     // setValue("categoryId", "yishiwe");
-      setValue("oldImgageUrl", productData.image);
-      setValue("price", priceS);
-     
-      setValue("discountPrice", discountPriceS);
-     setValue("status", productData.status ?? "published");
-     if(productData.sortOrder! !== undefined){
-      setValue("sortOrder", productData.sortOrder!.toString());
-     }
-      setValue("categoryId", productData.categoryId!);
-      setValue("isFeatured", productData.isFeatured);
-    }
+   async function prefetch() {
+  const data = await fetchProductById(id);
+
+
+  if (!data) return; // exit early if null
+
+  let priceS = "";
+  if (data.price !== undefined) {
+    priceS = data.price.toString().replace(/\./g, ',');
+  }
+
+  let discountPriceS = "";
+  if (data.discountPrice !== undefined) {
+    discountPriceS = data.discountPrice.toString().replace(/\./g, ',');
+  }
+
+  setValue("id", id);
+  setValue("name", data.name);
+  setValue("productDesc", data.productDesc);
+  setValue("oldImgageUrl", data.image);
+  setValue("price", priceS);
+  setValue("discountPrice", discountPriceS);
+  setValue("status", data.status ?? "published");
+
+  if (data.sortOrder !== undefined) {
+    setValue("sortOrder", data.sortOrder.toString());
+  }
+
+  setValue("categoryId", data.categoryId);
+  setValue("isFeatured", data.isFeatured);
+
+  // Optional: reassign to productData if needed elsewhere
+  productData = data;
+}
+
 
     prefetch();
   }, []);

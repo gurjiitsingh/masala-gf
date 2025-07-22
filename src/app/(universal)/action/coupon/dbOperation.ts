@@ -1,78 +1,32 @@
-"use server";
+'use server';
 
-//import { z } from "zod";
 import { deleteImage, upload } from "@/lib/cloudinary";
-import { db } from "@/lib/firebaseConfig";
-
-import {
-  addDoc,
-  collection,
-  deleteDoc,
-  doc,
-  getDoc,
-  getDocs,
-  query,
-  setDoc,
-  updateDoc,
-  where,
-} from "@firebase/firestore"; //doc, getDoc,
+import { adminDb } from "@/lib/firebaseAdmin";
+import { FieldValue } from "firebase-admin/firestore";
 import { couponType, couponSchema } from "@/lib/types/couponType";
+import { formatPriceStringToNumber } from "@/utils/formatters";
 
+// ---------------- Add New Coupon ----------------
 export async function addNewcoupon(formData: FormData) {
-  const code = formData.get("code");
-  const discount = formData.get("discount") as string;
-  const minSpend = formData.get("minSpend") as string;
-  const productCat = formData.get("productCat");
-  const couponDesc = formData.get("couponDesc");
-  const offerType = formData.get("offerType");
-  const expiry = formData.get("expiry");
-  const discountType = formData.get("discountType");
-  const isFeatured = false;
-  const isActivated = true;
-  // formData.append("isFeatured", data.isFeatured);
-
-  //image = formData.get("image"),
-
-  //console.log("isFeatured ", typeof formData.get("isFeatured"));
-
   const receivedData = {
-    code,
-    discount,
-    minSpend,
-    productCat,
-    couponDesc,
-    offerType,
-    expiry,
-    discountType,
-    isFeatured,
-    //image: formData.get("image"),
+    code: formData.get("code"),
+    discount: formData.get("discount"),
+    minSpend: formData.get("minSpend"),
+    productCat: formData.get("productCat"),
+    couponDesc: formData.get("couponDesc"),
+    offerType: formData.get("offerType"),
+    expiry: formData.get("expiry"),
+    discountType: formData.get("discountType"),
+    isFeatured: false,
   };
 
   const result = couponSchema.safeParse(receivedData);
-  console.log("zod result", result);
-  let zodErrors = {};
   if (!result.success) {
-    result.error.issues.forEach((issue) => {
-      zodErrors = { ...zodErrors, [issue.path[0]]: issue.message };
-    });
-
-    return Object.keys(zodErrors).length > 0
-      ? { errors: zodErrors }
-      : { success: true };
+    const zodErrors = Object.fromEntries(
+      result.error.issues.map((issue) => [issue.path[0], issue.message])
+    );
+    return { errors: zodErrors };
   }
-
-  //const image = formData.get("image");
-  // let imageUrl;
-  // try {
-  //   imageUrl = await upload(image);
-  //   console.log(imageUrl);
-  // } catch (error) {
-  //  // throw new Error("error");
-  //   console.log(error);
-  //   return { errors: "image cannot uploaded" };
-  // }
-
-  // imageUrl = "/public/com.jpg";
 
   const now_german = new Date().toLocaleString("en-DE", {
     dateStyle: "medium",
@@ -80,62 +34,50 @@ export async function addNewcoupon(formData: FormData) {
     timeZone: "Europe/Berlin",
   });
 
-  const discountF = parseFloat(discount) as number;
-  const minSpendF = parseFloat(minSpend) as number;
   const data = {
-    code,
-    discount: discountF,
-    minSpend: minSpendF,
-    productCat,
-    couponDesc,
-    offerType,
-    expiry,
-    discountType,
-    isFeatured,
-    isActivated,
+    ...receivedData,
+    discount: formatPriceStringToNumber(receivedData.discount),
+    minSpend: formatPriceStringToNumber(receivedData.minSpend),
+    isActivated: true,
     startDate: now_german,
-    date: now_german,
+    date: FieldValue.serverTimestamp(),
+    createdAt: FieldValue.serverTimestamp(),
   };
-  console.log("data to be saved ---", data);
 
   try {
-    const docRef = await addDoc(collection(db, "coupon"), data);
-    console.log("Document written with ID: ", docRef.id);
-    // Clear the form
+    const docRef = await adminDb.collection("coupon").add(data);
+    console.log("Coupon added with ID:", docRef.id);
+    return { message: "coupon saved" };
   } catch (e) {
-    console.error("Error adding document: ", e);
+    console.error("Error adding coupon:", e);
+    return { error: "Failed to add coupon" };
   }
-  return { message: "coupon saved" };
-} //end of add new coupon
-
-type rt = {
-  success: string;
-};
-
-export async function deletecoupon(id: string): Promise<rt> {
-  const docRef = doc(db, "coupon", id);
-  await deleteDoc(docRef);
-  return { success: "Delete implimented" };
 }
 
+// ---------------- Delete Coupon ----------------
+type rt = { success: string };
+export async function deletecoupon(id: string): Promise<rt> {
+  await adminDb.collection("coupon").doc(id).delete();
+  return { success: "Delete implemented" };
+}
+
+// ---------------- Edit Coupon ----------------
 export async function editcoupon(id: string, formData: FormData) {
   try {
-    const updatedData: any = {
+    const updatedData = {
       code: formData.get("code"),
-      discount: formData.get("discount"),
+      discount: formatPriceStringToNumber(formData.get("discount")),
       offerType: formData.get("offerType"),
       expiry: formData.get("expiry"),
       discountType: formData.get("discountType"),
       productCat: formData.get("productCat"),
       couponDesc: formData.get("couponDesc"),
       message: formData.get("message"),
-      minSpend: formData.get("minSpend"),
+      minSpend: formatPriceStringToNumber(formData.get("minSpend")),
       isFeatured: formData.get("isFeatured") === "true",
     };
 
-    const couponRef = doc(db, "coupon", id);
-    await updateDoc(couponRef, updatedData);
-
+    await adminDb.collection("coupon").doc(id).update(updatedData);
     return { success: true };
   } catch (error) {
     console.error("Failed to update coupon:", error);
@@ -143,12 +85,10 @@ export async function editcoupon(id: string, formData: FormData) {
   }
 }
 
+// ---------------- Edit Coupon v1 ----------------
 export async function editcoupon1(formData: FormData) {
   const id = formData.get("id") as string;
-  const image = formData.get("image");
-  // const oldImgageUrl = formData.get("oldImgageUrl") as string;
-  const featured_img: boolean = false;
-  // featured_img = formData.get("oldImgageUrl");
+  const featured_img = false;
 
   const receivedData = {
     code: formData.get("code"),
@@ -156,97 +96,105 @@ export async function editcoupon1(formData: FormData) {
     productCat: formData.get("productCat"),
     couponDesc: formData.get("couponDesc"),
     minSpend: formData.get("minSpend"),
-    // image: formData.get("image"),
     isFeatured: featured_img,
   };
 
   const result = couponSchema.safeParse(receivedData);
-
-  let zodErrors = {};
   if (!result.success) {
-    result.error.issues.forEach((issue) => {
-      zodErrors = { ...zodErrors, [issue.path[0]]: issue.message };
-    });
-
-    return Object.keys(zodErrors).length > 0
-      ? { errors: zodErrors }
-      : { success: true };
+    const zodErrors = Object.fromEntries(
+      result.error.issues.map((issue) => [issue.path[0], issue.message])
+    );
+    return { errors: zodErrors };
   }
 
-  // let imageUrl;
-  // if (image === "undefined" || image === null) {
-  //   imageUrl = oldImgageUrl;
-  //   //  console.log("----------------not change image")
-  // } else {
-  //   //  console.log("---------------- change image")
-  //   try {
-  //     imageUrl = (await upload(image)) as string;
-  //     console.log(imageUrl);
-  //   } catch (error) {
-  //     //  throw new Error("error")
-  //     console.log(error);
-  //     return { errors: "image cannot uploaded" };
-  //   }
-  //   const d = false;
-  //   if (d) {
-  //     const imageUrlArray = oldImgageUrl?.split("/");
-  //     console.log("old image url", imageUrlArray);
-  //     const imageName =
-  //       imageUrlArray[imageUrlArray.length - 2] +
-  //       "/" +
-  //       imageUrlArray[imageUrlArray.length - 1];
-
-  //     const image_public_id = imageName.split(".")[0];
-  //     console.log("image_public_id ---", image_public_id);
-  //     try {
-  //       const deleteResult = await deleteImage(image_public_id);
-  //       console.log(deleteResult);
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   }
-  // }
-
-  const couponUpdtedData = {
-    code: formData.get("code"),
-    discount: formData.get("discount"),
-    productCat: formData.get("productCat"),
-    couponDesc: formData.get("couponDesc"),
-    minSpend: formData.get("minSpend"),
-    //image: imageUrl,
-    isFeatured: featured_img,
+  const couponUpdatedData = {
+    ...receivedData,
+    discount: formatPriceStringToNumber(receivedData.discount),
+    minSpend: formatPriceStringToNumber(receivedData.minSpend),
   };
-  //console.log("update data ------------", couponUpdtedData)
-  // update database
+
   try {
-    const docRef = doc(db, "coupon", id);
-    await setDoc(docRef, couponUpdtedData);
+    await adminDb.collection("coupon").doc(id).set(couponUpdatedData, { merge: true });
+    return { success: true };
   } catch (error) {
     console.log("error", error);
     return { errors: "Cannot update" };
   }
 }
 
-// export async function fetchcoupon(): Promise<couponType[]> {
-//   const result = await getDocs(collection(db, "coupon"));
-
-//   const data = [] as couponType[];
-//   result.forEach((doc) => {
-//     const pData = { id: doc.id, ...doc.data() } as couponType;
-//     data.push(pData);
-//   });
-//   return data;
-// }
-
+// ---------------- Fetch All Coupons ----------------
 export async function fetchcoupon(): Promise<couponType[]> {
-  const result = await getDocs(collection(db, "coupon"));
-
+  const result = await adminDb.collection("coupon").get();
   const data: couponType[] = [];
 
   result.forEach((doc) => {
     const raw = doc.data();
+    data.push({
+      id: doc.id,
+      code: raw.code,
+      message: raw.message,
+      discount: raw.discount,
+      productCat: raw.productCat,
+      couponDesc: raw.couponDesc,
+      discountType: raw.discountType,
+      offerType: raw.offerType,
+      minSpend: raw.minSpend,
+      isFeatured: raw.isFeatured,
+      isActivated: raw.isActivated,
+      applyPickup: raw.applyPickup ?? true,
+      applyDelivery: raw.applyDelivery ?? true,
+      excludedCategoryIds: raw.excludedCategoryIds ?? [],
+      image: raw.image ?? null,
+      startDate: raw.startDate ?? null,
+      expiry: raw.expiry ?? null,
+      createdAt: raw.createdAt?.toDate?.() ?? undefined,
+      date: raw.date?.toDate?.() ?? new Date(),
+    });
+  });
 
-    const converted: couponType = {
+  return data;
+}
+
+// ---------------- Fetch Coupon By ID ----------------
+export async function fetchcouponById(id: string): Promise<couponType> {
+  const docSnap = await adminDb.collection("coupon").doc(id).get();
+
+  if (!docSnap.exists) throw new Error("Coupon not found");
+
+  const raw = docSnap.data()!; // <-- Assert non-null
+
+  return {
+    id: docSnap.id,
+    code: raw.code,
+    message: raw.message,
+    discount: raw.discount,
+    productCat: raw.productCat,
+    couponDesc: raw.couponDesc,
+    minSpend: raw.minSpend,
+    excludedCategoryIds: raw.excludedCategoryIds ?? [],
+    offerType: raw.offerType,
+    isFeatured: raw.isFeatured,
+    applyPickup: raw.applyPickup ?? true,
+    applyDelivery: raw.applyDelivery ?? true,
+    isActivated: raw.isActivated,
+    expiry: raw.expiry,
+    discountType: raw.discountType,
+    startDate: raw.startDate,
+    date: raw.date?.toDate?.()?.toISOString?.() ?? undefined,
+    createdAt: raw.createdAt?.toDate?.() ?? undefined,
+    image: raw.image ?? null,
+  };
+}
+
+
+// ---------------- Fetch Coupon By Code ----------------
+export async function fetchcouponByCode(condname: string): Promise<couponType[]> {
+  const q = await adminDb.collection("coupon").where("code", "==", condname).get();
+  const data: couponType[] = [];
+
+  q.forEach((doc) => {
+    const raw = doc.data();
+    data.push({
       id: doc.id,
       code: raw.code,
       discount: raw.discount,
@@ -258,154 +206,32 @@ export async function fetchcoupon(): Promise<couponType[]> {
       offerType: raw.offerType,
       isActivated: raw.isActivated,
       isFeatured: raw.isFeatured,
+      applyPickup: raw.applyPickup ?? true,
+      applyDelivery: raw.applyDelivery ?? true,
       productCat: raw.productCat,
       couponDesc: raw.couponDesc,
       excludedCategoryIds: raw.excludedCategoryIds,
       createdAt: raw.createdAt?.toDate?.() ?? undefined,
       date: raw.date?.toDate?.() ?? new Date(),
       image: raw.image,
-    };
-
-    data.push(converted);
+    });
   });
 
   return data;
 }
 
-export async function fetchcouponById(id: string): Promise<couponType> {
-  const docRef = doc(db, "coupon", id);
-  const docSnap = await getDoc(docRef);
-
-  if (!docSnap.exists()) {
-    console.warn("No such document!");
-    throw new Error("Coupon not found");
-  }
-
-  const raw = docSnap.data();
-
-  const couponData: couponType = {
-    id: docSnap.id,
-    code: raw.code,
-    discount: raw.discount,
-    discountType: raw.discountType,
-    message: raw.message,
-    minSpend: raw.minSpend,
-    expiry: raw.expiry,
-    startDate: raw.startDate,
-    offerType: raw.offerType,
-    isActivated: raw.isActivated,
-    isFeatured: raw.isFeatured,
-    applyPickup: raw.applyPickup ?? true, // fallback to true if undefined
-    applyDelivery: raw.applyDelivery ?? true,
-    productCat: raw.productCat,
-    couponDesc: raw.couponDesc,
-    excludedCategoryIds: raw.excludedCategoryIds,
-    createdAt: raw.createdAt?.toDate?.() ?? undefined,
-    date: raw.date?.toDate?.() ?? undefined,
-    image: raw.image,
-  };
-
-  return couponData;
-}
-
-// export async function fetchcouponByCode(
-//   condname: string
-// ): Promise<couponType[]> {
-
-//   const data = [] as couponType[];
-//   const q = query(collection(db, "coupon"), where("code", "==", condname));
-//   const querySnapshot = await getDocs(q);
-
-//   querySnapshot.forEach((doc) => {
-//     const datas = doc.data() as couponType;
-//     data.push(datas);
-//   });
-//   console.log("data-----------------",data)
-
-//   return data;
-// }
-
-export async function fetchcouponByCode(
-  condname: string
-): Promise<couponType[]> {
-  const data: couponType[] = [];
-
-  const q = query(collection(db, "coupon"), where("code", "==", condname));
-  const querySnapshot = await getDocs(q);
-
-  querySnapshot.forEach((doc) => {
-    const raw = doc.data();
-
-    const converted: couponType = {
-      code: raw.code,
-      discount: raw.discount,
-      discountType: raw.discountType,
-      message: raw.message,
-      minSpend: raw.minSpend,
-      expiry: raw.expiry,
-      startDate: raw.startDate,
-      offerType: raw.offerType,
-      isActivated: raw.isActivated,
-      isFeatured: raw.isFeatured,
-      applyPickup: raw.applyPickup ?? true, // fallback to true if undefined
-    applyDelivery: raw.applyDelivery ?? true,
-      productCat: raw.productCat,
-      couponDesc: raw.couponDesc,
-      excludedCategoryIds: raw.excludedCategoryIds,
-      createdAt: raw.createdAt?.toDate?.() ?? undefined,
-      date: raw.date?.toDate?.() ?? new Date(), // <--- FIX HERE
-    };
-
-    data.push(converted);
-  });
-
-  return data;
-}
-
-// export async function fetchCouponByCode(condname: string): Promise<couponType | null> {
-//   const q = query(collection(db, "coupon"), where("code", "==", condname));
-//   const querySnapshot = await getDocs(q);
-
-//   if (querySnapshot.empty) {
-//     return null; // No coupon found
-//   }
-
-//   const raw = querySnapshot.docs[0].data();
-
-//   const converted: couponType = {
-//     code: raw.code,
-//     discount: raw.discount,
-//     discountType: raw.discountType,
-//     message: raw.message,
-//     minSpend: raw.minSpend,
-//     expiry: raw.expiry,
-//     startDate: raw.startDate,
-//     offerType: raw.offerType,
-//     isActivated: raw.isActivated,
-//     isFeatured: raw.isFeatured,
-//     productCat: raw.productCat,
-//     couponDesc: raw.couponDesc,
-//     excludedCategoryIds: raw.excludedCategoryIds,
-//     createdAt: raw.createdAt?.toDate?.() ?? undefined,
-//     date: raw.date?.toDate?.() ?? new Date(),
-//   };
-
-//   return converted;
-// }
-
+// ---------------- Update Excluded Categories ----------------
 export async function updateCouponExcludedCategories(
   couponId: string,
   categoryIds: string[]
 ) {
-  console.log("categoryIds-------------", categoryIds);
-  const couponRef = doc(db, "coupon", couponId);
-  await updateDoc(couponRef, {
+  await adminDb.collection("coupon").doc(couponId).update({
     excludedCategoryIds: categoryIds,
   });
 }
 
+// ---------------- Fetch Raw Snapshot ----------------
 export async function fetchSingleCoupon(id: string) {
-  const docRef = doc(db, "coupon", id);
-  const snapshot = await getDoc(docRef);
-  return snapshot.exists() ? snapshot.data() : null;
+  const snapshot = await adminDb.collection("coupon").doc(id).get();
+  return snapshot.exists ? snapshot.data() : null;
 }

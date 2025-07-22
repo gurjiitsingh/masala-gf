@@ -10,14 +10,12 @@ import {
 } from "@/components/ui/table";
 
 import TableRows from "./TableRows";
-import {
-  fetchProductByCategoryId,
-  fetchProducts,
-} from "@/app/(universal)/action/productsbase/dbOperation";
+
 import { fetchCategories } from "@/app/(universal)/action/category/dbOperations";
 import { ProductType } from "@/lib/types/productType";
 import { categoryType } from "@/lib/types/categoryType";
 import { useSearchParams } from "next/navigation";
+import { fetchProductByCategoryId, fetchProducts } from "@/app/(universal)/action/products/dbOperation";
 
 const ListView = ({ title }: { title?: string }) => {
   const searchParams = useSearchParams();
@@ -29,6 +27,8 @@ const ListView = ({ title }: { title?: string }) => {
   const [cateId, setCateId] = useState<string>("");
   const [searchTerm, setSearchTerm] = useState<string>("");
 
+
+  
   useEffect(() => {
     async function fetchInitialData() {
       try {
@@ -54,23 +54,24 @@ const ListView = ({ title }: { title?: string }) => {
     fetchInitialData();
   }, [productIdFromQuery]);
 
-  useEffect(() => {
-    async function fetchProductsByCategory() {
-      try {
-        if (cateId === "") {
-          setProductData(allProducts);
-        } else {
-          const filteredProds = await fetchProductByCategoryId(cateId);
-          filteredProds.sort((a, b) => a.sortOrder - b.sortOrder);
-          setProductData(filteredProds);
-        }
-      } catch (error) {
-        console.log(error);
+useEffect(() => {
+  async function fetchProductsByCategory() {
+    try {
+      if (cateId === "") {
+        setProductData(allProducts);
+      } else {
+        const filteredProds = await fetchProductByCategoryId(cateId);
+        filteredProds.sort((a, b) => a.sortOrder - b.sortOrder);
+        setProductData(filteredProds);
       }
+    } catch (error) {
+      console.log(error);
     }
+  }
 
-    fetchProductsByCategory();
-  }, [cateId]);
+  fetchProductsByCategory();
+}, [cateId, allProducts]); // ✅ added allProducts
+
 
   const filteredProducts = productData.filter((product) =>
     product.name.toLowerCase().includes(searchTerm.toLowerCase())

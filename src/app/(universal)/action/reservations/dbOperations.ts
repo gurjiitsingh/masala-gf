@@ -1,19 +1,9 @@
 // src/actions/reservationsActions.ts
 import { db } from '@/lib/firebaseConfig';
+import { Reservation } from '@/lib/types/ReservationFormData';
 import { collection, getDocs, query, orderBy, doc, deleteDoc } from 'firebase/firestore';
 
-export interface Reservation {
-  id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone: string;
-  message: string;
-  numberOfPersons: string;
-  reservationDate: string;
-  reservationTime: string;
-  createdAt: string;
-}
+
 
 export async function getReservations(): Promise<Reservation[]> {
   const snapshot = await getDocs(query(collection(db, 'reservations'), orderBy('createdAt', 'desc')));
