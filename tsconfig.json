@@ -22,6 +22,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/(universal)/(purchase)/pay/components/Checkout.js","next-auth.d.ts", "src/app/level-1/CategorySlider.js", "src/components/Bargermenu/Menu.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/(universal)/(purchase)/pay/components/Checkout.js","next-auth.d.ts", "src/app/level-1/CategorySlider.js", "src/components/Bargermenu/Menu.tsx", "src/app/(universal)/admin/orders/order-detail/components/productList.js"],
   "exclude": ["node_modules"]
 }

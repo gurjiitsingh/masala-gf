@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/table';
 import { getReservations, deleteReservation } from '@/app/(universal)/action/reservations/dbOperations';
 import { MdDeleteForever } from 'react-icons/md';
+import { useLanguage } from '@/store/LanguageContext';
 
 interface Reservation {
   id: string;
@@ -28,6 +29,7 @@ interface Reservation {
 const RESERVATIONS_PER_PAGE = 10;
 
 export default function ReservationListPage() {
+  const { TEXT } = useLanguage();
   const [reservations, setReservations] = useState<Reservation[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
@@ -44,7 +46,7 @@ export default function ReservationListPage() {
   }, []);
 
   const handleDelete = async (id: string) => {
-    if (confirm('Do you want to delete this reservation?')) {
+    if (confirm(TEXT.confirm_delete_reservation)) {
       await deleteReservation(id);
       fetchData();
     }
@@ -61,28 +63,28 @@ export default function ReservationListPage() {
           <TableHeader className="bg-gray-100 dark:bg-zinc-800">
             <TableRow>
               <TableHead>#</TableHead>
-              <TableHead>Name</TableHead>
-              <TableHead>Email</TableHead>
-              <TableHead>Phone</TableHead>
-              <TableHead>Date</TableHead>
-              <TableHead>Time</TableHead>
-              <TableHead>Guests</TableHead>
-              <TableHead>Message</TableHead>
-              <TableHead>Created</TableHead>
-              <TableHead>Action</TableHead>
+              <TableHead>{TEXT.name}</TableHead>
+              <TableHead>{TEXT.email}</TableHead>
+              <TableHead>{TEXT.phone}</TableHead>
+              <TableHead>{TEXT.date}</TableHead>
+              <TableHead>{TEXT.time}</TableHead>
+              <TableHead>{TEXT.guests}</TableHead>
+              <TableHead>{TEXT.message}</TableHead>
+              <TableHead>{TEXT.created}</TableHead>
+              <TableHead>{TEXT.action}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {loading ? (
               <TableRow>
                 <TableCell colSpan={10} className="text-center py-4">
-                  Loading...
+                  {TEXT.loading}
                 </TableCell>
               </TableRow>
             ) : currentData.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={10} className="text-center py-4">
-                  No reservations found.
+                  {TEXT.no_reservations}
                 </TableCell>
               </TableRow>
             ) : (
@@ -109,7 +111,7 @@ export default function ReservationListPage() {
                     <button
                       onClick={() => handleDelete(rsv.id)}
                       className="p-2 rounded-full bg-red-600 hover:bg-red-700 transition"
-                      aria-label="Delete Reservation"
+                      aria-label={TEXT.delete_reservation}
                     >
                       <MdDeleteForever size={18} className="text-white" />
                     </button>
@@ -128,7 +130,7 @@ export default function ReservationListPage() {
           disabled={currentPage === 1}
           className="px-4 py-2 rounded bg-gray-200 hover:bg-gray-300 dark:bg-zinc-800 dark:hover:bg-zinc-700 disabled:opacity-50"
         >
-          ⬅️ Newer
+          ⬅️ {TEXT.pagination_newer}
         </button>
 
         <button
@@ -136,7 +138,7 @@ export default function ReservationListPage() {
           disabled={startIndex + RESERVATIONS_PER_PAGE >= reservations.length}
           className="px-4 py-2 rounded bg-gray-200 hover:bg-gray-300 dark:bg-zinc-800 dark:hover:bg-zinc-700 disabled:opacity-50"
         >
-          Older ➡️
+          {TEXT.pagination_older} ➡️
         </button>
       </div>
     </div>

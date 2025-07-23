@@ -48,12 +48,13 @@ const EditProduct = () => {
     discountPriceS = data.discountPrice.toString().replace(/\./g, ',');
   }
 
+
   setValue("id", id);
   setValue("name", data.name);
   setValue("productDesc", data.productDesc);
   setValue("oldImgageUrl", data.image);
   setValue("price", priceS);
-  setValue("discountPrice", discountPriceS);
+  setValue("discountPrice", discountPriceS ?? "0,00");
   setValue("status", data.status ?? "published");
 
   if (data.sortOrder !== undefined) {
@@ -95,7 +96,7 @@ const EditProduct = () => {
 
     formData.append("name", data.name);
     formData.append("price", data.price);
-    formData.append("discountPrice", data.discountPrice!);
+    formData.append("discountPrice", data.discountPrice! ?? "0.00");
     formData.append("categoryId", data.categoryId!);
     formData.append("sortOrder", data.sortOrder);
     formData.append("productDesc", data.productDesc!);

@@ -45,7 +45,7 @@ const OrderDetail = () => {
 
       const orderMaster = await fetchOrderMasterById(masterOrderId);
       setOrderMasterData(orderMaster);
-      console.log("master order -------", orderMaster);
+     
     }
     getOrderProducts();
   }, []);
@@ -72,7 +72,31 @@ const OrderDetail = () => {
     (settings.locale || 'de-DE') as string
   );
 
+    const deliveryCost = formatCurrencyNumber(
+    Number(orderMasterData?.deliveryCost) ?? 0,
+    (settings.currency || 'EUR') as string,
+    (settings.locale || 'de-DE') as string
+  );
 
+
+    const calculatedPickUpDiscount = formatCurrencyNumber(
+    Number(orderMasterData?.calculatedPickUpDiscountL) ?? 0,
+    (settings.currency || 'EUR') as string,
+    (settings.locale || 'de-DE') as string
+  );
+    const flatDiscount = formatCurrencyNumber(
+    Number(orderMasterData?.flatDiscount) ?? 0,
+    (settings.currency || 'EUR') as string,
+    (settings.locale || 'de-DE') as string
+  );
+
+      const calCouponDiscount = formatCurrencyNumber(
+    Number(orderMasterData?.calCouponDiscount) ?? 0,
+    (settings.currency || 'EUR') as string,
+    (settings.locale || 'de-DE') as string
+  );
+
+  
 
   return (
     <div className="flex flex-col gap-4 bg-white px-3 flex-1 mb-12">
@@ -99,7 +123,7 @@ const OrderDetail = () => {
 
           <div className="flex gap-2">
             <div className="font-semibold">Discount total:</div>{" "}
-            <div className="">%{orderMasterData?.totalDiscountG}</div>
+            <div className="">{orderMasterData?.totalDiscountG}{" "}%</div>
           </div>
 
          
@@ -119,24 +143,24 @@ const OrderDetail = () => {
           
           <div className="flex gap-2">
             <div className="font-semibold">Dilevery cost:</div>{" "}
-            <div className="">&euro;{orderMasterData?.deliveryCost}</div>
+            <div className="">{deliveryCost}</div>
           </div>
 
           <div className="flex gap-2">
             <div className="font-semibold">Pickup discount:</div>{" "}
             <div className="">
-           - &euro;{orderMasterData?.calculatedPickUpDiscountL}
+            {calculatedPickUpDiscount}
             </div>
           </div>
 
           <div className="flex gap-2">
             <div className="font-semibold">Coupon Discount Flat:</div>{" "}
-            <div className="">- &euro;{orderMasterData?.flatDiscount}</div>
+            <div className=""> {flatDiscount}</div>
           </div>
 
           <div className="flex gap-2">
             <div className="font-semibold">Coupon Discount percent:</div>{" "}
-            <div className="">- &euro;{orderMasterData?.calCouponDiscount}</div>
+            <div className=""> {calCouponDiscount}</div>
           </div>
           <div className="flex gap-2">
             <div className="font-semibold">Subtotal:</div>{" "}

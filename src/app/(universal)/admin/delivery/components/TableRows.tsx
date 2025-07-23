@@ -1,19 +1,19 @@
-import {
-  TableCell,
-  TableRow,
-} from "@/components/ui/table";
+"use client";
+
+import { TableCell, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { MdDeleteForever } from "react-icons/md";
 import { CiEdit } from "react-icons/ci";
 import Link from "next/link";
 import { deliveryType } from "@/lib/types/deliveryType";
 import { deletedelivery } from "@/app/(universal)/action/delivery/dbOperation";
+import { useLanguage } from "@/store/LanguageContext";
 
 function TableRows({ delivery }: { delivery: deliveryType }) {
+  const { TEXT } = useLanguage();
+
   async function handleDelete(delivery: deliveryType) {
-    const confirmDelete = confirm(
-      "Möchten Sie die Lieferung löschen?\nFalls ja, klicken Sie auf OK.\nFalls nicht, klicken Sie auf Cancel."
-    );
+    const confirmDelete = confirm(TEXT.confirm_delete_delivery);
     if (confirmDelete) {
       await deletedelivery(delivery.id!);
       location.reload();

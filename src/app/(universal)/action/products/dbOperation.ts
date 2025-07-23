@@ -251,6 +251,7 @@ export async function addNewProduct(formData: FormData) {
   const productDesc = formData.get("productDesc");
   const image = formData.get("image");
   const isFeatured = featured_img;
+  const status = formData.get("status");
 
   const receivedData = {
     name,
@@ -309,6 +310,7 @@ export async function addNewProduct(formData: FormData) {
     productDesc,
     image: imageUrl,
     isFeatured,
+    status
   };
 
   try {

@@ -33,81 +33,6 @@ const Page = () => {
     },
   });
 
-  async function onsubmit1(data: TnewProductSchema) {
-    const formData = new FormData();
-
-    formData.append("name", data.name);
-    formData.append("price", data.price);
-    formData.append("discountPrice", data.discountPrice || "");
-    formData.append("sortOrder", data.sortOrder);
-    formData.append("categoryId", data.categoryId || "");
-    formData.append("productDesc", data.productDesc || "");
-    formData.append("status", data.status || "published");
-
-    if (!data.image?.[0]) {
-      formData.append("image", "0");
-    } else {
-      formData.append("image", data.image[0]);
-    }
-
-    const result = await addNewProduct(formData);
-
-    if (!result?.errors) {
-      setValue("name", "");
-      setValue("productDesc", "");
-      setValue("price", "");
-      setValue("isFeatured", false);
-      const currentSortOrder = parseInt(data.sortOrder) || 0;
-      setValue("sortOrder", (currentSortOrder + 1).toString());
-      setValue("status", "published");
-    } else {
-      alert("Something went wrong");
-    }
-
-    console.log("response in create product form ", result);
-  }
-
-async function onsubmit2(data: TnewProductSchema) {
-  const formData = new FormData();
-
-  formData.append("name", data.name);
-  formData.append("price", data.price);
-  formData.append("discountPrice", data.discountPrice || "");
-  formData.append("sortOrder", data.sortOrder);
-  formData.append("categoryId", data.categoryId || "");
-  formData.append("productDesc", data.productDesc || "");
-  formData.append("status", data.status || "published");
-
-  // Handle image
-  if (!data.image?.[0]) {
-    formData.append("image", "0"); // or handle accordingly on server
-  } else {
-    try {
-      const resizedImage = await resizeImage(data.image[0], 400, 400); // adjust max width/height
-      formData.append("image", resizedImage);
-    } catch (error) {
-      console.error("Image resize failed:", error);
-      alert("Image resize failed. Please try again.");
-      return;
-    }
-  }
-
-  const result = await addNewProduct(formData);
-
-  if (!result?.errors) {
-    setValue("name", "");
-    setValue("productDesc", "");
-    setValue("price", "");
-    setValue("isFeatured", false);
-    const currentSortOrder = parseInt(data.sortOrder) || 0;
-    setValue("sortOrder", (currentSortOrder + 1).toString());
-    setValue("status", "published");
-  } else {
-    alert("Something went wrong");
-  }
-
-  console.log("response in create product form ", result);
-}
 
 
 async function onsubmit(data: TnewProductSchema) {
@@ -115,7 +40,7 @@ async function onsubmit(data: TnewProductSchema) {
 
   formData.append("name", data.name);
   formData.append("price", data.price);
-  formData.append("discountPrice", data.discountPrice || "");
+  formData.append("discountPrice", data.discountPrice || "0");
   formData.append("sortOrder", data.sortOrder);
   formData.append("categoryId", data.categoryId || "");
   formData.append("productDesc", data.productDesc || "");
@@ -135,7 +60,7 @@ async function onsubmit(data: TnewProductSchema) {
     }
   }
 
-  const result = await addNewProduct(formData);
+ const result = await addNewProduct(formData);
 
   if (!result?.errors) {
     setValue("name", "");
@@ -316,3 +241,81 @@ async function onsubmit(data: TnewProductSchema) {
 };
 
 export default Page;
+
+
+
+//   async function onsubmit1(data: TnewProductSchema) {
+//     const formData = new FormData();
+
+//     formData.append("name", data.name);
+//     formData.append("price", data.price);
+//     formData.append("discountPrice", data.discountPrice || "");
+//     formData.append("sortOrder", data.sortOrder);
+//     formData.append("categoryId", data.categoryId || "");
+//     formData.append("productDesc", data.productDesc || "");
+//     formData.append("status", data.status || "published");
+
+//     if (!data.image?.[0]) {
+//       formData.append("image", "0");
+//     } else {
+//       formData.append("image", data.image[0]);
+//     }
+
+//     const result = await addNewProduct(formData);
+
+//     if (!result?.errors) {
+//       setValue("name", "");
+//       setValue("productDesc", "");
+//       setValue("price", "");
+//       setValue("isFeatured", false);
+//       const currentSortOrder = parseInt(data.sortOrder) || 0;
+//       setValue("sortOrder", (currentSortOrder + 1).toString());
+//       setValue("status", "published");
+//     } else {
+//       alert("Something went wrong");
+//     }
+
+//     console.log("response in create product form ", result);
+//   }
+
+// async function onsubmit2(data: TnewProductSchema) {
+//   const formData = new FormData();
+
+//   formData.append("name", data.name);
+//   formData.append("price", data.price);
+//   formData.append("discountPrice", data.discountPrice || "");
+//   formData.append("sortOrder", data.sortOrder);
+//   formData.append("categoryId", data.categoryId || "");
+//   formData.append("productDesc", data.productDesc || "");
+//   formData.append("status", data.status || "published");
+
+//   // Handle image
+//   if (!data.image?.[0]) {
+//     formData.append("image", "0"); // or handle accordingly on server
+//   } else {
+//     try {
+//       const resizedImage = await resizeImage(data.image[0], 400, 400); // adjust max width/height
+//       formData.append("image", resizedImage);
+//     } catch (error) {
+//       console.error("Image resize failed:", error);
+//       alert("Image resize failed. Please try again.");
+//       return;
+//     }
+//   }
+
+//   const result = await addNewProduct(formData);
+
+//   if (!result?.errors) {
+//     setValue("name", "");
+//     setValue("productDesc", "");
+//     setValue("price", "");
+//     setValue("isFeatured", false);
+//     const currentSortOrder = parseInt(data.sortOrder) || 0;
+//     setValue("sortOrder", (currentSortOrder + 1).toString());
+//     setValue("status", "published");
+//   } else {
+//     alert("Something went wrong");
+//   }
+
+//   console.log("response in create product form ", result);
+// }

@@ -1,26 +1,30 @@
 "use client";
+import { UseSiteContext } from "@/SiteContext/SiteContext";
+import { formatCurrencyNumber } from "@/utils/formatCurrency";
 import React from "react";
 // import CartContext from "@/store/CartContext";
 
 const ProductList = ({ item }) => {
-  // const { addProductToCart, decCartProduct, removeCartProduct } =
-  //   useContext(CartContext);
-
-  //   console.log("cart item", item)
-
-  // function addProductToCartNew() {
-  //   //console.log("llll")
-  //   addProductToCart(item);
-  // }
-
-  const total = (parseInt(item.quantity) * parseFloat(item.price)).toFixed(2);
-
-  
-  const itemPrice = (parseFloat(item.price)).toFixed(2).replace(/\./g, ',');
  
-//   const itemPriceS = itemPrice?.toFixed(2).toString().replace(/\./g, ',');;
+   // const { TEXT } = useLanguage();
+    const { settings } = UseSiteContext();
 
-  const ToatlPrice = (total.toString()).replace(/\./g, ',')
+ const total = (parseInt(item.quantity) * parseFloat(item.price)).toFixed(2);
+ // const itemPrice = (parseFloat(item.price)).toFixed(2).replace(/\./g, ',');
+//  const ToatlPrice = (total.toString()).replace(/\./g, ',')
+
+    const total_FORMATED = formatCurrencyNumber(
+      Number(total) ?? 0,
+      (settings.currency || "EUR") as string,
+      (settings.locale || "de-DE") as string
+    );
+    const itemPrice_formated = formatCurrencyNumber(
+      Number(item.price) ?? 0,
+      (settings.currency || "EUR") as string,
+      (settings.locale || "de-DE") as string
+    );
+
+ 
   return (
     <div className="flex flex-row gap-2  justify-between border-b mt-2 rounded-xl">
       <div className="w-[20%]">
@@ -44,13 +48,13 @@ const ProductList = ({ item }) => {
 
           <div className="flex gap-2 w-[60%]">
             <div className="text-[1rem] w-[33%] flex items-start justify-end ">
-              &euro;{itemPrice}
+              {itemPrice_formated}
             </div>
             <div className="text-[1rem] w-[33%] flex items-start justify-end ">
                {item.quantity}
             </div>
             <div className="text-[1rem] w-[33%] flex items-start justify-end">
-              &euro;{ToatlPrice}
+              {total_FORMATED}
             </div>
           </div>
         </div>

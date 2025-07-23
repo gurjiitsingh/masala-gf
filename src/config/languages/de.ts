@@ -115,6 +115,56 @@ shop_more_button_order_complete: "Mehr einkaufen",
   error_unexpected_total: "Unerwarteter Fehler bei der Berechnung des Bestellbetrags. Bitte aktualisieren oder erneut versuchen.",
   error_empty_cart: "Der Warenkorb ist leer, bitte fügen Sie Lebensmittel hinzu",
 
+// Add aleart confirm 
+confirm_delete_product: "Möchten Sie das Produkt löschen?\nFalls ja, klicken Sie auf OK.\nFalls nicht, klicken Sie auf Cancel.",
+error_delete_failed: "Fehler: ",
+error_unexpected_delete: "Ein unerwarteter Fehler ist aufgetreten beim Löschen.",
+status_featured: "Featured",
+button_variants: "Varianten",
+
+
+category_delete_with_products_alert: "Diese Kategorie enthält noch Produkte ({count}).\nBitte löschen Sie zuerst alle Produkte, bevor Sie die Kategorie löschen.",
+confirm_delete_category: "Möchten Sie die Kategorie wirklich löschen?\nFalls ja, klicken Sie auf OK.\nFalls nicht, klicken Sie auf Abbrechen.",
+featured_label: "Featured",
+view_products_button: "Produkte anzeigen",
+
+confirm_delete_coupon: "Möchten Sie den Gutschein löschen?\nFalls ja, klicken Sie auf OK.\nFalls nicht, klicken Sie auf Cancel.",
+discount_type_flat: "Pauschal",
+discount_type_percent: "Prozent",
+fallback_dash: "—",
+ 
+confirm_delete_delivery: "Möchten Sie die Lieferung löschen?\nFalls ja, klicken Sie auf OK.\nFalls nicht, klicken Sie auf Cancel.",
+
+confirm_delete_flavor: "Möchten Sie den Geschmack löschen?\nFalls ja, klicken Sie auf OK.\nFalls nicht, klicken Sie auf Cancel.",
+
+
+confirm_delete_order: "Möchten Sie diese Bestellung löschen?",
+
+confirm_delete_addon: "Möchten Sie dieses Add-On löschen?\nFalls ja, klicken Sie auf OK.\nFalls nicht, klicken Sie auf Abbrechen.",
+
+
+confirm_delete_reservation: "Möchten Sie diese Reservierung löschen?",
+delete_reservation: "Reservierung löschen",
+loading: "Wird geladen...",
+no_reservations: "Keine Reservierungen gefunden.",
+pagination_newer: "Neuere",
+pagination_older: "Ältere",
+name: "Name",
+email: "E-Mail",
+phone: "Telefon",
+date: "Datum",
+time: "Uhrzeit",
+guests: "Gäste",
+message: "Nachricht",
+created: "Erstellt",
+action: "Aktion",
+
+confirm_delete_user: "Möchten Sie den Benutzer löschen?\nFalls ja, klicken Sie auf OK.\nFalls nicht, klicken Sie auf Abbrechen.",
+alert_failed_delete: "Benutzer konnte nicht gelöscht werden.",
+aria_delete_user: "Benutzer löschen",
+
+
+
 };
 
 export const SEO = {

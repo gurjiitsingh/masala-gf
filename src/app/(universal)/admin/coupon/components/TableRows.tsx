@@ -1,3 +1,5 @@
+"use client";
+
 import {
   TableCell,
   TableRow,
@@ -9,12 +11,13 @@ import Link from "next/link";
 import { CiEdit } from "react-icons/ci";
 import { deletecoupon } from "@/app/(universal)/action/coupon/dbOperation";
 import { couponType } from "@/lib/types/couponType";
+import { useLanguage } from "@/store/LanguageContext";
 
 function TableRows({ coupon }: { coupon: couponType }) {
+  const { TEXT } = useLanguage();
+
   async function handleDelete(coupon: couponType) {
-    const confirmDelete = confirm(
-      "Möchten Sie den Gutschein löschen?\n Falls ja, klicken Sie auf OK. \n Falls nicht, klicken Sie auf Cancel."
-    );
+    const confirmDelete = confirm(TEXT.confirm_delete_coupon || "Are you sure you want to delete the coupon?\nIf yes, click OK.\nIf not, click Cancel.");
     if (confirmDelete) {
       await deletecoupon(coupon.id!);
       location.reload(); // consider using state in the future for a better UX
@@ -27,8 +30,8 @@ function TableRows({ coupon }: { coupon: couponType }) {
 
       <TableCell>
         {coupon.discountType === "flat"
-          ? `Flat €${coupon.discount}`
-          : `Percent %${coupon.discount}`}
+          ? `${TEXT.discount_type_flat || "Flat"} €${coupon.discount}`
+          : `${TEXT.discount_type_percent || "Percent"} %${coupon.discount}`}
       </TableCell>
 
       <TableCell>€{coupon.minSpend}</TableCell>
@@ -36,7 +39,7 @@ function TableRows({ coupon }: { coupon: couponType }) {
       <TableCell>{coupon.expiry}</TableCell>
 
       <TableCell>
-        {coupon.createdAt ? coupon.createdAt.toLocaleDateString() : "—"}
+        {coupon.createdAt ? coupon.createdAt.toLocaleDateString() : TEXT.fallback_dash || "—"}
       </TableCell>
 
       <TableCell>
@@ -71,7 +74,7 @@ function TableRows({ coupon }: { coupon: couponType }) {
         </Link>
       </TableCell>
 
-      <TableCell>{coupon.message || "—"}</TableCell>
+      <TableCell>{coupon.message || TEXT.fallback_dash || "—"}</TableCell>
 
       <TableCell>
         <Button

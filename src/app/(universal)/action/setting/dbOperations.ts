@@ -149,20 +149,20 @@ export async function deleteSettingById(docId: string): Promise<void> {
   }
 }
 
-export async function deletesetting(id: string, oldImageUrl: string) {
+export async function deletesetting(id: string) {
   await adminDb.doc(`settings/${id}`).delete();
 
-  const segments = oldImageUrl.split("/");
-  const imageName = segments[segments.length - 2] + "/" + segments[segments.length - 1];
-  const publicId = imageName.split(".")[0];
+  // const segments = oldImageUrl.split("/");
+  // const imageName = segments[segments.length - 2] + "/" + segments[segments.length - 1];
+  // const publicId = imageName.split(".")[0];
 
-  try {
-    const result = await deleteImage(publicId);
-    console.log("Image delete result:", result);
-  } catch (error) {
-    console.error(error);
-    return { errors: "Something went wrong, cannot delete product picture." };
-  }
+  // try {
+  //   const result = await deleteImage(publicId);
+  //   console.log("Image delete result:", result);
+  // } catch (error) {
+  //   console.error(error);
+  //   return { errors: "Something went wrong, cannot delete product picture." };
+  // }
 
   return { message: { success: "Deleted product" } };
 }

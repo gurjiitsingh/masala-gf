@@ -12,7 +12,7 @@ export const addOnPorductSchema = z.object({
     .min(2, { message: "Product description is required" }),
   baseProductId: z.string().optional(),
   isFeatured: z.boolean().optional(),
-  //image: z.any().optional(),
+  image: z.any().optional(),
   // .refine((file) => file.size < MAX_FILE_SIZE, "Max size is 5MB.")
   // .refine(
   //   (file) => checkFileType(file),
@@ -35,7 +35,7 @@ export const addOnPorductEditSchema = z.object({
     .min(2, { message: "Product description is required" }),
   baseProductId: z.string().optional(),
   isFeatured: z.boolean().optional(),
-  //image: z.any().optional(),
+  image: z.any().optional(),
   // .refine((file) => file.size < MAX_FILE_SIZE, "Max size is 5MB.")
   // .refine(
   //   (file) => checkFileType(file),

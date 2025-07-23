@@ -1,25 +1,39 @@
-import { deleteOrderMasterRec } from "@/app/(universal)/action/orders/dbOperations";
-import {
-  TableCell,
-  TableRow,
-} from "@/components/ui/table";
-import { orderMasterDataT } from "@/lib/types/orderMasterType";
+"use client";
 
+import { deleteOrderMasterRec } from "@/app/(universal)/action/orders/dbOperations";
+import { TableCell, TableRow } from "@/components/ui/table";
+import { orderMasterDataT } from "@/lib/types/orderMasterType";
 import Link from "next/link";
 import { MdDeleteForever } from "react-icons/md";
+import { useLanguage } from "@/store/LanguageContext";
+import { formatCurrencyNumber } from "@/utils/formatCurrency";
+import { UseSiteContext } from "@/SiteContext/SiteContext";
 
 function TableRows({ order }: { order: orderMasterDataT }) {
+  const { TEXT } = useLanguage();
+  const { settings } = UseSiteContext();
+  const flatDiscount = formatCurrencyNumber(
+    Number(order.flatDiscount) ?? 0,
+    (settings.currency || "EUR") as string,
+    (settings.locale || "de-DE") as string
+  );
+  const endTotalG = formatCurrencyNumber(
+    Number(order.endTotalG) ?? 0,
+    (settings.currency || "EUR") as string,
+    (settings.locale || "de-DE") as string
+  );
+
   async function handleDelete(id: string) {
-    if (confirm("Do you want to delete this order?")) {
+    if (confirm(TEXT.confirm_delete_order)) {
       try {
         await deleteOrderMasterRec(id);
         // Optionally: add toast or refresh logic
       } catch (err) {
-        console.error("Delete failed", err);
+        console.error(TEXT.error_delete_failed, err);
       }
     }
   }
- 
+
   return (
     <TableRow className="bg-white dark:bg-zinc-800 hover:bg-amber-50 dark:hover:bg-zinc-700 transition duration-200">
       <TableCell>
@@ -35,6 +49,19 @@ function TableRows({ order }: { order: orderMasterDataT }) {
           className="border border-gray-500 hover:bg-amber-300 dark:bg-amber-900 dark:hover:bg-amber-700 text-amber-800 dark:text-white px-3 py-1 rounded-full text-xs font-semibold transition"
         >
           #{order.srno}
+        </Link>
+         <Link
+          href={{
+            pathname: `/admin/orders/order-print-auto`,
+            query: {
+              masterId: order.id,
+              userId: order.userId,
+              addressId: order.addressId,
+            },
+          }}
+          className="border border-gray-500 hover:bg-amber-300 dark:bg-amber-900 dark:hover:bg-amber-700 text-amber-800 dark:text-white px-3 py-1 rounded-full text-xs font-semibold transition"
+        >
+          Print
         </Link>
       </TableCell>
 
@@ -61,22 +88,22 @@ function TableRows({ order }: { order: orderMasterDataT }) {
       </TableCell>
 
       <TableCell className="font-medium text-gray-900 dark:text-zinc-100">
-        €{order.endTotalG}
+        {endTotalG}
       </TableCell>
 
       <TableCell className="text-sm text-gray-600 dark:text-zinc-400">
         {order.paymentType}
       </TableCell>
- <TableCell className="text-sm text-gray-600 dark:text-zinc-400">
+
+      <TableCell className="text-sm text-gray-600 dark:text-zinc-400">
         {order.couponCode}
       </TableCell>
+
       <TableCell className="text-sm text-gray-600">
         {order.totalDiscountG}%
       </TableCell>
 
-      <TableCell className="text-sm text-gray-600">
-        €{order.flatDiscount}
-      </TableCell>
+      <TableCell className="text-sm text-gray-600">{flatDiscount}</TableCell>
 
       <TableCell>
         <button

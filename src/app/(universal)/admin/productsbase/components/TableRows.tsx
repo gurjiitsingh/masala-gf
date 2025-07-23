@@ -13,10 +13,12 @@ import { deleteProduct } from "@/app/(universal)/action/products/dbOperation";
 import { ProductType } from "@/lib/types/productType";
 import { formatCurrencyNumber } from '@/utils/formatCurrency';
 import { UseSiteContext } from "@/SiteContext/SiteContext";
+import { useLanguage } from '@/store/LanguageContext';
 
 function TableRows({ product }: { product: ProductType }) {
   const { settings } = UseSiteContext();
-
+  const { TEXT } = useLanguage();
+  
   const price = formatCurrencyNumber(
     Number(product.price) ?? 0,
     (settings.currency || 'EUR') as string,
@@ -40,23 +42,19 @@ function TableRows({ product }: { product: ProductType }) {
   };
 
   async function handleDelete(product: ProductType) {
-    const confirmDelete = confirm(
-      "Möchten Sie das Produkt löschen?\nFalls ja, klicken Sie auf OK.\nFalls nicht, klicken Sie auf Cancel."
-    );
-
+    const confirmDelete = confirm(TEXT.confirm_delete_product || "Do you want to delete the product?");
     if (!confirmDelete) return;
 
     try {
       const result = await deleteProduct(product.id!, product.image);
-
       if (result?.errors) {
-        alert("Fehler: " + result.errors);
+        alert(TEXT.error_delete_failed + result.errors);
       } else {
         location.reload();
       }
     } catch (err) {
       console.error("Delete failed:", err);
-      alert("Ein unerwarteter Fehler ist aufgetreten beim Löschen.");
+      alert(TEXT.error_unexpected_delete || "Unexpected error while deleting.");
     }
   }
 
@@ -100,7 +98,7 @@ function TableRows({ product }: { product: ProductType }) {
       <TableCell>
         {product?.isFeatured === true && (
           <span className="ml-2 bg-gradient-to-tr from-blue-500 to-indigo-400 text-white text-[10px] rounded-full px-3 py-1">
-            Featured
+            {TEXT.status_featured || "Featured"}
           </span>
         )}
       </TableCell>
@@ -125,7 +123,7 @@ function TableRows({ product }: { product: ProductType }) {
             }}
           >
             <Button size="sm" className="bg-red-600 text-white px-1 py-0">
-              Variants
+              {TEXT.button_variants || "Variants"}
             </Button>
           </Link>
 
