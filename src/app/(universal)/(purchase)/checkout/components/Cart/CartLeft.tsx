@@ -352,9 +352,10 @@ export default function CartLeft() {
 
       const AddressId =
         JSON.parse(localStorage.getItem("customer_address_Id") || "null") || "";
-      const order_user_Id = JSON.parse(
-        localStorage.getItem("order_user_Id") || ""
-      );
+      // const order_user_Id = JSON.parse(
+      //   localStorage.getItem("order_user_Id") || ""
+      // );
+      const order_user_Id = localStorage.getItem("order_user_Id") ?? null;
       const customer_name = JSON.parse(
         localStorage.getItem("customer_name") || ""
       );

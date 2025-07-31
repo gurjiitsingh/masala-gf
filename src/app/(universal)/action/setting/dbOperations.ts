@@ -1,17 +1,6 @@
 "use server";
 
 import { adminDb } from "@/lib/firebaseAdmin";
-import { deleteImage, upload } from "@/lib/cloudinary";
-import {
-  addDoc,
-  collection,
-  deleteDoc,
-  doc,
-  getDoc,
-  getDocs,
-  setDoc,
-  updateDoc,
-} from "firebase-admin/firestore"; // Using admin SDK now
 import { editSettingSchema, settingSchema, settingSchemaType } from "@/lib/types/settingType";
 import { SettingsDataType, value } from "@/lib/types/settings";
 
@@ -119,8 +108,8 @@ export async function fetchSettingById(docId: string): Promise<settingSchemaType
 
     const data = docSnap.data();
     return {
-      name: data.name || docId,
-      value: data.value || "",
+      name: data!.name || docId,
+      value: data!.value || "",
       key: docId,
     };
   } catch (error) {

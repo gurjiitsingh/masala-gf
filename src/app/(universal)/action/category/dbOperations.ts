@@ -4,6 +4,7 @@ import { categorySchema, editCategorySchema } from "@/lib/types/categoryType";
 import { deleteImage, upload } from "@/lib/cloudinary";
 import { categoryType } from "@/lib/types/categoryType";
 import { adminDb } from "@/lib/firebaseAdmin";
+import z from "zod";
 
 // ✅ Removed all incorrect Firestore imports from firebase-admin
 // You already use the correct admin SDK syntax
@@ -169,4 +170,54 @@ export async function updateCategoryFlag(
       disablePickupDiscount,
     });
   }
+}
+
+
+
+// const categorySchema = z.object({
+//   id: z.string().optional(),
+//   name: z.string(),
+//   desc: z.string(),
+//   productDesc: z.string().optional(),
+//   slug: z.string().optional(),
+//   image: z.string().optional(),
+//   isFeatured: z.coerce.boolean().optional(),
+//   sortOrder: z.coerce.number().optional(),
+//   disablePickupDiscount: z.coerce.boolean().optional(),
+// });
+
+export async function uploadCategoryFromCSV(data: any) {
+  const parsed = categorySchema.safeParse(data);
+  if (!parsed.success) {
+    console.warn('Invalid category data:', parsed.error.format());
+    return;
+  }
+
+  const category = parsed.data as categoryType;
+
+  const ref = category.id
+    ? adminDb.collection('category').doc(category.id)
+    : adminDb.collection('category').doc();
+
+  await ref.set(category, { merge: true });
+}
+
+
+
+export async function uploadCategories1(rawData: any[]) {
+  const batch = adminDb.batch();
+
+  for (const item of rawData) {
+    const parsed = categorySchema.safeParse(item);
+    if (!parsed.success) continue;
+
+    const data = parsed.data as categoryType;
+    const ref = data.id
+      ? adminDb.collection('category').doc(data.id)
+      : adminDb.collection('category').doc();
+
+    batch.set(ref, data, { merge: true });
+  }
+
+  await batch.commit();
 }

@@ -6,7 +6,7 @@ import { generateCartHtml } from '@/lib/email/generateCartHtml';
 
  const DOMAIN = process.env.MAILGUN_DOMAIN as string;
  const API_KEY = process.env.MAILGUN_API_KEY as string;
-
+const ADMIN_EMAI_ORDER_CONFIRM = process.env.ADMIN_EMAI_ORDER_CONFIRM as string;
 
 
 
@@ -38,7 +38,7 @@ export async function POST(req:NextRequest) {
   //   Email to business/info
      const internalMail = await client.messages.create(DOMAIN, {
       from: 'info@masala-gf.shop',
-      to: 'info@masala-gf.de',
+      to: ADMIN_EMAI_ORDER_CONFIRM,
       subject: `New Order Received - ${subject}`,
       html: emailBody,
     });

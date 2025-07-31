@@ -83,7 +83,9 @@ export type TaddressCheckout ={
     }
 
 
-export type addressResT = {
+export type addressResT = { 
+  
+  id?: string;
   email: string;
   firstName: string;
   lastName: string;
@@ -94,7 +96,7 @@ export type addressResT = {
   city: string;
   state: string;
   zipCode: string;
-  createdAt?: Timestamp;
+  createdAt?: Timestamp | string;
 };
 
 export type addressWithId = Omit<addressResT, "createdAt"> & {

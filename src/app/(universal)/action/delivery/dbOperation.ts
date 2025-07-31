@@ -101,8 +101,19 @@ export async function fetchdeliveryByZip(zipname: string): Promise<deliveryType>
     .where("name", "==", zipname)
     .get();
 
+   //   console.log("querySnapshot.docs[0].data()---------", querySnapshot.docs[0].data())
  if (querySnapshot.empty){
-  return querySnapshot.docs[0].data() as deliveryType;
+ 
+ // return querySnapshot.docs[0].data() as deliveryType;
+  return {
+    id:'',
+  name: '',
+  price: '',
+  productCat: '',
+  deliveryDesc: '',
+  deliveryDistance: '',
+  minSpend: 1
+}
  } //throw new Error("No delivery data found for the provided zip");
   return querySnapshot.docs[0].data() as deliveryType;
  // return { id: querySnapshot.docs[0].id, ...querySnapshot.docs[0].data() } as deliveryType;

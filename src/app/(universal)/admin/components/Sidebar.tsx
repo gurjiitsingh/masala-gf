@@ -13,6 +13,8 @@ import {
   MdInventory,
   MdRestaurantMenu,
   MdSettings,
+  MdOutlineCrisisAlert,
+  MdOutlineBackup,
 } from 'react-icons/md';
 import { FaUsers } from 'react-icons/fa';
 import { BsCardList } from 'react-icons/bs';
@@ -21,6 +23,7 @@ import { IoIosLogOut } from 'react-icons/io';
 import { IoClose } from 'react-icons/io5';
 
 import { UseSiteContext } from '@/SiteContext/SiteContext';
+import { FaClipboardList } from 'react-icons/fa6';
 
 type Titem = {
   name: string;
@@ -31,6 +34,8 @@ type Titem = {
 const menuList: Titem[] = [
   { name: 'Home', link: '/', icon: <GoHome /> },
   { name: 'Orders', link: '/admin', icon: <MdDashboard /> },
+    { name: 'Orders Realtime', link: '/admin/order-realtime', icon: <MdOutlineCrisisAlert /> },
+     { name: 'Sale', link: '/admin/sale', icon: <FaClipboardList /> },
   { name: 'Reservations', link: '/admin/reservations', icon: <BsCardList /> },
   { name: 'Categories', link: '/admin/categories', icon: <MdCategory /> },
   {
@@ -48,6 +53,8 @@ const menuList: Titem[] = [
   { name: 'Delivery', link: '/admin/delivery', icon: <TbTruckDelivery /> },
   { name: 'Users', link: '/admin/users', icon: <FaUsers /> },
   { name: 'Setting', link: '/admin/setting', icon: <MdSettings /> },
+  { name: 'Data Backup', link: '/admin/data-backup', icon: <MdOutlineBackup /> }, // Add icon to top
+
 ];
 
 const Sidebar = () => {

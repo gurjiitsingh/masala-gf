@@ -13,13 +13,13 @@ import { HiOutlineChatBubbleBottomCenterText } from "react-icons/hi2";
 import { TbBrandBooking } from "react-icons/tb";
 import { TEXT } from "@/config/languages";
 
-// Icon mapping
-// const iconMap: Record<string, any> = {
-//   "/": BiHomeSmile,
-//   "/about": BiUser,
-//   "/contact": HiOutlineChatBubbleBottomCenterText,
-//   "/reservation": TbBrandBooking,
-// };
+// Icon mapping (optional)
+const iconMap: Record<string, any> = {
+  "/": BiHomeSmile,
+  "/about": BiUser,
+  "/contact": HiOutlineChatBubbleBottomCenterText,
+  "/reservation": TbBrandBooking,
+};
 
 // Framer Motion Variants
 const framerMenuBackground = {
@@ -48,19 +48,17 @@ const framerIcon = {
   initial: { scale: 0 },
   animate: { scale: 1 },
   transition: {
-    type: "spring",
+    type: "spring" as const,
     stiffness: 260,
     damping: 20,
     delay: 1.5,
   },
 };
 
-
 export const BargerMenu = () => {
   const { openBargerMenu, bargerMenuToggle } = UseSiteContext();
   const ref = useRef(null);
 
-  // Guard to ensure no SSR mismatch
   const [hasMounted, setHasMounted] = useState(false);
   useEffect(() => {
     setHasMounted(true);
@@ -102,7 +100,7 @@ export const BargerMenu = () => {
             {/* Menu Items */}
             <ul>
               {TEXT.menu.map((item, idx) => {
-                // const Icon = iconMap[item.link] || BiHomeSmile;
+                const Icon = iconMap[item.link] || BiHomeSmile;
 
                 return (
                   <li key={item.name}>
@@ -118,7 +116,7 @@ export const BargerMenu = () => {
                         {item.name}
                       </motion.span>
                       <motion.div {...framerIcon}>
-                        {/* <Icon className="text-2xl" /> */}
+                        <Icon className="text-2xl text-white" />
                       </motion.div>
                     </a>
                   </li>
@@ -131,4 +129,3 @@ export const BargerMenu = () => {
     </AnimatePresence>
   );
 };
-

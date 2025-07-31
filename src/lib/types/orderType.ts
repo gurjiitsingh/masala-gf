@@ -7,5 +7,6 @@ purchaseSession:string;
 quantity:number;
 status:string;
 userId:string;
+productDesc?:string;
 };
 

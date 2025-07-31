@@ -9,7 +9,7 @@ export async function sendReservationConfirmationEmail(data: ReservationFormData
     const DOMAIN = process.env.MAILGUN_DOMAIN!;
     const API_KEY = process.env.MAILGUN_API_KEY!;
     const FROM = process.env.MAILGUN_FROM_EMAIL!;
-    const TO_BUSINESS = process.env.MAILGUN_BUSINESS_EMAIL!;
+    const TO_ADMIN = process.env.ADMIN_EMAI_TABLE_BOOK!; 
 
     const mg = new Mailgun(formData);
     const client = mg.client({
@@ -31,7 +31,7 @@ export async function sendReservationConfirmationEmail(data: ReservationFormData
 
     const businessResponse = await client.messages.create(DOMAIN, {
       from: FROM,
-      to: TO_BUSINESS,
+      to: TO_ADMIN,
       subject: 'New Reservation Received',
       html,
     });

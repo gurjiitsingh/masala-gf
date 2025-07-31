@@ -17,7 +17,7 @@ function TableRows({ user }: { user: userType }) {
     );
     if (!confirmDelete) return;
 
-    const result = await deleteUser(user.id, "user.image");
+    const result = await deleteUser(user.id);
 
     if (result.message.success === "ok") {
       location.reload();

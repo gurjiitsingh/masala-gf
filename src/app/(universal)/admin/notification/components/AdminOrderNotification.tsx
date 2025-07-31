@@ -6,15 +6,16 @@ import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
 import toast from "react-hot-toast";
 
 export default function AdminOrderNotification() {
-  const lastOrderTime = useRef<number>(Date.now()); // Track last seen order
+  const lastOrderTime = useRef<number>(Date.now());
 
   useEffect(() => {
     const q = query(
-      collection(db, "orderMaster"),
+      collection(db, "orderMaster"), // your Firestore collection
       orderBy("time", "desc")
     );
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
+        console.log("this works-------------------")
       snapshot.docChanges().forEach((change) => {
         if (change.type === "added") {
           const data = change.doc.data();
@@ -24,7 +25,6 @@ export default function AdminOrderNotification() {
           if (orderTime > lastOrderTime.current) {
             lastOrderTime.current = orderTime;
             toast.success(`New order #${data.srno} received!`);
-            // You can also play a sound here if needed
           }
         }
       });
@@ -33,5 +33,5 @@ export default function AdminOrderNotification() {
     return () => unsubscribe();
   }, []);
 
-  return null; // Component doesn't render anything, just listens
+  return null;
 }

@@ -6,7 +6,6 @@ export type orderMasterDataT = {
   email:string;
   userId: string;
   addressId: string;
-  time: string;
   endTotalG: number;
   itemTotal: number;
   paymentType: string;
@@ -18,6 +17,8 @@ export type orderMasterDataT = {
   deliveryCost: number;
   calculatedPickUpDiscountL: number;
   createdAt:Timestamp | string;
+  createdAtUTC?: string;
+  time: string;
   calCouponDiscount: number;
   couponDiscountPercentL: number;
   couponCode: string | undefined;

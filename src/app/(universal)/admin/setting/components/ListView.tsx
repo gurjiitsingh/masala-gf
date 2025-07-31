@@ -17,12 +17,12 @@ import {
 } from "@/components/ui/table";
 
 import TableRows from "./TableRows";
-import { fetchProductByCategoryId } from "@/app/(universal)/action/productsbase/dbOperation";
 
 import { ProductType } from "@/lib/types/productType";
 import { fetchCategories } from "@/app/(universal)/action/category/dbOperations";
 import { categoryType } from "@/lib/types/categoryType";
 import CategoryComp from "./CategoryComp";
+import { fetchProductByCategoryId } from "@/app/(universal)/action/products/dbOperation";
 //import FeaturProductUpdate from "./FeaturProductUpdate";
 
 const ListView = ({ title }: productTableProps) => {

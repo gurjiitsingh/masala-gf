@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { exportToCSV } from '@/lib/backups/exportToCSV';
-import { fetchProducts } from '@/app/(universal)/action/productsbase/dbOperation'; // correct server function path
+import { fetchProducts } from '@/app/(universal)/action/products/dbOperation';
 
 export default function DownloadProductCSV() {
   const [loading, setLoading] = useState(false);

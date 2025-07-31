@@ -94,7 +94,7 @@ export async function searchAddressEmail(email: string): Promise<addressResType 
 export async function searchAddressByAddressId(id: string): Promise<addressWithId> {
   const docSnap = await adminDb.collection("address").doc(id).get();
   if (!docSnap.exists) throw new Error("No such address document");
-
+ 
   const raw = docSnap.data() as addressResT;
   const createdAtStr =
     raw.createdAt instanceof Timestamp
@@ -108,22 +108,7 @@ export async function searchAddressByAddressId(id: string): Promise<addressWithI
   };
 }
 
-// ✅ Same as above, but returns addressResT only
-export async function searchAddressByAddressId1(id: string): Promise<addressResT> {
-  const docSnap = await adminDb.collection("address").doc(id).get();
-  const raw = docSnap.data() as addressResT;
 
-  const createdAtStr =
-    raw.createdAt instanceof Timestamp
-      ? raw.createdAt.toDate().toISOString()
-      : new Date().toISOString();
-
-  return {
-    ...raw,
-    createdAt: createdAtStr,
-    id: docSnap.id,
-  };
-}
 
 // ✅ Get order master by ID
 export async function fetchOrderMasterById(id: string) {
@@ -132,7 +117,7 @@ export async function fetchOrderMasterById(id: string) {
 
   const raw = docSnap.data();
   const createdAtStr =
-    raw.createdAt instanceof Timestamp
+    raw?.createdAt instanceof Timestamp
       ? raw.createdAt.toDate().toISOString()
       : new Date().toISOString();
 

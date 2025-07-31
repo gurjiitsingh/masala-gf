@@ -524,12 +524,10 @@ export async function fetchProductByCategoryId(id: string): Promise<ProductType[
 
 
 export async function fetchProductsForExport(): Promise<ProductType[]> {
-  const snapshot = await getDocs(collection(db, 'product'));
-  const data: ProductType[] = [];
+  const snapshot = await adminDb.collection("product").get();
 
-  snapshot.forEach((doc) => {
-    const pData = { id: doc.id, ...doc.data() } as ProductType;
-    data.push(pData);
+  const data: ProductType[] = snapshot.docs.map((doc) => {
+    return { id: doc.id, ...doc.data() } as ProductType;
   });
 
   return data;
@@ -540,36 +538,38 @@ export async function fetchProductsForExport(): Promise<ProductType[]> {
  */
 export async function uploadProductFromCSV(data: Partial<ProductType>) {
   if (!data.name || data.price === undefined) {
-    throw new Error('Missing required fields: name or price');
+    throw new Error("Missing required fields: name or price");
   }
 
-  const productData: Omit<ProductType, 'id'> = {
+  console.log("data------",data)
+
+  const productData: Omit<ProductType, "id"> = {
     name: data.name,
     price: Number(data.price),
     discountPrice:
       data.discountPrice !== undefined ? Number(data.discountPrice) : 0,
-    categoryId: data.categoryId ?? '',
-    productCat: data.productCat ?? '',
-    baseProductId: data.baseProductId ?? '',
-    productDesc: data.productDesc ?? '',
+    categoryId: data.categoryId ?? "",
+    productCat: data.productCat ?? "",
+    baseProductId: data.baseProductId ?? "",
+    productDesc: data.productDesc ?? "",
     sortOrder: data.sortOrder !== undefined ? Number(data.sortOrder) : 0,
-    image: data.image ?? '',
-   isFeatured:
-  String(data.isFeatured).toLowerCase() === 'true' ? true : false,
+    image: data.image ?? "",
+    isFeatured:
+      String(data.isFeatured).toLowerCase() === "true" ? true : false,
     purchaseSession: data.purchaseSession ?? null,
     quantity:
       data.quantity !== undefined && data.quantity !== null
         ? Number(data.quantity)
         : null,
     flavors:
-  String(data.flavors).toLowerCase() === 'true' ? true : false,
+      String(data.flavors).toLowerCase() === "true" ? true : false,
     status:
-      data.status === 'published' ||
-      data.status === 'draft' ||
-      data.status === 'out_of_stock'
+      data.status === "published" ||
+      data.status === "draft" ||
+      data.status === "out_of_stock"
         ? data.status
         : undefined,
   };
 
-  await addDoc(collection(db, 'product'), productData);
+  await adminDb.collection("products").add(productData);
 }

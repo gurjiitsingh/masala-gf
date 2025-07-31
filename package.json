@@ -53,7 +53,7 @@
     "react-radio-buttons": "^1.2.2",
     "react-slick": "^0.30.2",
     "react-use": "^17.6.0",
-    "recharts": "^2.12.7",
+    "recharts": "^2.15.4",
     "slick-carousel": "^1.8.1",
     "slick-slider": "^1.8.2",
     "stripe": "^18.0.0",

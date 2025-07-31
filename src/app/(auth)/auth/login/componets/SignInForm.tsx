@@ -1,99 +1,86 @@
-'use client'
+'use client';
 
-import { Card } from "../../../../../components/ui/card"
-import { FormEvent } from "react"
-import { signIn } from "next-auth/react";// useSession
-//import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-
+import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
+import { FormEvent } from 'react';
+import { signIn } from 'next-auth/react';
 
 const SignIn = () => {
+  async function submitHandler(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
 
-  // const { data: session, status } = useSession();
-  // console.log(session)
+    const loginData = {
+      id: 'login-form',
+      email: formData.get('email'),
+      password: formData.get('password'),
+      redirect: true,
+      callbackUrl: '/user',
+    };
 
- // const router = useRouter();
-
-async function submitHandler(event:FormEvent<HTMLFormElement>){
-
-event.preventDefault();
-const formData = new FormData(event.currentTarget);
-
-const loginData = {
-  
-  id: "kjlkjl",
-  email: formData.get('email'),
-  password: formData.get('password'),
- redirect: true,//if set ture, midleware will work, if set false response signIn responce will redirect
-  callbackUrl:"/user"
-}
-
-const response  = await signIn('credentials', loginData);
-
-console.log("in form ",response)
-
-// if(!response?.error){
-//   console.log("login--------")
-//  if(response?.role === 'admin'){
-//   router.push('/admin');
-//  } 
-//  if(response?.role === 'user'){
-//   router.push('/user');
-//  } 
-// // router.push('/');
-// // router.refresh();
-
-// }
-
-}
-
-
-//console.log("session")
+    const response = await signIn('credentials', loginData);
+    console.log('Login response:', response);
+  }
 
   return (
-    
-    <Card className="  lg:w-[70%] m-auto p-12" >
-   <h1 className="text-md">Login</h1>
-    <form onSubmit={submitHandler}>
-      <div className="flex w-full flex-col gap-8  my-15 ">
+    <div className="flex min-h-screen items-center justify-center bg-gray-50 dark:bg-zinc-900 px-4">
+      <Card className="w-full max-w-md p-8 shadow-md border border-gray-200 dark:border-zinc-700">
+        <h1 className="text-2xl font-bold text-center mb-6 text-gray-800 dark:text-white">
+          Sign in to your account
+        </h1>
 
-        {/* register your input into the hook by invoking the "register" function */}
-        <div className="flex flex-col gap-1">
-          <label className="label-style">Email</label>
-          <input 
-          type="email" name="email" id="email"  defaultValue='g@mail.com'
-          className="input-style" />
-          <p className="text-[0.8rem] font-medium text-destructive">
-          
-          </p>
-        </div>
+        <form onSubmit={submitHandler} className="space-y-6">
+          <div>
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-zinc-300">
+              Email address
+            </label>
+            <input
+              type="email"
+              name="email"
+              id="email"
+              required
+              defaultValue="g@mail.com"
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm dark:bg-zinc-800 dark:border-zinc-700 dark:text-white focus:border-emerald-600 focus:ring-emerald-500 sm:text-sm"
+            />
+          </div>
 
-        <div className="flex flex-col gap-1">
-          <label className="label-style">Password</label>
-          <input
-           type="password" name="password" id="password"  defaultValue='123456'
-            className="input-style"
-          />
+          <div>
+            <div className="flex justify-between items-center">
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-zinc-300">
+                Password
+              </label>
+              <Link
+                href="/forgot-password"
+                className="text-sm text-emerald-600 hover:underline"
+              >
+                Forgot password?
+              </Link>
+            </div>
+            <input
+              type="password"
+              name="password"
+              id="password"
+              required
+              defaultValue="123456"
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm dark:bg-zinc-800 dark:border-zinc-700 dark:text-white focus:border-emerald-600 focus:ring-emerald-500 sm:text-sm"
+            />
+          </div>
 
-          <p className="text-[0.8rem] font-medium text-destructive">
-           
-          </p>
-        </div>
+          <Button type="submit" className="w-full">
+            Sign In
+          </Button>
+        </form>
 
-      
-       
-        <Button type="submit">Login </Button>
-      </div>
-    </form>
-<div className="w-full text-center mt-5">
-If Not register  <Link  href="/auth/register"> click to register</Link>
+        <p className="mt-6 text-center text-sm text-gray-600 dark:text-zinc-400">
+          Don't have an account?{' '}
+          <Link href="/auth/register" className="text-emerald-600 hover:underline font-medium">
+            Register here
+          </Link>
+        </p>
+      </Card>
     </div>
-    </Card>
+  );
+};
 
-
-
-  )
-}
-
-export default SignIn
+export default SignIn;

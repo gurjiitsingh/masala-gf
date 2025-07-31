@@ -4,7 +4,7 @@ import { hashPassword } from "@/lib/auth";
 import { adminDb } from "@/lib/firebaseAdmin";
 import { TuserSchem, userType } from "@/lib/types/userType";
 import { FieldValue } from "firebase-admin/firestore";
-
+import admin from 'firebase-admin';
 /**
  * Add a new user if email isn't already in use.
  * Returns the new or existing user ID.
@@ -123,6 +123,24 @@ export async function unsubscribeUser(email: string): Promise<boolean> {
     return true;
   } catch (error) {
     console.error("Failed to unsubscribe:", error);
+    return false;
+  }
+}
+
+
+
+export async function unsbscribeUser(email: string): Promise<boolean> {
+  try {
+    if (!email) return false;
+
+    await adminDb.collection("unsubscribedEmails").doc(email).set({
+      email,
+      unsubscribedAt: admin.firestore.FieldValue.serverTimestamp(),
+    });
+
+    return true;
+  } catch (error) {
+    console.error("❌ Failed to unsubscribe user:", error);
     return false;
   }
 }

@@ -10,6 +10,7 @@ import { orderProductsT } from "@/lib/types/orderType";
 import { orderDataType, purchaseDataT } from "@/lib/types/cartDataType";
 import { ProductType } from "@/lib/types/productType";
 import admin from 'firebase-admin';
+import { doc } from "@firebase/firestore";
 type orderMasterDataSafeT = Omit<orderMasterDataT, "createdAt"> & {
   createdAt: string; // ISO string
 };
@@ -59,6 +60,9 @@ export async function createNewOrderCustomerAddress(purchaseData: purchaseDataT)
 
 
 export async function createNewOrder(purchaseData: orderDataType) {
+
+  const nowUTC = new Date().toISOString(); // UTC ISO string (e.g. "2025-07-24T06:07:32.123Z")
+  
   const nowGerman = new Date().toLocaleString("en-DE", {
     dateStyle: "medium",
     timeStyle: "medium",
@@ -118,16 +122,18 @@ export async function createNewOrder(purchaseData: orderDataType) {
     status,
     totalDiscountG,
     createdAt: admin.firestore.FieldValue.serverTimestamp(),
+    createdAtUTC: nowUTC, // ISO string, cross-compatible
     time: nowGerman,
     srno: new_srno,
   } as orderMasterDataT;
+  
 
   // Add to orderMaster collection
   const orderMasterId = await addOrderToMaster(orderMasterData);
 
   // Add each product to orderProducts
   for (const product of cartData) {
-    await addProductDraft(product, userId, orderMasterId);
+    await addProductDraft(product, userId!, orderMasterId!);
   }
 
   // Save marketing data
@@ -181,7 +187,7 @@ export async function marketingData({
   noOfferEmails,
 }: {
   name: string;
-  userId: string;
+  userId: string | undefined;
   addressId: string;
   email: string;
   noOfferEmails: boolean;
@@ -195,7 +201,7 @@ export async function marketingData({
   });
   const germanDate = new Date(germanDateStr);
 
-  const docRef = adminDb.collection("customerRecentOrder").doc(userId);
+  const docRef = adminDb.collection("customerRecentOrder").doc(userId!);
 
   await docRef.set(
     {
@@ -214,11 +220,11 @@ export async function marketingData({
 
 export async function updateOrderMaster(id: string, status: string) {
   try {
-    const docRef = doc(adminDb, "orderMaster", id);
-    await updateDoc(docRef, { status });
+    const docRef = adminDb.collection("orderMaster").doc(id);
+    await docRef.update({ status });
     console.log("Document updated successfully!");
   } catch (error) {
-    console.log("error", error);
+    console.error("❌ Failed to update orderMaster:", error);
     return { errors: "Cannot update" };
   }
 }
@@ -288,13 +294,22 @@ export async function fetchOrdersPaginated({
       minute: "2-digit",
     });
 
+//     const dateObj =
+//     typeof data.createdAt === "object" && data.createdAt?.toDate
+//     ? data.createdAt.toDate()
+//     : data.createdAt
+//     ? new Date(data.createdAt)
+//     : null;
+// const createdAtISO = dateObj?.toISOString() || data.createdAtUTC || "";
+
+
+
     return {
       id: doc.id,
       customerName: data.customerName || "",
       email: data.email || "",
       paymentType: data.paymentType || "",
       status: data.status || "",
-      time: data.time || "",
       couponCode: data.couponCode || "",
       userId: data.userId || "",
       addressId: data.addressId || "",
@@ -310,6 +325,8 @@ export async function fetchOrdersPaginated({
       couponDiscountPercentL: data.couponDiscountPercentL || 0,
       pickUpDiscountPercentL: data.pickUpDiscountPercentL || 0,
       createdAt: data.createdAt?.toDate?.().toISOString() || "",
+      createdAtUTC: data.createdAtUTC || "", // ✅ Add support
+      time: data.time || "",
     } as orderMasterDataT;
   });
 
@@ -317,23 +334,19 @@ export async function fetchOrdersPaginated({
   return { orders, lastId: lastDoc?.id || null };
 }
 
-
 export async function fetchOrdersMaster(): Promise<orderMasterDataSafeT[]> {
   const data: orderMasterDataSafeT[] = [];
 
   const collectionRef = adminDb.collection("orderMaster");
-  const querySnapshot = await collectionRef
-    .orderBy("srno", "desc")
-    .limit(20)
-    .get();
+  const querySnapshot = await collectionRef.orderBy("srno", "desc").limit(20).get();
 
   querySnapshot.forEach((doc) => {
     const raw = doc.data() as orderMasterDataT;
 
     const createdAtStr =
-      raw.createdAt?.toDate?.() instanceof Date
+      raw.createdAt instanceof admin.firestore.Timestamp
         ? raw.createdAt.toDate().toISOString()
-        : new Date().toISOString(); // fallback
+        : new Date().toISOString(); // fallback if somehow it's not a Timestamp
 
     const pData: orderMasterDataSafeT = {
       ...raw,
@@ -346,6 +359,34 @@ export async function fetchOrdersMaster(): Promise<orderMasterDataSafeT[]> {
 
   return data;
 }
+// export async function fetchOrdersMaster(): Promise<orderMasterDataSafeT[]> {
+//   const data: orderMasterDataSafeT[] = [];
+
+//   const collectionRef = adminDb.collection("orderMaster");
+//   const querySnapshot = await collectionRef
+//     .orderBy("srno", "desc")
+//     .limit(20)
+//     .get();
+
+//   querySnapshot.forEach((doc) => {
+//     const raw = doc.data() as orderMasterDataT;
+
+//     const createdAtStr =
+//       raw.createdAt?.toDate?.() instanceof Date
+//         ? raw.createdAt.toDate().toISOString()
+//         : new Date().toISOString(); // fallback
+
+//     const pData: orderMasterDataSafeT = {
+//       ...raw,
+//       id: doc.id,
+//       createdAt: createdAtStr,
+//     };
+
+//     data.push(pData);
+//   });
+
+//   return data;
+// }
 
 
 
@@ -392,8 +433,14 @@ export async function fetchOrderMasterById(id: string) {
 
   const raw = docSnap.data() as orderMasterDataT;
 
-  const createdAtStr =
-    raw.createdAt?.toDate?.().toISOString?.() ?? new Date().toISOString();
+  // const createdAtStr =
+  //   raw.createdAt?.toDate?.().toISOString?.() ?? new Date().toISOString();
+
+
+   const createdAtStr =
+    raw.createdAt instanceof Timestamp
+      ? raw.createdAt.toDate().toISOString()
+      : new Date().toISOString();  
 
   return {
     ...raw,
