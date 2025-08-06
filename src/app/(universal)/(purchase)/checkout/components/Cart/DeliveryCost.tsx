@@ -1,15 +1,17 @@
 import { UseSiteContext } from "@/SiteContext/SiteContext";
+import { useLanguage } from "@/store/LanguageContext";
 import React from "react";
 
 export default function DeliveryCost() {
   const { deliveryDis, deliveryType } = UseSiteContext();
+  const { TEXT } = useLanguage();
+
   return (
     <>
       {deliveryType === "delivery" && (
         <div className="font-semibold border-b py-3 w-full flex justify-between items-center">
           <button className="text-sm font-semibold py-3 w-full text-left">
-            {/* Versandkosten */}
-            Lieferpauschale
+            {TEXT.deliveryCost.title}
           </button>
           {deliveryDis?.price !== undefined && (
             <div className="flex gap-1">
@@ -18,10 +20,8 @@ export default function DeliveryCost() {
           )}
           {deliveryDis?.price === undefined && (
             <div className="flex gap-1 justify-start">
-              {/* <span className="text-sm font-extralight">Please enter full address for delivery estimation </span> */}
               <span className="text-sm font-extralight text-red-600">
-                Bitte geben Sie die vollständige Adresse und Postleitzahl ein,
-                um die Versandkosten zu schätzen{" "}
+                {TEXT.deliveryCost.addressRequired}
               </span>
             </div>
           )}

@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { signOut } from 'next-auth/react';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState, JSX } from 'react';
+import { useLanguage } from '@/store/LanguageContext';
 
 import { GoHome } from 'react-icons/go';
 import {
@@ -25,39 +26,53 @@ import { IoClose } from 'react-icons/io5';
 import { UseSiteContext } from '@/SiteContext/SiteContext';
 import { FaClipboardList } from 'react-icons/fa6';
 
+const fallbackText = {
+  sidebar: {
+    home: "Home",
+    orders: "Orders",
+    orders_realtime: "Orders Realtime",
+    sale: "Sale",
+    reservations: "Reservations",
+    categories: "Categories",
+    pickup_discount: "Pickup Discount",
+    products: "Products",
+    variants: "Variants",
+    coupon: "Coupon",
+    delivery: "Delivery",
+    users: "Users",
+    setting: "Setting",
+    data_backup: "Data Backup",
+    logout: "Logout",
+  },
+};
+
 type Titem = {
   name: string;
   link: string;
   icon: JSX.Element;
 };
 
-const menuList: Titem[] = [
-  { name: 'Home', link: '/', icon: <GoHome /> },
-  { name: 'Orders', link: '/admin', icon: <MdDashboard /> },
-    { name: 'Orders Realtime', link: '/admin/order-realtime', icon: <MdOutlineCrisisAlert /> },
-     { name: 'Sale', link: '/admin/sale', icon: <FaClipboardList /> },
-  { name: 'Reservations', link: '/admin/reservations', icon: <BsCardList /> },
-  { name: 'Categories', link: '/admin/categories', icon: <MdCategory /> },
-  {
-    name: 'Pickup Discount',
-    link: '/admin/pickupdiscount/pickup-discount',
-    icon: <MdLocalOffer />,
-  },
-  { name: 'Products', link: '/admin/productsbase', icon: <MdInventory /> },
-  {
-    name: 'Variants',
-    link: '/admin/flavorsProductG',
-    icon: <MdRestaurantMenu />,
-  },
-  { name: 'Coupon', link: '/admin/coupon', icon: <MdLocalOffer /> },
-  { name: 'Delivery', link: '/admin/delivery', icon: <TbTruckDelivery /> },
-  { name: 'Users', link: '/admin/users', icon: <FaUsers /> },
-  { name: 'Setting', link: '/admin/setting', icon: <MdSettings /> },
-  { name: 'Data Backup', link: '/admin/data-backup', icon: <MdOutlineBackup /> }, // Add icon to top
-
-];
 
 const Sidebar = () => {
+
+const { TEXT } = useLanguage() || { TEXT: fallbackText };
+const menuList: Titem[] = [
+  { name: TEXT.sidebar.home, link: '/', icon: <GoHome /> },
+  { name: TEXT.sidebar.orders, link: '/admin', icon: <MdDashboard /> },
+  { name: TEXT.sidebar.orders_realtime, link: '/admin/order-realtime', icon: <MdOutlineCrisisAlert /> },
+  { name: TEXT.sidebar.sale, link: '/admin/sale', icon: <FaClipboardList /> },
+  { name: TEXT.sidebar.reservations, link: '/admin/reservations', icon: <BsCardList /> },
+  { name: TEXT.sidebar.categories, link: '/admin/categories', icon: <MdCategory /> },
+  { name: TEXT.sidebar.pickup_discount, link: '/admin/pickupdiscount/pickup-discount', icon: <MdLocalOffer /> },
+  { name: TEXT.sidebar.products, link: '/admin/productsbase', icon: <MdInventory /> },
+  { name: TEXT.sidebar.variants, link: '/admin/flavorsProductG', icon: <MdRestaurantMenu /> },
+  { name: TEXT.sidebar.coupon, link: '/admin/coupon', icon: <MdLocalOffer /> },
+  { name: TEXT.sidebar.delivery, link: '/admin/delivery', icon: <TbTruckDelivery /> },
+  { name: TEXT.sidebar.users, link: '/admin/users', icon: <FaUsers /> },
+  { name: TEXT.sidebar.setting, link: '/admin/setting', icon: <MdSettings /> },
+  { name: TEXT.sidebar.data_backup, link: '/admin/data-backup', icon: <MdOutlineBackup /> },
+];
+
   const { setAdminSideBarToggleG } = UseSiteContext();
 
   return (
@@ -90,7 +105,7 @@ const Sidebar = () => {
             className="flex items-center gap-3 px-4 py-2 w-full text-sm font-medium rounded-md bg-amber-600 text-white hover:bg-rose-700 transition"
           >
             <IoIosLogOut size={20} />
-            Logout
+             {TEXT.sidebar.logout}
           </button>
         </div>
       </div>

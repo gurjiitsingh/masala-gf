@@ -6,7 +6,7 @@ import { readFileSync } from "fs";
 import path from "path";
 
 const relativePath = process.env.FIREBASE_ADMIN_CREDENTIALS_PATH;
-const serviceAccountPath = path.join(process.cwd(), relativePath || "src/lib/firebase-service-account.json");
+const serviceAccountPath = path.join(process.cwd(), relativePath || "firebase-service-account.json");
 
 
 

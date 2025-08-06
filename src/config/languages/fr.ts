@@ -95,6 +95,13 @@ export const TEXT = {
   pickup_time: "À emporter : 20–25 minutes",
   delivery_time: "Délai de livraison : 40–55 minutes",
 
+
+  deliveryCost: {
+  title: "Frais de livraison",
+  addressRequired: "Veuillez entrer l'adresse complète et le code postal pour estimer les frais de livraison",
+},
+
+
  // toast error message
   error_select_payment_type: "Sélectionnez le mode de paiement",
   error_select_address: "Sélectionnez l'adresse",

@@ -46,6 +46,27 @@ export const TEXT = {
     },
   },
 
+  //admin sidebar
+
+  sidebar: {
+  home: "Startseite",
+  orders: "Bestellungen",
+  orders_realtime: "Live-Bestellungen",
+  sale: "Verkauf",
+  reservations: "Reservierungen",
+  categories: "Kategorien",
+  pickup_discount: "Abholrabatt",
+  products: "Produkte",
+  variants: "Varianten",
+  coupon: "Gutschein",
+  delivery: "Lieferung",
+  users: "Benutzer",
+  setting: "Einstellungen",
+  data_backup: "Datensicherung",
+  logout: "Abmelden",
+},
+
+
   footer_bottom: {
     poweredBy: "Powered by",
     poweredByUrl: "http://www.gstadeveloper.com",
@@ -71,6 +92,12 @@ export const TEXT = {
   place_order_button: "Place",
   order_button_suffix: "Order",
   placing_order_text: "Placing Order...",
+
+
+  deliveryCost: {
+  title: "Lieferpauschale", // German
+  addressRequired: "Bitte geben Sie die vollständige Adresse und Postleitzahl ein, um die Versandkosten zu schätzen",
+},
 
   // Address form
   address_section_title: "Adresse",

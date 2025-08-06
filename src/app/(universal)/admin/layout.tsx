@@ -5,11 +5,12 @@ import React from "react";
 import "@/app/globals.css";
 //import { Metadata } from "next";
 
-import { SiteProvider } from "@/SiteContext/SiteProvider";
+
 import SideBarBase from "./SideBarBase";
 import { ButtonProvider } from "@/ButtonContext/ButtonProvider";
 import { LanguageProvider } from "@/store/LanguageContext";
 import { Toaster } from "react-hot-toast";
+import { Providers } from "@/app/Providers";
 
 // export const metadata = {
 //   title: "Next.js",
@@ -24,7 +25,8 @@ export default function RootLayout({
   return (
     <html lang="de" translate="no">
       <body>
-        <SiteProvider>
+        <Providers>
+       
         <ButtonProvider>
           <main className="relative flex text-slate-600">
             <SideBarBase />
@@ -41,7 +43,7 @@ export default function RootLayout({
             </div>
           </main>
           </ButtonProvider>
-        </SiteProvider>
+      
            <Toaster
             position="top-center"
             containerStyle={{
@@ -75,6 +77,7 @@ export default function RootLayout({
             }}
             reverseOrder={false}
           />
+          </Providers>
       </body>
     </html>
   );
