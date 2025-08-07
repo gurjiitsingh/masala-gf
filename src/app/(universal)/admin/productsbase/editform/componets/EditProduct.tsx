@@ -109,7 +109,7 @@ const EditProduct = () => {
     const result = await editProduct(formData);
 
     if (!result?.errors) {
-      router.push(`/admin/productsbase?productId=${data.id}`);
+      router.push(`/admin/productsbase?productId=${data.id}&categoryId=${data.categoryId}`);
     } else {
       alert("Some thing went wrong");
     }

@@ -11,14 +11,22 @@ import Image from "next/image";
 import Link from "next/link";
 import { deleteProduct } from "@/app/(universal)/action/products/dbOperation";
 import { ProductType } from "@/lib/types/productType";
-import { formatCurrencyNumber } from '@/utils/formatCurrency';
+import { formatCurrencyNumber } from "@/utils/formatCurrency";
 import { UseSiteContext } from "@/SiteContext/SiteContext";
-import { useLanguage } from '@/store/LanguageContext';
+import { useLanguage } from "@/store/LanguageContext";
+import { useEffect, useRef } from "react";
 
-function TableRows({ product }: { product: ProductType }) {
+function TableRows({ product, highlight }: { product: ProductType; highlight?: boolean }) {
   const { settings } = UseSiteContext();
   const { TEXT } = useLanguage();
-  
+  const rowRef = useRef<HTMLTableRowElement>(null);
+
+  useEffect(() => {
+    if (highlight && rowRef.current) {
+      rowRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }, [highlight]);
+
   const price = formatCurrencyNumber(
     Number(product.price) ?? 0,
     (settings.currency || 'EUR') as string,
@@ -59,7 +67,13 @@ function TableRows({ product }: { product: ProductType }) {
   }
 
   return (
-    <TableRow key={product.id} className="whitespace-nowrap hover:bg-green-50 dark:hover:bg-zinc-800 transition rounded-xl">
+    <TableRow
+      ref={rowRef}
+      key={product.id}
+      className={`whitespace-nowrap transition rounded-xl 
+        ${highlight ? "bg-yellow-100 dark:bg-yellow-800" : "hover:bg-green-50 dark:hover:bg-zinc-800"}
+      `}
+    >
       <TableCell>
         <div className="px-3 py-1 text-center min-w-[100px]">
           {product.image && (
@@ -96,7 +110,7 @@ function TableRows({ product }: { product: ProductType }) {
       </TableCell>
 
       <TableCell>
-        {product?.isFeatured === true && (
+        {product?.isFeatured && (
           <span className="ml-2 bg-gradient-to-tr from-blue-500 to-indigo-400 text-white text-[10px] rounded-full px-3 py-1">
             {TEXT.status_featured || "Featured"}
           </span>
