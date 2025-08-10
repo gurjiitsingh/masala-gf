@@ -75,10 +75,10 @@ priceDiscounted = formatCurrencyNumber(product.discountPrice,  (settings.currenc
   //common code end
   return (
     <div className="w-full  lg:w-[48%]   bg-zinc-50 shadow-lg flex flex-row   rounded-2xl items-center">
-      <div className="rounded-full flex items-center justify-center w-[70px] h-[65px]  md:w-[90px]  md:h-[80px]  overflow-hidden">
+      <div className="rounded-2xl flex items-center justify-center w-[120px] h-[120px]  md:w-[150px]  md:h-[150px]  overflow-hidden">
         
         {product.image && (
-  <img src={product.image} alt={product.name} className="h-[65px]  md:h-[85px]" />
+  <img src={product.image} alt={product.name} className="h-[150px]  md:h-[150px]" />
   
 )}
 
