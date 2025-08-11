@@ -74,7 +74,7 @@ priceDiscounted = formatCurrencyNumber(product.discountPrice,  (settings.currenc
 
   //common code end
   return (
-    <div className="w-full  lg:w-[48%]   bg-zinc-50 shadow-lg flex flex-row   rounded-2xl items-center">
+    <div className="product-card-bg w-full  lg:w-[48%]    shadow-lg flex flex-row   rounded-2xl items-center">
       <div className="rounded-2xl flex items-center justify-center w-[120px] h-[120px]  md:w-[150px]  md:h-[150px]  overflow-hidden">
         
         {product.image && (
@@ -88,7 +88,7 @@ priceDiscounted = formatCurrencyNumber(product.discountPrice,  (settings.currenc
       <div className="w-full flex flex-col p-3 justify-between ">
         <div className="w-full flex-col gap-4 justify-between ">
           <div className="w-full flex gap-1 mb-2 justify-between ">
-            <div className="flex items-center justify-center text-nowrap text-center px-2 py-1 bg-[#64870d] min-w-[180px]  rounded-3xl  text-white">
+            <div className="product-card-add-title-cover-1 flex items-center justify-center text-nowrap text-center px-2 py-1  min-w-[180px]  rounded-3xl  ">
               {productCategoryIdG !== "" && <>{product.sortOrder}.&nbsp;</>}
               {product.name}
             </div>
@@ -96,12 +96,12 @@ priceDiscounted = formatCurrencyNumber(product.discountPrice,  (settings.currenc
 
           {/* <button onClick={() => alert(product.productDesc)}> */}
          
-          <button onClick={() => alert(product.productDesc ?? "Keine Beschreibung verfügbar")} className="text-sm text-slate-500 font-extralight text-left max-w-fit md:max-w-[400px] max-h-[22px] overflow-hidden">
+          <button onClick={() => alert(product.productDesc ?? "Keine Beschreibung verfügbar")} className="text-sm text-slate-500 font-extralight text-left   overflow-hidden">
           {product.productDesc}
           </button>
 
           {!product.flavors && (
-            <div className="flex text-slate-500 items-center bg-[#FADB5E] justify-between pt-1 pl-2 pr-1  rounded-3xl">
+            <div className="product-card-add-button-cover-1 flex  items-center  justify-between py-[1px] pl-2 pr-1  rounded-3xl">
               <div>Pack</div>
               {/* common code start */}
               {product.discountPrice !== undefined &&

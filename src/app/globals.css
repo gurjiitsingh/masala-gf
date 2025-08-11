@@ -305,3 +305,17 @@ button:disabled {
 .footer-item-border {
   @apply border-b border-slate-400;
 }
+
+
+/* Products */
+.product-card-bg{
+  @apply bg-zinc-50
+}
+
+.product-card-add-button-cover-1{
+  @apply text-slate-500 bg-[#FADB5E]
+}
+
+.product-card-add-title-cover-1{
+  @apply bg-[#64870d] text-white
+}

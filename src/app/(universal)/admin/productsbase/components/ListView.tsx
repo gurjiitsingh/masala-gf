@@ -137,7 +137,7 @@ const ListView = ({ title }: { title?: string }) => {
                 key={product.id}
                 product={product}
                 highlight={product.id === productIdFromQuery}
-                scrollTo={product.id === productIdFromQuery}
+               
               />
             ))}
           </TableBody>
