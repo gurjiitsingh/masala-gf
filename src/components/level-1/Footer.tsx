@@ -2,6 +2,7 @@
 import Link from "next/link";
 import React from "react";
 import { useLanguage } from "@/store/LanguageContext";
+type FooterLink = { href: string; name: string };
 
 export default function Footer() {
 
@@ -31,7 +32,7 @@ export default function Footer() {
               {TEXT.sections.links.title}
             </h3>
             <ul className="flex flex-col gap-3">
-              {TEXT.sections.links.items.map((item, idx) => (
+               {TEXT.sections.links.items.map((item: FooterLink, idx: number) => (
                 <li
                   key={idx}
                   className={`pb-1 ${idx < TEXT.sections.links.items.length - 1 ? "footer-item-border" : ""}`}
@@ -48,7 +49,7 @@ export default function Footer() {
               {TEXT.sections.company.title}
             </h3>
             <ul className="space-y-1">
-              {TEXT.sections.company.items.map((item, idx) => (
+              {TEXT.sections.company.items.map((item: FooterLink, idx: number) => (
                 <li
                   key={idx}
                   className={idx === 0 ? "footer-item-border pb-1" : ""}

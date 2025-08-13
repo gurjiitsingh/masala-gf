@@ -41,7 +41,7 @@ export const languages = {
 export const SEO = languages[LANG as keyof typeof languages].SEO;
 export const BRANDING = languages[LANG as keyof typeof languages].BRANDING;
 
-console.log(SEO, BRANDING)
+
 
 // import * as en from './en';
 // import * as de from './de';
