@@ -1,14 +1,7 @@
 export const TEXT = {
-  home_page_offer: "", // fallback for DB-driven value
-  offer_instruction: "", // fallback for DB-driven value
-  delivery_note: "Delivery is also available.",
-  home_page_disclaimer: "Food may differ from image.",
   logo_alt: "Logo",
-  brand: "Masala",
-  tag_line: "Taste of India",
-  brand_name: "Masala Taste of India",
-
-menu_list: [
+  
+  menu_list: [
     { name: "Home", link: "/" },
     { name: "About Us", link: "/about" },
     { name: "Contact", link: "/contact" },
@@ -66,12 +59,12 @@ menu_list: [
 },
 
   footer_bottom: {
-    poweredBy: "Powered by",
+    poweredBy: "",
     poweredByUrl: "http://www.gstadeveloper.com",
     copyright: {
       prefix: "Copyright ©",
       suffix: "All Rights Reserved by",
-      company: "Masala Taste of India",
+      company: "",
     },
   },
 
@@ -188,11 +181,6 @@ alert_failed_delete: "Failed to delete user.",
 aria_delete_user: "Delete User",
 
 
-
 };
 
-export const SEO = {
-  title: "Masala – Indian Restaurant inSteinbrink 26, 38122 Braunschweig-Broitzem",
-  description:
-    "Authentic Indian food at Masala Braunschweig-Broitzem. Order online for delivery or visit us in Braunschweig-Broitzem.",
-};
+

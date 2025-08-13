@@ -1,13 +1,6 @@
 export const TEXT = {
-  home_page_offer: "", // fallback for DB-driven value
-  offer_instruction: "", // fallback for DB-driven value
-  delivery_note: "Lieferung ist ebenfalls verfügbar.",
-  home_page_disclaimer: "Das Essen kann vom Bild abweichen",
   logo_alt: "Logo",
-  brand: "Masala",
-  tag_line: "Taste of India",
-  brand_name: "Masala Taste of India",
-
+ 
   menu_list: [
     { name: "Heim", link: "/" },
     { name: "Über Uns", link: "/about" },
@@ -73,7 +66,7 @@ export const TEXT = {
     copyright: {
       prefix: "Copyright ©",
       suffix: "All Rights Reserved by",
-      company: "Masala Taste of India",
+      company: "",
     },
   },
 
@@ -190,10 +183,8 @@ confirm_delete_user: "Möchten Sie den Benutzer löschen?\nFalls ja, klicken Sie
 alert_failed_delete: "Benutzer konnte nicht gelöscht werden.",
 aria_delete_user: "Benutzer löschen",
 
+
+
 };
 
-export const SEO = {
-  title: "Masala – Indisches Restaurant in Steinbrink 26, 38122 Braunschweig-Broitzem",
-  description:
-    "Genießen Sie authentische indische Küche bei Masala in Braunschweig-Broitzem. Jetzt online bestellen oder vor Ort besuchen.",
-};
+

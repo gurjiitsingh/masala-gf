@@ -1,7 +1,7 @@
 import "../globals.css";
 import { Toaster } from "react-hot-toast";
 import type { Metadata } from "next";
-import { getSeoMetadata } from "@/utils/getSeoMetadata";
+//import { getSeoMetadata } from "@/utils/getSeoMetadata";
 import CartBottom from "@/components/CartBottom/CartBottom";
 
 import UTMInitializer from "../UTMInitializer";
@@ -12,9 +12,16 @@ import { BargerMenu } from "@/components/Bargermenu/Menu";
 import Modal from "@/components/level-1/Modal";
 import Header from "@/components/level-1/Header";
 import Footer from "@/components/level-1/Footer";
+import { SEO } from "@/config/languages";
 
 // ✅ Dynamic SEO fallback logic here
-export const metadata: Metadata = getSeoMetadata();
+//export const metadata: Metadata = getSeoMetadata();
+
+export const metadata: Metadata = {
+  title: SEO.title,
+  description: SEO.description,
+  other: { google: "notranslate" },
+};
 
 export default function RootLayout({
   children,

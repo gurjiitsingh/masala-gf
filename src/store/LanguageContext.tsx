@@ -15,6 +15,7 @@ type LanguageContextType = {
   changeLanguage: (lang: LangKey) => void;
   TEXT: any;
   SEO: any;
+  BRANDING: any;
 };
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
@@ -46,18 +47,21 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     localStorage.setItem('lang', newLang);
   };
 
-  const { TEXT, SEO } = useMemo(() => {
-    if (!lang || !languages[lang]) return { TEXT: {}, SEO: {} };
+  const { TEXT, SEO, BRANDING } = useMemo(() => {
+    if (!lang || !languages[lang]) return { TEXT: {}, SEO: {}, BRANDING: {} };
     return {
       TEXT: languages[lang].TEXT,
       SEO: languages[lang].SEO,
+      BRANDING: languages[lang].BRANDING,
     };
   }, [lang]);
 
   if (!lang) return null;
 
+  console.log('t c---------', TEXT, SEO, BRANDING);
+
   return (
-    <LanguageContext.Provider value={{ lang, changeLanguage, TEXT, SEO }}>
+    <LanguageContext.Provider value={{ lang, changeLanguage, TEXT, SEO, BRANDING }}>
       {children}
     </LanguageContext.Provider>
   );

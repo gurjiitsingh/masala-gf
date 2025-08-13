@@ -1,9 +1,12 @@
 "use client";
 import Link from "next/link";
 import React from "react";
-import { TEXT } from "@/config/languages";
+import { useLanguage } from "@/store/LanguageContext";
 
 export default function Footer() {
+
+  const { TEXT, BRANDING } = useLanguage();
+
  return (
     <footer className="relative pt-12 -mb-20 footer-bg-primary">
       <div className="container mx-auto">
@@ -17,7 +20,7 @@ export default function Footer() {
             </div>
             <div className="flex items-center h-fit">
               <span className="self-center text-md footer-text">
-                {TEXT.brand_name}
+                {BRANDING.brand_name}
               </span>
             </div>
           </div>
@@ -74,15 +77,15 @@ export default function Footer() {
       <div className="footer-bg-bottom mt-12 pt-3 pb-6">
         <div className="container mx-auto flex flex-col items-center">
           <p className="text-md footer-text-light">
-            {TEXT.footer_bottom.poweredBy}{" "}
-            <a href={TEXT.footer_bottom.poweredByUrl}>
-              {new URL(TEXT.footer_bottom.poweredByUrl).hostname}
+            {BRANDING.poweredBy}{" "}
+            <a href={BRANDING.poweredByUrl}>
+              {new URL(BRANDING.poweredByUrl).hostname}
             </a>
           </p>
           <p className="text-md footer-text-light">
-            {TEXT.footer_bottom.copyright.prefix}{" "}
-            {new Date().getFullYear()} {TEXT.footer_bottom.copyright.suffix}{" "}
-            <b>{TEXT.footer_bottom.copyright.company}</b>
+            {BRANDING.copyright.prefix}{" "}
+            {new Date().getFullYear()} {BRANDING.copyright.suffix}{" "}
+            <b>{BRANDING.copyright.company}</b>
           </p>
         </div>
       </div>

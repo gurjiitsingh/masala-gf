@@ -9,7 +9,7 @@ const bebas = Bebas_Neue({
 });
 
 export default function HeroText() {
-  const { TEXT } = useLanguage();
+  const { BRANDING } = useLanguage();
   const homePageOffer = useSafeSetting("home_page_offer");
   const offerInstruction = useSafeSetting("offer_instruction");
 
@@ -21,16 +21,16 @@ export default function HeroText() {
           {offerInstruction && <span className="hero-subtext">{offerInstruction}</span>}
         </h2>
 
-        {TEXT.delivery_note && (
+        {BRANDING.delivery_note && (
           <div className="hero-delivery-note">
-            {TEXT.delivery_note}
+            {BRANDING.delivery_note}
           </div>
         )}
       </div>
 
-      {TEXT.home_page_disclaimer && (
+      {BRANDING.home_page_disclaimer && (
         <p className="hero-disclaimer">
-          {TEXT.home_page_disclaimer}
+          {BRANDING.home_page_disclaimer}
         </p>
       )}
     </div>
