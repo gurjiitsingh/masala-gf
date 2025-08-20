@@ -279,18 +279,39 @@ export default function CartLeft() {
 
      
   
+// if (deliveryType === "delivery") {
+//    if (
+//     !deliveryDis || 
+//     typeof deliveryDis.price !== "number" || 
+//     isNaN(deliveryDis.price)
+//   ) {
+//     console.log("deliveryDis.price-------",typeof(deliveryDis!.price))
+//     setIsLoading(false);
+//     toast.error(TEXT.error_address_not_deliverable);
+//     return; // ⛔ stop
+//   }
+
+//  }
+
+
 if (deliveryType === "delivery") {
-   if (
-    !deliveryDis || 
-    typeof deliveryDis.price !== "number" || 
-    isNaN(deliveryDis.price)
-  ) {
+  if (!deliveryDis || deliveryDis.price === null) {
     setIsLoading(false);
     toast.error(TEXT.error_address_not_deliverable);
     return; // ⛔ stop
   }
 
- }
+  // convert to number
+  const price = Number(deliveryDis.price);
+
+  if (isNaN(price)) {
+    setIsLoading(false);
+    toast.error(TEXT.error_address_not_deliverable);
+    return;
+  }
+
+
+}
 
      
 
@@ -368,7 +389,7 @@ if (deliveryType === "delivery") {
         noOffers,
       } as orderDataType;
 
-      if (cartData.length !== 60) {
+      if (cartData.length !== 0) {
         //  toast.error(`cart length is more than 0,order started, ${cartData.length}`)
         const orderMasterId = await createNewOrder(purchaseData);
 

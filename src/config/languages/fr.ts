@@ -95,6 +95,12 @@ export const TEXT = {
   pickup_time: "À emporter : 20–25 minutes",
   delivery_time: "Délai de livraison : 40–55 minutes",
 
+    deliveryCost: {
+  title: "Delivery Cost",
+  addressRequired: "Please enter full address and postal code to estimate delivery cost",
+notDeliverableAddress:"We do not deliver at this address",
+},
+
 };
 
 

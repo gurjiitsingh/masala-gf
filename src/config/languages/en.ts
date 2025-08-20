@@ -96,6 +96,7 @@ menu_list: [
   deliveryCost: {
   title: "Delivery Cost",
   addressRequired: "Please enter full address and postal code to estimate delivery cost",
+notDeliverableAddress:"We do not deliver at this address",
 },
 
   // Text from address form component

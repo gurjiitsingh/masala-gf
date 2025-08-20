@@ -25,6 +25,18 @@ export default function Checkout(){
     const {   endTotalG } = useCartContext();
 
 
+
+//    if (
+//     !endTotalG || 
+//     typeof endTotalG !== "number" || 
+//     isNaN(endTotalG)
+//   ) {
+// //  toast.error(TEXT.error_address_not_deliverable);
+// toast.error("Something went wrong, refresh browser or reorder foods");
+//    console.log("paypal not a number")
+//    // return; // ⛔ stop
+//   }
+
     
     const formattedAmount = (Number(endTotalG) || 0).toFixed(2);
 

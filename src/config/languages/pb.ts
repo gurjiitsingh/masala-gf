@@ -95,6 +95,12 @@ export const TEXT = {
    order_complete_heading: "ਤੁਹਾਡਾ ਆਰਡਰ ਪੂਰਾ ਹੋ ਗਿਆ ਹੈ",
   pickup_time: "ਪਿਕਅੱਪ: 20–25 ਮਿੰਟ",
   delivery_time: "ਡਿਲੀਵਰੀ ਸਮਾਂ: 40–55 ਮਿੰਟ",
+
+    deliveryCost: {
+  title: "Delivery Cost",
+  addressRequired: "Please enter full address and postal code to estimate delivery cost",
+notDeliverableAddress:"We do not deliver at this address",
+},
  
 };
 
