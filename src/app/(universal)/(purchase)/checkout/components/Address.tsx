@@ -39,7 +39,7 @@ const { TEXT } = useLanguage();
   const { data: session } = useSession();
 
   useEffect(() => {
-    console.log("customerEmail----------", customerEmail)
+   
     if (customerEmail !== undefined) {
       getAddressByEmail(customerEmail);
     }

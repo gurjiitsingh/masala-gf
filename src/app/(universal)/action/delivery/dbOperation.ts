@@ -96,24 +96,23 @@ export async function fetchdeliveryById(id: string): Promise<deliveryType> {
   return { id: docSnap.id, ...docSnap.data() } as deliveryType;
 }
 
-export async function fetchdeliveryByZip(zipname: string): Promise<deliveryType> {
+export async function fetchdeliveryByZip(zipname: string): Promise<deliveryType | null> {
   const querySnapshot = await adminDb.collection("delivery")
     .where("name", "==", zipname)
     .get();
 
-   //   console.log("querySnapshot.docs[0].data()---------", querySnapshot.docs[0].data())
+  
  if (querySnapshot.empty){
- 
- // return querySnapshot.docs[0].data() as deliveryType;
-  return {
-    id:'',
-  name: '',
-  price: '',
-  productCat: '',
-  deliveryDesc: '',
-  deliveryDistance: '',
-  minSpend: 1
-}
+     return null; // ❌ no delivery found
+//   return {
+//     id:'',
+//   name: '',
+//   price: '',
+//   productCat: '',
+//   deliveryDesc: '',
+//   deliveryDistance: '',
+//   minSpend: 1
+// }
  } //throw new Error("No delivery data found for the provided zip");
   return querySnapshot.docs[0].data() as deliveryType;
  // return { id: querySnapshot.docs[0].id, ...querySnapshot.docs[0].data() } as deliveryType;

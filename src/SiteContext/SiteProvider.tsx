@@ -37,7 +37,7 @@ export const SiteProvider: React.FC<Props> = ({
     useState(false);
   const [deliveryType, setDeliveryType] = useState<string>("pickup");
   const [couponDisc, setCouponDiscU] = useState<couponType | undefined>();
-  const [deliveryDis, setdeliveryDisU] = useState<deliveryType | undefined>();
+  const [deliveryDis, setdeliveryDisU] = useState<deliveryType | null>(null);
   const [showProductDetailM, setShowProductDetailML] = useState<boolean>(false);
   const [baseProductId, setBaseProductIdL] = useState<string>("");
   const [adminSideBarToggle, setAdminSideBarToggleL] = useState<boolean>(false);
@@ -117,7 +117,7 @@ export const SiteProvider: React.FC<Props> = ({
   function setCouponDisc(e: couponType | undefined) {
     setCouponDiscU(e);
   }
-  function setdeliveryDis(e: deliveryType | undefined) {
+  function setdeliveryDis(e: deliveryType | null) {
     setdeliveryDisU(e);
   }
   // deliveryDis:{},

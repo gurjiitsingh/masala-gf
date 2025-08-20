@@ -23,15 +23,14 @@ export default function Checkout(){
   
     const router = useRouter();
     const {   endTotalG } = useCartContext();
+
+
+    
     const formattedAmount = (Number(endTotalG) || 0).toFixed(2);
 
    
 
-    let customerAddress = {};
-    if (typeof window !== 'undefined') {
-      const address = localStorage.getItem("customer_address");
-      customerAddress = address ? JSON.parse(address) : {};
-    }
+  
 
   
      const onCreateOrder = (data,actions) => {

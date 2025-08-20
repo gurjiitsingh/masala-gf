@@ -58,7 +58,7 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
 
   if (!lang) return null;
 
-  console.log('t c---------', TEXT, SEO, BRANDING);
+ 
 
   return (
     <LanguageContext.Provider value={{ lang, changeLanguage, TEXT, SEO, BRANDING }}>

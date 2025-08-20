@@ -10,7 +10,7 @@ import { orderProductsT } from "@/lib/types/orderType";
 import { orderDataType, purchaseDataT } from "@/lib/types/cartDataType";
 import { ProductType } from "@/lib/types/productType";
 import admin from 'firebase-admin';
-import { doc } from "@firebase/firestore";
+
 type orderMasterDataSafeT = Omit<orderMasterDataT, "createdAt"> & {
   createdAt: string; // ISO string
 };
@@ -61,6 +61,67 @@ export async function createNewOrderCustomerAddress(purchaseData: purchaseDataT)
 
 export async function createNewOrder(purchaseData: orderDataType) {
 
+ const {
+    endTotalG,
+    totalDiscountG,
+    addressId,
+    userId,
+    customerName,
+    email,
+    paymentType,
+    itemTotal,
+    deliveryCost,
+    calculatedPickUpDiscountL,
+    flatDiscount,
+    calCouponDiscount,
+    couponCode,
+    couponDiscountPercentL,
+    pickUpDiscountPercentL,
+    noOffers,
+    cartData,
+  } = purchaseData;
+
+
+  // validaton start
+
+
+//change main funciton
+
+// export async function createNewOrder(
+//   purchaseData: orderDataType
+// ): Promise<{ success: boolean; message: string; orderId?: string }> {
+
+
+
+  // try {
+  //   // ✅ DELIVERY VALIDATION
+  //   if (purchaseData.deliveryType === "delivery") {
+  //     if (!purchaseData.zipCode) {
+  //       return { success: false, message: "Zip code is required for delivery." };
+  //     }
+
+  //     // Check if ZIP exists in delivery list
+  //     const deliveryData = await fetchdeliveryByZip(purchaseData.zipCode);
+
+  //     if (!deliveryData || !deliveryData.name) {
+  //       return {
+  //         success: false,
+  //         message: "Sorry, we do not deliver to this zip code.",
+  //       };
+  //     }
+
+  //     // Optionally validate minimum spend
+  //     if (purchaseData.endTotalG < (deliveryData.minSpend || 0)) {
+  //       return {
+  //         success: false,
+  //         message: `Minimum order amount for delivery in ${deliveryData.name} is €${deliveryData.minSpend}.`,
+  //       };
+  //     }
+  //   }
+
+
+    //end new validation code
+
   const nowUTC = new Date().toISOString(); // UTC ISO string (e.g. "2025-07-24T06:07:32.123Z")
   
   const nowGerman = new Date().toLocaleString("en-DE", {
@@ -82,25 +143,7 @@ export async function createNewOrder(purchaseData: orderDataType) {
     new_srno = (latest?.srno || 0) + 1;
   }
 
-  const {
-    endTotalG,
-    totalDiscountG,
-    addressId,
-    userId,
-    customerName,
-    email,
-    paymentType,
-    itemTotal,
-    deliveryCost,
-    calculatedPickUpDiscountL,
-    flatDiscount,
-    calCouponDiscount,
-    couponCode,
-    couponDiscountPercentL,
-    pickUpDiscountPercentL,
-    noOffers,
-    cartData,
-  } = purchaseData;
+ 
 
   const status = paymentType === "cod" ? "Completed" : "Payment Pending";
 
