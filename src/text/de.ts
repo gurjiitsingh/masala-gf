@@ -1,43 +1,47 @@
 export const TEXT = {
   logo_alt: "Logo",
  
+
+
   menu_list: [
-    { name: "Heim", link: "/" },
-    { name: "Über Uns", link: "/about" },
-    { name: "Kontakt", link: "/contact" },
-    { name: "Tisch reservation", link: "/reservation" },
+  { name: "Startseite", link: "/" },
+  { name: "Über uns", link: "/about" },
+  { name: "Kontakt", link: "/contact" },
+  { name: "Tischreservierung", link: "/reservation" },
   ],
 
   menu: [
-    { name: "Heim", link: "/" },
+    { name: "Startseite", link: "/" },
     { name: "Über Uns", link: "/about" },
     { name: "Kontakt", link: "/contact" },
-    { name: "Tisch reservation", link: "/reservation" },
+    { name: "Tischreservierung", link: "/reservation" },
   ],
 
-  sections: {
-    links: {
-      title: "Links",
-      items: [
-        { name: "Home", href: "/" },
-        { name: "Menü", href: "/" },
-        { name: "Über Uns", href: "/about" },
-        { name: "Kontakt", href: "/contact" },
-        { name: "Tisch reservation", href: "/reservation" },
-        { name: "Allergene", href: "/allergene" },
-      ],
-    },
-    company: {
-      title: "Company",
-      items: [
-        { name: "Privacy Policy", href: "/privacy" },
-        { name: "Terms of Service", href: "#" },
-      ],
-    },
-    social: {
-      title: "Social media",
-    },
+sections: {
+  links: {
+    title: "Links",
+    items: [
+      { name: "Startseite", href: "/" },
+      { name: "Speisekarte", href: "/" },
+      { name: "Über uns", href: "/about" },
+      { name: "Kontakt", href: "/contact" },
+      { name: "Tischreservierung", href: "/reservation" },
+      { name: "Allergene", href: "/allergene" },
+    ],
   },
+  company: {
+    title: "Unternehmen",
+    items: [
+      { name: "Datenschutzrichtlinie", href: "/privacy" }, // more precise than just "Datenschutz"
+      { name: "Nutzungsbedingungen", href: "#" },
+    ],
+  },
+  social: {
+    title: "Soziale Medien",
+  },
+},
+
+
 
   //admin sidebar
 
