@@ -317,5 +317,5 @@ button:disabled {
 }
 
 .product-card-add-title-cover-1{
-  @apply bg-[#64870d] text-white
+  @apply bg-[#64870d] text-white flex items-center justify-center text-nowrap text-center px-2 py-1  min-w-[180px]  rounded-3xl
 }
