@@ -40,6 +40,11 @@ export const TEXT = {
     },
   },
 
+  searchForm: {
+  placeholder: "Rechercher des plats...",
+},
+
+
   footer_bottom: {
     poweredBy: "Propulsé par",
     poweredByUrl: "http://www.gstadeveloper.com",

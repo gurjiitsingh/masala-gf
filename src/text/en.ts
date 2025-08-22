@@ -39,6 +39,11 @@ export const TEXT = {
     },
   },
 
+
+  searchForm: {
+  placeholder: "Search dishes...",
+},
+
   //admin sidebar
   sidebar: {
   home: "Home",
@@ -58,15 +63,16 @@ export const TEXT = {
   logout: "Logout",
 },
 
-  footer_bottom: {
-    poweredBy: "",
-    poweredByUrl: "http://www.gstadeveloper.com",
-    copyright: {
-      prefix: "Copyright ©",
-      suffix: "All Rights Reserved by",
-      company: "",
-    },
+footer_bottom: {
+  poweredBy: "Powered by",
+  poweredByUrl: "http://www.gstadeveloper.com",
+  copyright: {
+    prefix: "Copyright ©",
+    suffix: "All Rights Reserved by",
+    company: "Masala Taste of India",
   },
+},
+
 
   // Text from cart component
   cart_heading: "Cart Total",

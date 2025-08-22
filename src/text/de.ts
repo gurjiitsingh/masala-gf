@@ -41,6 +41,10 @@ sections: {
   },
 },
 
+searchForm: {
+  placeholder: "Gerichte suchen...",
+},
+
 
 
   //admin sidebar
@@ -64,15 +68,16 @@ sections: {
 },
 
 
-  footer_bottom: {
-    poweredBy: "Powered by",
-    poweredByUrl: "http://www.gstadeveloper.com",
-    copyright: {
-      prefix: "Copyright ©",
-      suffix: "All Rights Reserved by",
-      company: "",
-    },
+footer_bottom: {
+  poweredBy: "Bereitgestellt von",
+  poweredByUrl: "http://www.gstadeveloper.com",
+  copyright: {
+    prefix: "Copyright ©",
+    suffix: "Alle Rechte vorbehalten von",
+    company: "Masala Taste of India",
   },
+},
+
 
   // Text from cart component
   cart_heading: "Warenkorb-Summe.",

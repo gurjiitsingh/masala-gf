@@ -2,13 +2,54 @@
 import Link from "next/link";
 import React from "react";
 import { useLanguage } from "@/store/LanguageContext";
+
 type FooterLink = { href: string; name: string };
 
 export default function Footer() {
-
   const { TEXT, BRANDING } = useLanguage();
 
- return (
+  // Fallbacks
+  const fallbackBrand = {
+    brand_name: BRANDING?.brand_name || "Masala Taste of India",
+    poweredBy: BRANDING?.poweredBy || "Powered by",
+    poweredByUrl: BRANDING?.poweredByUrl || "https://www.gstadeveloper.com",
+    copyright: {
+      prefix: BRANDING?.copyright?.prefix || "Copyright ©",
+      suffix: BRANDING?.copyright?.suffix || "All Rights Reserved by",
+      company: BRANDING?.copyright?.company || "Masala Taste of India",
+    },
+  };
+
+  const fallbackText = {
+    logo_alt: TEXT?.logo_alt || "Restaurant Logo",
+    sections: {
+      links: {
+        title: TEXT?.sections?.links?.title || "Links",
+        items:
+          TEXT?.sections?.links?.items || [
+            { name: "Startseite", href: "/" },
+            { name: "Speisekarte", href: "/menu" },
+            { name: "Über uns", href: "/about" },
+            { name: "Kontakt", href: "/contact" },
+            { name: "Tischreservierung", href: "/reservation" },
+            { name: "Allergene", href: "/allergene" },
+          ],
+      },
+      company: {
+        title: TEXT?.sections?.company?.title || "Unternehmen",
+        items:
+          TEXT?.sections?.company?.items || [
+            { name: "Datenschutz", href: "/privacy" },
+            { name: "Nutzungsbedingungen", href: "#" },
+          ],
+      },
+      social: {
+        title: TEXT?.sections?.social?.title || "Soziale Medien",
+      },
+    },
+  };
+
+  return (
     <footer className="relative pt-12 -mb-20 footer-bg-primary">
       <div className="container mx-auto">
         <div className="flex flex-col md:flex-row justify-between gap-8 md:gap-1">
@@ -16,12 +57,12 @@ export default function Footer() {
           <div className="flex items-center gap-1 w-full h-fit footer-border p-1 mx-1 rounded-2xl footer-box-bg">
             <div className="flex items-center justify-start rounded-full">
               <Link href="/">
-                <img className="h-12 md:h-12" src="/logo.webp" alt={TEXT.logo_alt} />
+                <img className="h-12 md:h-12" src="/logo.webp" alt={fallbackText.logo_alt} />
               </Link>
             </div>
             <div className="flex items-center h-fit">
               <span className="self-center text-md footer-text">
-                {BRANDING.brand_name}
+                {fallbackBrand.brand_name}
               </span>
             </div>
           </div>
@@ -29,13 +70,13 @@ export default function Footer() {
           {/* Links Section */}
           <div className="flex flex-col gap-2 w-full px-2">
             <h3 className="tracking-wide text-xl font-bold uppercase">
-              {TEXT.sections.links.title}
+              {fallbackText.sections.links.title}
             </h3>
             <ul className="flex flex-col gap-3">
-               {TEXT.sections.links.items.map((item: FooterLink, idx: number) => (
+              {fallbackText.sections.links.items.map((item: FooterLink, idx: number) => (
                 <li
                   key={idx}
-                  className={`pb-1 ${idx < TEXT.sections.links.items.length - 1 ? "footer-item-border" : ""}`}
+                  className={`pb-1 ${idx < fallbackText.sections.links.items.length - 1 ? "footer-item-border" : ""}`}
                 >
                   <Link href={item.href}>{item.name}</Link>
                 </li>
@@ -46,10 +87,10 @@ export default function Footer() {
           {/* Company Section */}
           <div className="flex flex-col gap-2 w-full px-2">
             <h3 className="tracking-wide text-xl font-bold uppercase">
-              {TEXT.sections.company.title}
+              {fallbackText.sections.company.title}
             </h3>
             <ul className="space-y-1">
-              {TEXT.sections.company.items.map((item: FooterLink, idx: number) => (
+              {fallbackText.sections.company.items.map((item: FooterLink, idx: number) => (
                 <li
                   key={idx}
                   className={idx === 0 ? "footer-item-border pb-1" : ""}
@@ -65,7 +106,7 @@ export default function Footer() {
           {/* Social Media */}
           <div className="flex flex-col gap-2 w-full px-2">
             <div className="tracking-wide text-xl font-bold uppercase">
-              {TEXT.sections.social.title}
+              {fallbackText.sections.social.title}
             </div>
             <div className="flex justify-start space-x-3">
               {/* Add social media icons here */}
@@ -78,15 +119,15 @@ export default function Footer() {
       <div className="footer-bg-bottom mt-12 pt-3 pb-6">
         <div className="container mx-auto flex flex-col items-center">
           <p className="text-md footer-text-light">
-            {BRANDING.poweredBy}{" "}
-            <a href={BRANDING.poweredByUrl}>
-              {new URL(BRANDING.poweredByUrl).hostname}
+            {fallbackBrand.poweredBy}{" "}
+            <a href={fallbackBrand.poweredByUrl}>
+              {new URL(fallbackBrand.poweredByUrl).hostname}
             </a>
           </p>
           <p className="text-md footer-text-light">
-            {BRANDING.copyright.prefix}{" "}
-            {new Date().getFullYear()} {BRANDING.copyright.suffix}{" "}
-            <b>{BRANDING.copyright.company}</b>
+            {fallbackBrand.copyright.prefix}{" "}
+            {new Date().getFullYear()} {fallbackBrand.copyright.suffix}{" "}
+            <b>{fallbackBrand.copyright.company}</b>
           </p>
         </div>
       </div>

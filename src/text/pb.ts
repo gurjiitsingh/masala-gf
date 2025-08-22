@@ -40,6 +40,11 @@ export const TEXT = {
     },
   },
 
+  searchForm: {
+  placeholder: "ਖਾਣੇ ਖੋਜੋ...",
+},
+
+
   footer_bottom: {
     poweredBy: "ਦੁਆਰਾ ਚਲਾਇਆ ਗਿਆ",
     poweredByUrl: "http://www.gstadeveloper.com",

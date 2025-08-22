@@ -39,6 +39,11 @@ export const TEXT = {
     },
   },
 
+  searchForm: {
+  placeholder: "व्यंजन खोजें...",
+},
+
+
   footer_bottom: {
     poweredBy: "द्वारा संचालित",
     poweredByUrl: "http://www.gstadeveloper.com",

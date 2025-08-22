@@ -15,10 +15,11 @@ export const BRANDING = {
   tag_line: "Goût de l'Inde",
   brand_name: "Masala Goût de l'Inde",
 
-   poweredBy: "Powered by",
-    poweredByUrl: "http://www.gstadeveloper.com",
-    copyright: {
-      prefix: "Copyright ©",
-      suffix: "All Rights Reserved by",
-      company: "Masala Taste of India"}
+   poweredBy: "Propulsé par",
+  poweredByUrl: "https://www.gstadeveloper.com",
+  copyright: {
+    prefix: "Droits d'auteur ©",
+    suffix: "Tous droits réservés par",
+    company: "Masala Taste of India",
+  },
 }
