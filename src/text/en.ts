@@ -92,6 +92,21 @@ export const TEXT = {
 notDeliverableAddress: "We do not deliver at this address"
 },
 
+//order cancel
+
+  orderCancel: {
+    title: "Payment Canceled.",
+    message: "Your payment has been canceled. Please try again.",
+    retry: "Try Again",
+  },
+
+// order fail
+orderFail: {
+  title: "Payment failed.",
+  message: "Use another payment method or select cash on delivery",
+  retry: "Try again",
+},
+
   // Text from address form component
   address_section_title: "Address",
   email_label: "Email",

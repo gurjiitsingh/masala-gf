@@ -93,6 +93,22 @@ export const TEXT = {
 notDeliverableAddress: "Wir liefern nicht an diese Adresse",
 },
 
+// Order Fail
+orderFail: {
+  title: "Zahlung fehlgeschlagen.",
+  message: "Andere Zahlungsart verwenden oder Nachnahme wählen",
+  retry: "Versuchen Sie es erneut",
+},
+
+
+// Order Cancel
+orderCancel: {
+  title: "Zahlung abgebrochen.",
+  message: "Ihre Zahlung wurde abgebrochen, bitte versuchen Sie es erneut.",
+  retry: "Versuchen Sie es erneut",
+},
+
+
   // Address form
   address_section_title: "Adresse",
   email_label: "Email",

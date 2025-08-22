@@ -87,7 +87,23 @@ export const TEXT = {
 order_complete_heading: "आपका ऑर्डर पूरा हो गया है",
   pickup_time: "पिकअप: 20–25 मिनट",
   delivery_time: "डिलीवरी समय: 40–55 मिनट",
+
+
+//order fail
+  orderFail: {
+  title: "भुगतान विफल हुआ।",
+  message: "कृपया कोई अन्य भुगतान विधि का उपयोग करें या कैश ऑन डिलीवरी चुनें",
+  retry: "फिर से प्रयास करें",
+},
+
+// Order Cancel
+orderCancel: {
+  title: "भुगतान रद्द कर दिया गया।",
+  message: "आपका भुगतान रद्द हो गया है, कृपया पुनः प्रयास करें।",
+  retry: "पुनः प्रयास करें",
+},
   // toast error message
+  
 
    error_select_payment_type: "भुगतान का प्रकार चुनें",
     error_select_address: "पता चुनें",

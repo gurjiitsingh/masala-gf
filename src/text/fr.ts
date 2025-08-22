@@ -95,6 +95,19 @@ export const TEXT = {
   addressRequired: "Veuillez entrer l'adresse complète et le code postal pour estimer les frais de livraison",
 },
 
+//order failed
+orderFail: {
+  title: "Échec du paiement.",
+  message: "Utilisez un autre mode de paiement ou choisissez le paiement à la livraison",
+  retry: "Réessayer",
+},
+
+// Order Cancel
+orderCancel: {
+  title: "Paiement annulé.",
+  message: "Votre paiement a été annulé, veuillez réessayer.",
+  retry: "Réessayer",
+},
 
  // toast error message
   error_select_payment_type: "Sélectionnez le mode de paiement",

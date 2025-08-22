@@ -1,5 +1,5 @@
 "use client";
-import React, { Suspense } from "react";
+
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 import Checkout from "./components/Checkout";
 

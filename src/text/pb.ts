@@ -90,6 +90,21 @@ export const TEXT = {
   pickup_time: "ਪਿਕਅੱਪ: 20–25 ਮਿੰਟ",
   delivery_time: "ਡਿਲੀਵਰੀ ਸਮਾਂ: 40–55 ਮਿੰਟ",
 
+
+  orderFail: {
+  title: "ਭੁਗਤਾਨ ਅਸਫਲ ਹੋ ਗਿਆ।",
+  message: "ਕੋਈ ਹੋਰ ਭੁਗਤਾਨ ਵਿਧੀ ਵਰਤੋ ਜਾਂ ਨਕਦ ਭੁਗਤਾਨ ਚੁਣੋ",
+  retry: "ਮੁੜ ਕੋਸ਼ਿਸ਼ ਕਰੋ",
+},
+
+
+// Order Cancel
+orderCancel: {
+  title: "ਭੁਗਤਾਨ ਰੱਦ ਕਰ ਦਿੱਤਾ ਗਿਆ ਹੈ।",
+  message: "ਤੁਹਾਡਾ ਭੁਗਤਾਨ ਰੱਦ ਹੋ ਗਿਆ ਹੈ, ਕਿਰਪਾ ਕਰਕੇ ਮੁੜ ਕੋਸ਼ਿਸ਼ ਕਰੋ।",
+  retry: "ਮੁੜ ਕੋਸ਼ਿਸ਼ ਕਰੋ",
+},
+
    // toast error message
 error_select_payment_type: "ਭੁਗਤਾਨ ਦੀ ਕਿਸਮ ਚੁਣੋ",
     error_select_address: "ਪਤਾ ਚੁਣੋ",
