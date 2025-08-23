@@ -8,46 +8,47 @@ type FooterLink = { href: string; name: string };
 export default function Footer() {
   const { TEXT, BRANDING } = useLanguage();
 
-  // Fallbacks
-  const fallbackBrand = {
-    brand_name: BRANDING?.brand_name || "Masala Taste of India",
-    poweredBy: BRANDING?.poweredBy || "Powered by",
-    poweredByUrl: BRANDING?.poweredByUrl || "https://www.gstadeveloper.com",
-    copyright: {
-      prefix: BRANDING?.copyright?.prefix || "Copyright ©",
-      suffix: BRANDING?.copyright?.suffix || "All Rights Reserved by",
-      company: BRANDING?.copyright?.company || "Masala Taste of India",
-    },
-  };
+// Fallbacks
+const fallbackBrand = {
+  brand_name: BRANDING?.brand_name || "",
+  poweredBy: BRANDING?.poweredBy || "Powered by",
+  poweredByUrl: BRANDING?.poweredByUrl || "https://www.gstadeveloper.com",
+  copyright: {
+    prefix: BRANDING?.copyright?.prefix || "Copyright ©",
+    suffix: BRANDING?.copyright?.suffix || "All Rights Reserved by",
+    company: BRANDING?.copyright?.company || "",
+  },
+};
 
-  const fallbackText = {
-    logo_alt: TEXT?.logo_alt || "Restaurant Logo",
-    sections: {
-      links: {
-        title: TEXT?.sections?.links?.title || "Links",
-        items:
-          TEXT?.sections?.links?.items || [
-            { name: "Startseite", href: "/" },
-            { name: "Speisekarte", href: "/menu" },
-            { name: "Über uns", href: "/about" },
-            { name: "Kontakt", href: "/contact" },
-            { name: "Tischreservierung", href: "/reservation" },
-            { name: "Allergene", href: "/allergene" },
-          ],
-      },
-      company: {
-        title: TEXT?.sections?.company?.title || "Unternehmen",
-        items:
-          TEXT?.sections?.company?.items || [
-            { name: "Datenschutz", href: "/privacy" },
-            { name: "Nutzungsbedingungen", href: "#" },
-          ],
-      },
-      social: {
-        title: TEXT?.sections?.social?.title || "Soziale Medien",
-      },
+const fallbackText = {
+  logo_alt: TEXT?.logo_alt || "Restaurant Logo",
+  sections: {
+    links: {
+      title: TEXT?.sections?.links?.title || "Links",
+      items:
+        TEXT?.sections?.links?.items || [
+          { name: "Home", href: "/" },
+          { name: "Menu", href: "/menu" },
+          { name: "About Us", href: "/about" },
+          { name: "Contact", href: "/contact" },
+          { name: "Table Reservation", href: "/reservation" },
+          { name: "Allergens", href: "/allergene" },
+        ],
     },
-  };
+    company: {
+      title: TEXT?.sections?.company?.title || "Company",
+      items:
+        TEXT?.sections?.company?.items || [
+          { name: "Privacy Policy", href: "/privacy" },
+          { name: "Terms of Service", href: "#" },
+        ],
+    },
+    social: {
+      title: TEXT?.sections?.social?.title || "Social Media",
+    },
+  },
+};
+
 
   return (
     <footer className="relative pt-12 -mb-20 footer-bg-primary">

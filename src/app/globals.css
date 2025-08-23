@@ -253,6 +253,10 @@ button:disabled {
   @apply bg-[#64870d];
 }
 
+.navbar-link-top {
+  @apply text-slate-50;
+}
+
 .header-shadow {
   @apply shadow-md;
 }

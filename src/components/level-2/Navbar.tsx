@@ -10,7 +10,7 @@ function Navbar() {
       <ul className="hidden lg:w-full lg:flex lg:gap-3 lg:items-center">
         {TEXT.menu.map((item: { link: string; name: string }) => (
           <li className="fit navbar-link" key={item.name}>
-            <Link href={item.link}>{item.name}</Link>
+            <Link className="navbar-link-top" href={item.link}>{item.name}</Link>
           </li>
         ))}
       </ul>

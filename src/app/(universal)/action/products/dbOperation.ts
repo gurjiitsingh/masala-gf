@@ -573,3 +573,65 @@ export async function uploadProductFromCSV(data: Partial<ProductType>) {
 
   await adminDb.collection("products").add(productData);
 }
+
+
+
+
+/**
+ * Copy all docs from "product" collection to "products" collection.
+ * Keeps the same document IDs.
+ */
+export async function duplicateProducts(): Promise<void> {
+  try {
+    const snapshot = await adminDb.collection("product").get();
+
+    if (snapshot.empty) {
+      console.warn("No products found in 'product' collection.");
+      return;
+    }
+
+    const batch = adminDb.batch();
+
+    snapshot.docs.forEach((doc) => {
+      const data = doc.data();
+      const targetRef = adminDb.collection("products").doc(doc.id); // same ID
+      batch.set(targetRef, data, { merge: true });
+    });
+
+    await batch.commit();
+    console.log("Successfully copied all products to 'products' collection.");
+  } catch (error) {
+    console.error("Failed to duplicate products:", error);
+    throw new Error("Error duplicating products collection");
+  }
+}
+
+
+
+/**
+ * Ensure all docs in "products" collection have status = "published".
+ * Creates/updates the field for every doc.
+ */
+export async function publishAllProducts(): Promise<void> {
+  try {
+    const snapshot = await adminDb.collection("products").get();
+
+    if (snapshot.empty) {
+      console.warn("No products found in 'products' collection.");
+      return;
+    }
+
+    const batch = adminDb.batch();
+
+    snapshot.docs.forEach((doc) => {
+      const ref = adminDb.collection("products").doc(doc.id);
+      batch.set(ref, { status: "published" }, { merge: true });
+    });
+
+    await batch.commit();
+    console.log("✅ All products marked as published.");
+  } catch (error) {
+    console.error("❌ Failed to publish products:", error);
+    throw new Error("Error updating product statuses");
+  }
+}

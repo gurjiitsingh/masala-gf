@@ -24,7 +24,7 @@ const Header = () => {
 
   return (
     <header className="header-bg header-opacity header-shadow w-full px-3 mx-auto header-rounded mt-3 z-50">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between min-h-[40px] md:min-h-[53px]">
         {/* Left Side */}
         <div className="flex items-center gap-4">
           <button

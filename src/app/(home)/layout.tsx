@@ -37,7 +37,10 @@ export default function RootLayout({
             <BargerMenu />
             <Modal />
 
-            <div className="layout-bg relative w-full h-screen overflow-x-hidden m-0 p-0">
+            <div
+              className="layout-bg relative w-full h-screen overflow-x-hidden bg-cover  m-0 p-0"
+              style={{ backgroundImage: "url('/hero-bg.jpg')" }}
+            >
               <div
                 className="absolute top-0 inset-0 z-0 bg-cover bg-center bg-no-repeat"
                 style={{ backgroundImage: "url('/hero-bg.jpg')" }}

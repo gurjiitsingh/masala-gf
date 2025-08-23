@@ -33,7 +33,7 @@ export default function Products() {
           fetchAddOnProducts(),
           fetchProducts(),
         ]);
-
+ 
         // ✅ Filter for only published products
         const publishedProducts = fetchedProducts.filter(
           (p) => p.status === "published"
