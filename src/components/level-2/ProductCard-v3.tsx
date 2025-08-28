@@ -14,27 +14,17 @@ import AddOn from "../level-1/AddOn";
 import { formatCurrencyNumber } from "@/utils/formatCurrency";
 import Image from "next/image";
 
-import { Cinzel, Lato, Roboto  } from "next/font/google";
+import { Cinzel, Lato, Roboto, Abel } from "next/font/google";
 // import { Montserrat, Oswald, Bebas_Neue, Anton, Poppins } from "next/font/google";
 // import { Great_Vibes, Pacifico, Dancing_Script } from "next/font/google";
 
 const cinzel = Cinzel({ subsets: ["latin"], weight: ["400", "600", "700"] });
 const lato = Lato({ subsets: ["latin"], weight: ["400", "700"] });
 const roboto = Roboto({ subsets: ["latin"], weight: ["400", "500", "700"] });
-//const poppins = Poppins({ subsets: ["latin"], weight: ["400", "600", "700"] });
-
-// export const vibes = Great_Vibes({ subsets: ["latin"], weight: ["400"] });
-// export const pacifico = Pacifico({ subsets: ["latin"], weight: ["400"] });
-// export const dancing = Dancing_Script({ subsets: ["latin"], weight: ["400", "700"] });
-
-// export const montserrat = Montserrat({ subsets: ["latin"], weight: ["400", "700", "900"] });
-// export const oswald = Oswald({ subsets: ["latin"], weight: ["400", "700"] });
-// export const bebas = Bebas_Neue({ subsets: ["latin"], weight: ["400"] });
-// export const anton = Anton({ subsets: ["latin"], weight: ["400"] });
-
-//const fonts = { Cinzel: cinzel, Lato: lato, Roboto: roboto, Poppins: poppins };
- const fonts = {
+const abel = Abel({ subsets: ["latin"], weight: "400" });
+const fonts = {
   Cinzel: cinzel,
+  Abel: abel,
   // Playfair: playfair,
   // Cormorant: cormorant,
   // Lora: lora,
@@ -129,7 +119,7 @@ export default function ProdcutCardHorizontical({
     >
       {/* Product Image */}
       {/* <div className="w-full aspect-[4/3] bg-gray-100 flex items-center justify-center"> */}
-         <div className="w-full aspect-[4/3]  rounded-xl flex items-center justify-center h-[150px]">
+      <div className="w-full aspect-[4/3]  rounded-xl flex items-center justify-center h-[150px]">
         {product.image && (
           <Image
             src={product.image}
@@ -145,8 +135,10 @@ export default function ProdcutCardHorizontical({
       <div className="px-4 pb-4 pt-0 flex flex-col justify-between flex-1">
         <div className="flex-1">
           {/* Title */}
-          <h3 className={`${fontTitle.className} text-lg font-semibold text-gray-900 leading-snug line-clamp-2`}>
-            {productCategoryIdG && <>{product.sortOrder}.&nbsp;</>}
+          <h3
+            className={`${fontTitle.className} text-lg font-semibold text-gray-900 leading-snug line-clamp-2`}
+          >
+            {/* {productCategoryIdG && <>{product.sortOrder}.&nbsp;</>} */}
             {product.name}
           </h3>
 
@@ -156,7 +148,7 @@ export default function ProdcutCardHorizontical({
               onClick={() =>
                 alert(product.productDesc ?? "No description available")
               }
-             className={`${fontDescription.className} text-sm text-gray-600 mt-1 line-clamp-3 cursor-pointer`}
+              className={`${fontDescription.className} text-md text-gray-600 mt-1 line-clamp-3 cursor-pointer`}
             >
               {product.productDesc}
             </p>
@@ -165,24 +157,30 @@ export default function ProdcutCardHorizontical({
 
         {/* Price + AddToCart */}
         {!product.flavors && (
-          <div className="flex items-center justify-between mt-4">
-          {/* Price Section */}
-{priceDiscounted ? (
-  <div className={`${fontPrice.className} text-sm font-medium text-gray-900`}>
-    <span className="line-through text-gray-400 mr-2 font-normal">
-      {priceRegular}
-    </span>
-    <span className="text-gray-600 font-semibold">
-      {priceDiscounted}
-    </span>
-  </div>
-) : (
-  <div className={`${fontPrice.className} text-sm font-semibold text-gray-800`}>
-    {priceRegular}
-  </div>
-)}
-
+          <div className="flex items-center justify-between  mt-4">
+            {/* Price Section */}
+          <div>
+            {priceDiscounted ? (
+              <div
+                className={`${fontPrice.className} text-md font-medium text-gray-900`}
+              >
+                <span className="line-through text-gray-400 mr-2 font-normal">
+                  {priceRegular}
+                </span>
+                <span className="text-gray-600 font-bold">
+                  {priceDiscounted}
+                </span>
+              </div>
+            ) : (
+              <div
+                className={`${fontPrice.className} text-md font-bold text-gray-800`}
+              >
+                {priceRegular}
+              </div>
+            )}
+</div>
             {/* Cart Button */}
+            <div className="bg-amber-500 rounded-full ">
             {!isCartDisabled ? (
               <CartButton cartProduct={cartProduct} />
             ) : (
@@ -202,6 +200,7 @@ export default function ProdcutCardHorizontical({
                 </div>
               </div>
             )}
+            </div>
           </div>
         )}
 

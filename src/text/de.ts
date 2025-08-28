@@ -19,7 +19,7 @@ export const TEXT = {
 
 sections: {
   links: {
-    title: "Links",
+    title: "Quick Links",
     items: [
       { name: "Startseite", href: "/" },
       { name: "Speisekarte", href: "/" },

@@ -5,7 +5,7 @@ import { IoMdAdd, IoMdRemove } from "react-icons/io";
 import { useCartContext } from "@/store/CartContext";
 import { cartProductType } from "@/lib/types/cartDataType";
 
-const CartButton = ({ cartProduct }: { cartProduct: cartProductType }) => {
+const CartButton1 = ({ cartProduct }: { cartProduct: cartProductType }) => {
   const [quantity, setQuantity] = useState<number>(0);
   //const [ productVariat, setProductVariant ] = useState<string>();
 
@@ -40,18 +40,11 @@ const CartButton = ({ cartProduct }: { cartProduct: cartProductType }) => {
                 <IoMdRemove size={16} className="text-white" />
               </button>
             ) : (
-                <button
-               
-                className="px-1 py-1 rounded-full bg-slate-400 leading-none flex items-center justify-center"
-              >
-                {/* flex items-center justify-center w-7 h-7 rounded-full bg-slate-400 */}
-                <IoMdRemove size={16} className="text-white" />
-              </button>
+              <></>
             )}
           </div>
 
-          {quantity > 0 ? <div className="text-slate-900">{quantity}</div> : <div className="text-white">0</div>}
-         
+          {quantity}
           <div>
             <button
               onClick={addToCartL}
@@ -68,4 +61,4 @@ const CartButton = ({ cartProduct }: { cartProduct: cartProductType }) => {
   );
 };
 
-export default CartButton;
+export default CartButton1;

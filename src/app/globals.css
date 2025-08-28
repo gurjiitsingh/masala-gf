@@ -280,11 +280,11 @@ button:disabled {
 
 /* Footer background colors */
 .footer-bg-primary {
-  @apply bg-[#FADB5E]; /* Original: #FADB5E */
+  @apply bg-slate-500 text-slate-50;; /*bg-[#FADB5E]; /* Original: #FADB5E */
 }
 
 .footer-bg-bottom {
-  @apply bg-[#64870d]; /* Original: #64870d */
+   @apply bg-slate-700;/*  bg-[#64870d]; * Original: #64870d */
 }
 
 /* Footer card background and border */
