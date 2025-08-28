@@ -13,7 +13,7 @@ import CartButton from "../AddToCart/CartButton";
 import AddOn from "../level-1/AddOn";
 import { formatCurrencyNumber } from "@/utils/formatCurrency";
 
-export default function PageProductDetailComponent({
+export default function ProdcutCardHorizontical({
   product,
   allAddOns,
 }: {

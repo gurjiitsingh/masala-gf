@@ -14,6 +14,7 @@ import Header from "@/components/level-1/Header";
 import Footer from "@/components/level-1/Footer";
 import { SEO } from "@/config/languages";
 
+
 // ✅ Dynamic SEO fallback logic here
 //export const metadata: Metadata = getSeoMetadata();
 

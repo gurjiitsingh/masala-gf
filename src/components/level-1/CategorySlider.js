@@ -8,6 +8,29 @@ import { fetchCategories } from "@/app/(universal)/action/category/dbOperations"
 import { UseSiteContext } from "@/SiteContext/SiteContext";
 import { TEXT } from "@/config/languages";
 
+import { Cinzel, Lato, Roboto, Poppins } from "next/font/google";
+
+const cinzel = Cinzel({
+  subsets: ["latin"],
+  weight: ["400", "600", "700"], 
+});
+
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["400", "600", "700"], // choose what you need
+});
+
+const lato = Lato({
+  subsets: ["latin"],
+  weight: ["400", "700"], 
+});
+
+const roboto = Roboto({
+  subsets: ["latin"],
+  weight: ["400", "500", "700"], 
+});
+
+
 export default function CategorySlider() {
   const [width, setWidth] = useState(0); // Start with 0, safe for SSR
   // const [width, setWidth] = useState(() =>
@@ -124,7 +147,7 @@ export default function CategorySlider() {
                       </div>
                     </div>
                     <div className="flex flex-col justify-center w-[110px] items-center">
-                      <h3 className="text-[.8rem] text-slate-600 px-0">
+                      <h3 className={`${poppins.className} text-[.85rem] font-semibold text-slate-700 px-0`}>
                         {category.name}
                       </h3>
                     </div>
