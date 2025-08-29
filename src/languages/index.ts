@@ -1,17 +1,17 @@
 import { TEXT as enTEXT } from '@/text/en';
-import { SEO as enSEO, BRANDING as enBRANDING } from '@/seo/en';
+import { SEO as enSEO, BRANDING as enBRANDING } from '@/custom/seo/en';
 
 import { TEXT as deTEXT } from '@/text/de';
-import { SEO as deSEO, BRANDING as deBRANDING } from '@/seo/de';
+import { SEO as deSEO, BRANDING as deBRANDING } from '@/custom/seo/de';
 
 import { TEXT as pbTEXT } from '@/text/pb';
-import { SEO as pbSEO, BRANDING as pbBRANDING } from '@/seo/pb';
+import { SEO as pbSEO, BRANDING as pbBRANDING } from '@/custom/seo/pb';
 
 import { TEXT as frTEXT } from '@/text/fr';
-import { SEO as frSEO, BRANDING as frBRANDING } from '@/seo/fr';
+import { SEO as frSEO, BRANDING as frBRANDING } from '@/custom/seo/fr';
 
 import { TEXT as hiTEXT } from '@/text/hi';
-import { SEO as hiSEO, BRANDING as hiBRANDING } from '@/seo/hi';
+import { SEO as hiSEO, BRANDING as hiBRANDING } from '@/custom/seo/hi';
 
 export const languages = {
   en: { TEXT: enTEXT, SEO: enSEO, BRANDING: enBRANDING },
