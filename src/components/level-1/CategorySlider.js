@@ -118,7 +118,7 @@ export default function CategorySlider() {
         </div>
     </div>
 
-    <div className="mx-auto max-w-[1700px] min-h-[100px] bg-white/70 backdrop-blur-md rounded-b-xl rounded-tl-xl shadow-md p-1">
+    <div className="mx-auto max-w-[1700px] min-h-[100px] bg-white backdrop-blur-md rounded-b-xl rounded-tl-xl shadow-md p-1">
       {categoryData.length > 0 && (
         <Slider {...sliderSettings}>
 {categoryData.map((category) => {
