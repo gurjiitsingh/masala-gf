@@ -113,7 +113,7 @@ export default function ProdcutCardHorizontical({
     <div
       className="
         bg-white border border-gray-200 rounded-xl shadow hover:shadow-md
-        transition-all duration-200  flex flex-col mt-30
+        transition-all duration-200  flex flex-col mt-21
         w-full sm:w-full md:w-[320px] lg:w-[350px]
       "
     >
