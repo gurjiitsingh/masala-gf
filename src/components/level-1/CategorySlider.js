@@ -108,9 +108,9 @@ export default function CategorySlider() {
   };
 
  return (
-  <div className="relative z-10 mt-10 mb-7 container mx-auto">
+  <div className="relative z-10 mt-10 mb-7 container mx-auto ">
     {/* <div className="flex justify-end mb-1 px-2"> */}
-   <div className="container mx-auto w-full flex justify-end ">
+   <div className=" mx-auto w-full flex justify-end ">
 
      <div className=" w-fit  text-zinc-500 light-bg rounded-t-2xl py-1 px-2 text-sm font-light md:font-normal">
           {TEXT.search_dish_or_category}
@@ -118,7 +118,7 @@ export default function CategorySlider() {
         </div>
     </div>
 
-    <div className="mx-auto max-w-[1700px] min-h-[100px] bg-white/70 backdrop-blur-md rounded-b-xl rounded-tl-xl shadow-md p-3">
+    <div className="mx-auto max-w-[1700px] min-h-[100px] bg-white/70 backdrop-blur-md rounded-b-xl rounded-tl-xl shadow-md p-1">
       {categoryData.length > 0 && (
         <Slider {...sliderSettings}>
 {categoryData.map((category) => {
@@ -140,7 +140,7 @@ export default function CategorySlider() {
       >
         <div className={`${
                         displayCategory === category.id
-                          ? "relative  rounded-xl overflow-hidden bg-gray-100 shadow-inner border-amber-400 border-2"
+                          ? "relative  rounded-xl overflow-hidden bg-gray-100 shadow-inner border-amber-200 border-2"
                           : "relative  rounded-xl overflow-hidden bg-gray-100 shadow-inner"
                       }`}>
   {/* <div
