@@ -55,22 +55,22 @@ type Titem = {
 
 const Sidebar = () => {
 
-const { TEXT } = useLanguage() || { TEXT: fallbackText };
+const { TEXT, BRANDING } = useLanguage() || { BRANDING: fallbackText };
 const menuList: Titem[] = [
-  { name: TEXT.sidebar.home, link: '/', icon: <GoHome /> },
-  { name: TEXT.sidebar.orders, link: '/admin', icon: <MdDashboard /> },
-  { name: TEXT.sidebar.orders_realtime, link: '/admin/order-realtime', icon: <MdOutlineCrisisAlert /> },
-  { name: TEXT.sidebar.sale, link: '/admin/sale', icon: <FaClipboardList /> },
-  { name: TEXT.sidebar.reservations, link: '/admin/reservations', icon: <BsCardList /> },
-  { name: TEXT.sidebar.categories, link: '/admin/categories', icon: <MdCategory /> },
-  { name: TEXT.sidebar.pickup_discount, link: '/admin/pickupdiscount/pickup-discount', icon: <MdLocalOffer /> },
-  { name: TEXT.sidebar.products, link: '/admin/productsbase', icon: <MdInventory /> },
-  { name: TEXT.sidebar.variants, link: '/admin/flavorsProductG', icon: <MdRestaurantMenu /> },
-  { name: TEXT.sidebar.coupon, link: '/admin/coupon', icon: <MdLocalOffer /> },
-  { name: TEXT.sidebar.delivery, link: '/admin/delivery', icon: <TbTruckDelivery /> },
-  { name: TEXT.sidebar.users, link: '/admin/users', icon: <FaUsers /> },
-  { name: TEXT.sidebar.setting, link: '/admin/setting', icon: <MdSettings /> },
-  { name: TEXT.sidebar.data_backup, link: '/admin/data-backup', icon: <MdOutlineBackup /> },
+  { name: BRANDING.sidebar.home, link: '/', icon: <GoHome /> },
+  { name: BRANDING.sidebar.orders, link: '/admin', icon: <MdDashboard /> },
+  { name: BRANDING.sidebar.orders_realtime, link: '/admin/order-realtime', icon: <MdOutlineCrisisAlert /> },
+  { name: BRANDING.sidebar.sale, link: '/admin/sale', icon: <FaClipboardList /> },
+  { name: BRANDING.sidebar.reservations, link: '/admin/reservations', icon: <BsCardList /> },
+  { name: BRANDING.sidebar.categories, link: '/admin/categories', icon: <MdCategory /> },
+  { name: BRANDING.sidebar.pickup_discount, link: '/admin/pickupdiscount/pickup-discount', icon: <MdLocalOffer /> },
+  { name: BRANDING.sidebar.products, link: '/admin/productsbase', icon: <MdInventory /> },
+  { name: BRANDING.sidebar.variants, link: '/admin/flavorsProductG', icon: <MdRestaurantMenu /> },
+  { name: BRANDING.sidebar.coupon, link: '/admin/coupon', icon: <MdLocalOffer /> },
+  { name: BRANDING.sidebar.delivery, link: '/admin/delivery', icon: <TbTruckDelivery /> },
+  { name: BRANDING.sidebar.users, link: '/admin/users', icon: <FaUsers /> },
+  { name: BRANDING.sidebar.setting, link: '/admin/setting', icon: <MdSettings /> },
+  { name: BRANDING.sidebar.data_backup, link: '/admin/data-backup', icon: <MdOutlineBackup /> },
 ];
 
   const { setAdminSideBarToggleG } = UseSiteContext();
@@ -105,7 +105,7 @@ const menuList: Titem[] = [
             className="flex items-center gap-3 px-4 py-2 w-full text-sm font-medium rounded-md bg-amber-600 text-white hover:bg-rose-700 transition"
           >
             <IoIosLogOut size={20} />
-             {TEXT.sidebar.logout}
+             {BRANDING.sidebar.logout}
           </button>
         </div>
       </div>

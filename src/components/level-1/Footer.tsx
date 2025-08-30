@@ -56,8 +56,8 @@ export default function Footer() {
     logo_alt: TEXT?.logo_alt || "Restaurant Logo",
     sections: {
       links: {
-        title: TEXT?.sections?.links?.title || "Links",
-        items: TEXT?.sections?.links?.items || [
+        title: BRANDING?.sections?.links?.title || "Links",
+        items: BRANDING?.sections?.links?.items || [
           { name: "Home", href: "/" },
           { name: "Menu", href: "/menu" },
           { name: "About Us", href: "/about" },
@@ -67,14 +67,14 @@ export default function Footer() {
         ],
       },
       company: {
-        title: TEXT?.sections?.company?.title || "Company",
-        items: TEXT?.sections?.company?.items || [
+        title: BRANDING?.sections?.company?.title || "Company",
+        items: BRANDING?.sections?.company?.items || [
           { name: "Privacy Policy", href: "/privacy" },
           { name: "Terms of Service", href: "#" },
         ],
       },
       social: {
-        title: TEXT?.sections?.social?.title || "Social Media",
+        title: BRANDING?.sections?.social?.title || "Social Media",
       },
     },
   };

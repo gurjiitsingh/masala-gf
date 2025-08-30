@@ -1,77 +1,14 @@
 export const TEXT = {
   logo_alt: "Logo",
+
+
   
-  menu_list: [
-    { name: "Home", link: "/" },
-    { name: "About Us", link: "/about" },
-    { name: "Contact", link: "/contact" },
-    { name: "Table Reservation", link: "/reservation" },
-  ],
-
-  menu: [
-    { name: "Home", link: "/" },
-    { name: "About Us", link: "/about" },
-    { name: "Contact", link: "/contact" },
-    { name: "Table Reservation", link: "/reservation" },
-  ],
-
-  sections: {
-    links: {
-      title: "Quick Links",
-      items: [
-        { name: "Home", href: "/" },
-        { name: "Menu", href: "/" },
-        { name: "About", href: "/about" },
-        { name: "Contact", href: "/contact" },
-        { name: "Reservation", href: "/reservation" },
-        { name: "Allergens", href: "/allergene" },
-      ],
-    },
-    company: {
-      title: "Company",
-      items: [
-        { name: "Privacy Policy", href: "/privacy" },
-        { name: "Terms of Service", href: "#" },
-      ],
-    },
-    social: {
-      title: "Social media",
-    },
-  },
-
 
   searchForm: {
   placeholder: "Search dishes...",
 },
 
-  //admin sidebar
-  sidebar: {
-  home: "Home",
-  orders: "Orders",
-  orders_realtime: "Orders Realtime",
-  sale: "Sale",
-  reservations: "Reservations",
-  categories: "Categories",
-  pickup_discount: "Pickup Discount",
-  products: "Products",
-  variants: "Variants",
-  coupon: "Coupon",
-  delivery: "Delivery",
-  users: "Users",
-  setting: "Setting",
-  data_backup: "Data Backup",
-  logout: "Logout",
-},
-
-footer_bottom: {
-  poweredBy: "Powered by",
-  poweredByUrl: "http://www.gstadeveloper.com",
-  copyright: {
-    prefix: "Copyright ©",
-    suffix: "All Rights Reserved by",
-    company: "Masala Taste of India",
-  },
-},
+ 
 
 
   // Text from cart component
@@ -139,11 +76,7 @@ orderFail: {
   shop_more_button: "Shop More",
   discount_hint_checkout: "See discount at checkout",
 
-  // Order complete
-
-  order_complete_heading: "Your order is complete",
-  pickup_time: "Pickup: 20–25 minutes",
-  delivery_time: "Delivery time: 40–55 minutes",
+  
 
   // toast error message
   error_select_payment_type: "Select payment type",

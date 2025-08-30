@@ -20,7 +20,7 @@ export default function OrderComplete() {
 
   const router = useRouter();
   const { deliveryCost } = UseSiteContext();
-  const {  TEXT } = useLanguage();
+  const {  TEXT, BRANDING } = useLanguage();
   const { cartData, endTotalG, totalDiscountG, productTotalCost, emptyCart } =
     useContext(CartContext);
 
@@ -105,15 +105,15 @@ export default function OrderComplete() {
     <div className="container bg-slate-100 mp flex rounded-2xl my-9 flex-col w-[90%] lg:w-[50%] mx-auto">
       <div className="flex flex-col gap-6 items-center">
         <div className="text-2xl font-semibold text-center">
-          {TEXT?.order_complete_heading || 'Ihre Bestellung ist abgeschlossen'}
+          {BRANDING?.order_complete_heading || 'Ihre Bestellung ist abgeschlossen'}
         </div>
 
         <div className="text-lg text-center text-slate-500">
-          {TEXT?.pickup_time || 'Abholen: 20–25 Minuten'}
+          {BRANDING?.pickup_time || 'Abholen: 20–25 Minuten'}
         </div>
 
         <div className="text-lg text-center text-slate-500">
-          {TEXT?.delivery_time || 'Lieferzeit: 40–55 Minuten'}
+          {BRANDING?.delivery_time || 'Lieferzeit: 40–55 Minuten'}
         </div>
 
         <div>

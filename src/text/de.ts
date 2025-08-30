@@ -1,82 +1,12 @@
 export const TEXT = {
   logo_alt: "Logo",
  
-
-
-  menu_list: [
-  { name: "Startseite", link: "/" },
-  { name: "Über uns", link: "/about" },
-  { name: "Kontakt", link: "/contact" },
-  { name: "Tischreservierung", link: "/reservation" },
-  ],
-
-  menu: [
-    { name: "Startseite", link: "/" },
-    { name: "Über Uns", link: "/about" },
-    { name: "Kontakt", link: "/contact" },
-    { name: "Tischreservierung", link: "/reservation" },
-  ],
-
-sections: {
-  links: {
-    title: "Quick Links",
-    items: [
-      { name: "Startseite", href: "/" },
-      { name: "Speisekarte", href: "/" },
-      { name: "Über uns", href: "/about" },
-      { name: "Kontakt", href: "/contact" },
-      { name: "Tischreservierung", href: "/reservation" },
-      { name: "Allergene", href: "/allergene" },
-    ],
-  },
-  company: {
-    title: "Unternehmen",
-    items: [
-      { name: "Datenschutzrichtlinie", href: "/privacy" }, // more precise than just "Datenschutz"
-      { name: "Nutzungsbedingungen", href: "#" },
-    ],
-  },
-  social: {
-    title: "Soziale Medien",
-  },
-},
-
 searchForm: {
   placeholder: "Gerichte suchen...",
 },
 
+  
 
-
-  //admin sidebar
-
-  sidebar: {
-  home: "Startseite",
-  orders: "Bestellungen",
-  orders_realtime: "Live-Bestellungen",
-  sale: "Verkauf",
-  reservations: "Reservierungen",
-  categories: "Kategorien",
-  pickup_discount: "Abholrabatt",
-  products: "Produkte",
-  variants: "Varianten",
-  coupon: "Gutschein",
-  delivery: "Lieferung",
-  users: "Benutzer",
-  setting: "Einstellungen",
-  data_backup: "Datensicherung",
-  logout: "Abmelden",
-},
-
-
-footer_bottom: {
-  poweredBy: "Bereitgestellt von",
-  poweredByUrl: "http://www.gstadeveloper.com",
-  copyright: {
-    prefix: "Copyright ©",
-    suffix: "Alle Rechte vorbehalten von",
-    company: "Masala Taste of India",
-  },
-},
 
 
   // Text from cart component
@@ -144,11 +74,7 @@ orderCancel: {
   shop_more_button: "Mehr einkaufen",
   discount_hint_checkout: "Rabatt in der Kasse ansehen",
 
-  // Order complete
-  order_complete_heading: "Ihre Bestellung ist abgeschlossen",
-  pickup_time: "Abholen: 20–25 Minuten",
-  delivery_time: "Lieferzeit: 40–55 Minuten",
-shop_more_button_order_complete: "Mehr einkaufen",
+
 
 //toas errors
 
