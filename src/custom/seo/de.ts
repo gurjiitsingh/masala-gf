@@ -9,7 +9,7 @@ export const BRANDING = {
   home_page_offer: "", // fallback for DB-driven value
   offer_instruction: "", // fallback for DB-driven value
   delivery_note: "Lieferung ist ebenfalls verfügbar.",
-  home_page_disclaimer: "Das Essen kann vom Bild abweichen",
+  home_page_disclaimer: "",//"Das Essen kann vom Bild abweichen",
   brand: "Masala",
   tag_line: "Taste of India",
   brand_name: "Masala Taste of India",

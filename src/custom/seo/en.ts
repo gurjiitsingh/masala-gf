@@ -10,7 +10,7 @@ export const BRANDING = {
   home_page_offer: "",
   offer_instruction: "",
   delivery_note: "Delivery is also available.",
-  home_page_disclaimer: "Food may differ from image.",
+  home_page_disclaimer:"",// "Food may differ from image.",
   brand: "Masala",
   tag_line: "Taste of India",
   brand_name: "Masala Taste of India",

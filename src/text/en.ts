@@ -130,8 +130,8 @@ orderFail: {
   payment_method_cod: "Cash on Delivery",
 
   // Search section
-  search_dish_or_category: "Search dish or select category",
-
+  search_dish_or_category: "Browse dishes",//"Search dish or select category",
+//Browse dishes
   // Mini cart sidebar
   cart_sidebar_title: "Your Cart",
   checkout_button: "Checkout",

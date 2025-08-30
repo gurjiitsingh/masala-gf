@@ -22,7 +22,7 @@ export default function Page() {
 
   return (
     <>
-      <div className="relative min-h-screen px-3 md:px-0 pb-6 mt-10">
+      <div className="relative min-h-screen px-3 md:px-0 pb-6 mt-3">
       
         {/* Foreground Content */}
         <div className="relative z-10">

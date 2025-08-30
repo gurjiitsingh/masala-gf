@@ -135,8 +135,8 @@ orderCancel: {
   payment_method_cod: "Barzahlung bei Lieferung",
   
   // Search section
-  search_dish_or_category: "Gericht suchen oder Kategorie auswählen",
-
+  search_dish_or_category: "Speisen durchsuchen",//"Gericht suchen oder Kategorie auswählen",
+//
   // Mini cart sidebar
   cart_sidebar_title: "Dein Warenkorb",
   checkout_button: "Kasse",

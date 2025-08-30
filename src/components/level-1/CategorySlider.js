@@ -108,11 +108,11 @@ export default function CategorySlider() {
   };
 
  return (
-  <div className="relative z-10 mt-10 mb-7 container mx-auto ">
+  <div className="relative z-10 mt-5 mb-7 container mx-auto ">
     {/* <div className="flex justify-end mb-1 px-2"> */}
    <div className=" mx-auto w-full flex justify-end ">
 
-     <div className=" w-fit  text-zinc-500 light-bg rounded-t-2xl py-1 px-2 text-sm font-light md:font-normal">
+     <div className=" w-fit  text-zinc-500 bg-white rounded-t-2xl py-1 px-2 text-sm font-light md:font-normal">
           {TEXT.search_dish_or_category}
           
         </div>
