@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import "../../globals.css";
+import "@/custom/globals.css";
 import Comcomp from "@/components/Comcomp";
 import { Toaster } from "react-hot-toast";
 

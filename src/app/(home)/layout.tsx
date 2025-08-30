@@ -1,4 +1,4 @@
-import "../globals.css";
+import "@/custom/globals.css";
 import { Toaster } from "react-hot-toast";
 import type { Metadata } from "next";
 //import { getSeoMetadata } from "@/utils/getSeoMetadata";
