@@ -5,7 +5,7 @@ export const TEXT = {
   
 
   searchForm: {
-  placeholder: "Search dishes...",
+  placeholder: "Search ...",
 },
 
  

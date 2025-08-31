@@ -2,7 +2,7 @@
 import Sidebar from "./components/Sidebar";
 import Header from "@/app/(universal)/admin/components/Header";
 import React, { useEffect, useRef, useState } from "react";
-import "../globals.css";
+import "@/custom/globals.css";
 //import { Metadata } from "next";
 import { usePathname } from "next/navigation";
 import { SessionProvider } from "next-auth/react"

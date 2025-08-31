@@ -2,7 +2,7 @@ export const TEXT = {
   logo_alt: "Logo",
  
 searchForm: {
-  placeholder: "Gerichte suchen...",
+  placeholder: "Gerichte ...",
 },
 
   
