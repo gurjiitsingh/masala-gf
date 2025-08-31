@@ -11,7 +11,7 @@ import {
 } from "react-icons/bi";
 import { HiOutlineChatBubbleBottomCenterText } from "react-icons/hi2";
 import { TbBrandBooking } from "react-icons/tb";
-import { TEXT } from "@/config/languages";
+import {  BRANDING } from "@/config/languages";
 
 // Icon mapping (optional)
 const iconMap: Record<string, any> = {
@@ -99,7 +99,7 @@ export const BargerMenu = () => {
 
             {/* Menu Items */}
             <ul>
-              {TEXT.menu.map((item, idx) => {
+              {BRANDING.menu.map((item, idx) => {
                 const Icon = iconMap[item.link] || BiHomeSmile;
 
                 return (
