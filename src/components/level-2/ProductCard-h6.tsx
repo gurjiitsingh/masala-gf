@@ -12,7 +12,6 @@ import toast from "react-hot-toast";
 import CartButton from "../AddToCart/CartButton";
 import AddOn from "../level-1/AddOn";
 import { formatCurrencyNumber } from "@/utils/formatCurrency";
-import CartButtonAdd from "../AddToCart/CartButtonAdd";
 
 export default function ProdcutCardHorizontical({
   product,
@@ -22,7 +21,7 @@ export default function ProdcutCardHorizontical({
   allAddOns: addOnType[];
 }) {
   const [addOnData, setAddOnData] = useState<addOnType[]>([]);
-  const {  settings } = UseSiteContext();
+  const { productCategoryIdG, settings } = UseSiteContext();
 
   useEffect(() => {
     if (allAddOns.length !== 0 && product.flavors) {
@@ -77,7 +76,7 @@ export default function ProdcutCardHorizontical({
 
   //common code end
   return (
-    <div className="bg-slate-50 w-full  lg:w-[48%]    shadow-lg flex flex-row   rounded-2xl items-center p-1">
+    <div className="bg-black w-full  lg:w-[48%]    shadow-lg flex flex-row   rounded-2xl items-center p-1">
       <div className="rounded-2xl flex items-center justify-center w-[120px] h-[120px]  md:w-[150px]  md:h-[150px]  overflow-hidden">
         {product.image && (
           <img
@@ -91,7 +90,7 @@ export default function ProdcutCardHorizontical({
       <div className="w-full flex flex-col pl-3 justify-between">
         <div className="w-full flex-col gap-4 justify-between ">
           <div className="w-full flex gap-1 mb-2 justify-between ">
-            <div className="flex text-slate-500 font-bold items-start justify-start  min-w-[180px] ">
+            <div className="flex text-slate-50 font-bold items-start justify-start  min-w-[180px] ">
            {/* product-card-add-title-cover-1 */}
               {/* {productCategoryIdG !== "" && <>{product.sortOrder}.&nbsp;</>} */}
               {product.name}
@@ -111,41 +110,42 @@ export default function ProdcutCardHorizontical({
 
           {!product.flavors && (
             <div className=" flex  items-center  justify-between py-[1px]   rounded-3xl">
-            
+              <div>Pack</div>
               {/* common code start */}
               {product.discountPrice !== undefined &&
               product.discountPrice > 0 ? (
                 <div className="flex justify-between gap-3 items-center">
                   {" "}
-                  <div className="text-md font-bold text-slate-500">{priceDiscounted}</div>
-                  <div className="line-through text-sm text-slate-500">{priceRegular}</div>
-                  {" "}
-                  </div>
+                  <div className="line-through">{priceRegular}</div>{" "}
+                  <div>{priceDiscounted}</div>
+                </div>
               ) : (
-                <div className="text-md font-bold text-slate-500">{priceRegular}</div>
+                <div>{priceRegular}</div>
               )}
-               {/* Cart Button */}
-        <div className="w-full flex justify-center mx-3 ">
-          {!isCartDisabled ? (
-            <CartButtonAdd cartProduct={cartProduct} />
-          ) : (
-            <div className="relative group">
-              <button
-                onClick={() =>
-                  toast(
-                    "Lunch available only from 11 to 16. Please choose another item."
-                  )
-                }
-                className="px-2 py-1 rounded-full bg-gray-400 cursor-not-allowed"
-              >
-                <IoMdAdd size={20} className="text-white" />
-              </button>
-              <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 w-max max-w-[220px] bg-gray-800 text-white text-xs p-2 rounded opacity-0 group-hover:opacity-100 transition-opacity z-50">
-                Lunch available only from 11 to 16.
+              {/* common code end */}
+              <div>
+                {!isCartDisabled ? (
+                  <div className="product-card-add-button-cover-1 rounded-2xl">
+                  <CartButton cartProduct={cartProduct} /></div>
+                ) : (
+                  <div className="relative group ">
+                    <button
+                      onClick={() => {
+                        toast(
+                          "Mittagessen gibt’s nur von 11 bis 16 Uhr. Bitte etwas anderes wählen."
+                        );
+                      }}
+                      className="px-1 py-1 rounded-full bg-slate-500 cursor-not-allowed"
+                    >
+                      <IoMdAdd size={20} className="text-white" />
+                    </button>
+                    <div className="absolute bottom-full left-0 transform -translate-x-[100%] mb-2 w-max max-w-[200px] bg-gray-800 text-white text-xs p-2 rounded opacity-0 group-hover:opacity-100 transition-opacity z-50">
+                      Mittagessen gibt’s nur von 11 bis 16 Uhr. Bitte etwas
+                      anderes wählen.
+                    </div>
+                  </div>
+                )}
               </div>
-            </div>
-          )}
-        </div>
             </div>
           )}
         </div>

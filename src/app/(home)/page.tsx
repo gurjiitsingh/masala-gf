@@ -2,7 +2,8 @@
 
 //import Categories from "./Components/Categories";
 import Products from "@/components/level-1/Products";
-import CategorySlider from "@/components/level-1/CategorySlider";
+//import CategorySlider from "@/components/level-1/CategorySlider";
+import CategorySliderSm2 from "@/components/level-1/CategorySliderSm2";
 import { useLanguage } from "@/store/LanguageContext";
 import Hero from "@/custom/cus-components/Hero";
 
@@ -29,8 +30,8 @@ export default function Page() {
           <div className="container mx-auto">
             <Hero />
           </div>
-
-          <CategorySlider />
+<CategorySliderSm2 />
+          {/* <CategorySlider /> */}
           <Products />
         </div>
       </div>

@@ -161,7 +161,7 @@ body {
 } 
 
 .slick-arrow{
-  background-color: #438a57 !important;
+  background-color: #aaa !important;
   border-radius: 100%;
   padding-top:2px !important;
   z-index: 9999;
@@ -196,6 +196,17 @@ button:disabled {
 /* === Layout Colors === */
 .layout-bg {
   @apply bg-[#d4eebe];
+  /* bg-gradient-to-t from-rose-50 to-slate-100  */
+  /* bg-gradient-to-r from-[#FFFFFF] to-[#FAFAFA]; */
+  /* bg-gradient-to-r from-[#FAFEFF] to-[#F0FCFF]; */
+  /* bg-gradient-to-r from-[#FFFFFB] to-[#FFFEEB]; */
+  /* bg-gradient-to-r from-[#FAFFFB] to-[#F3FFF9]; */
+  /* bg-gradient-to-r from-[#F9FAFB] to-[#F3F4F6]; */
+  /* bg-gradient-to-r from-[#E8F5E9] to-[#E0F7FA]; */
+  /* bg-gradient-to-r from-[#FFF8E1] to-[#FFE0B2]; */
+  /* bg-gradient-to-r from-[#FFFDE1] to-[#E0F7FA]; */
+  /* bg-gradient-to-r from-[#555555] to-[#111111] */
+  /* bg-gradient-to-r from-[#555555] to-[#111111] */
 }
 
 /* === Toast Styles === */
@@ -251,6 +262,7 @@ button:disabled {
 
 .header-bg {
   @apply bg-[#64870d];
+  /* bg-[#FE8B2E]; */
 }
 
 .navbar-link-top {

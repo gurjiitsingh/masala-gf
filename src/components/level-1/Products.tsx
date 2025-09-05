@@ -10,16 +10,43 @@ import dynamic from "next/dynamic";
 // Pick card based on .env
 let Card: React.ComponentType<any>;
 const cardType = process.env.NEXT_PUBLIC_PRODUCT_CARD_TYPE;
+
 switch (cardType) {
-    case "3":
-    Card = dynamic(() => import("../level-2/ProductCard-v3")); // horizontal
+  case "1":
+    Card = dynamic(() => import("../level-2/ProductCard-h1")); // horizontal
     break;
+
   case "2":
     Card = dynamic(() => import("../level-2/ProductCard-v2")); // horizontal
     break;
+  case "3":
+    Card = dynamic(() => import("../level-2/ProductCard-v3")); // horizontal
+    break;
+
+  case "4":
+    Card = dynamic(() => import("../level-2/ProductCard-v4")); // horizontal
+    break;
+  case "5":
+    Card = dynamic(() => import("../level-2/ProductCard-v5")); // horizontal
+    break;
+  case "6":
+    Card = dynamic(() => import("../level-2/ProductCard-h6")); // vertical
+    break;
   default:
     Card = dynamic(() => import("../level-2/ProductCard-h1")); // vertical
+
+  //   case "3":
+  //   Card = dynamic(() => import("../level-2/ProductCard-v3")); // horizontal
+  //   break;
+  // case "2":
+  //   Card = dynamic(() => import("../level-2/ProductCard-v2")); // horizontal
+  //   break;
+  // default:
+  //   Card = dynamic(() => import("../level-2/ProductCard-h1")); // vertical
 }
+
+
+
 export default function Products() {
   const { productCategoryIdG, settings, setAllProduct, productToSearchQuery } =
     UseSiteContext();
@@ -91,25 +118,43 @@ export default function Products() {
 let containerClass = "";
 
 switch (cardType) {
-  case "2":
-    // Horizontal cards
-    containerClass =
-      //"grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-5";
-       "flex flex-col md:flex-row md:flex-wrap gap-3 md:gap-5 justify-center";
-    break;
+  case "1":
+      // Horizontal cards
+      containerClass =
+             "flex flex-col md:flex-row md:flex-wrap gap-3 md:gap-5";
+      break;
+    case "2":
+      // Horizontal cards
+      containerClass =
+        //"grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-5";
+        "flex flex-col md:flex-row md:flex-wrap gap-3 md:gap-5 justify-center";
+      break;
 
-  case "3":
-    // Grid with 2/3/4 columns
-    containerClass =
-     // "grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-5";
-      "flex flex-col md:flex-row md:flex-wrap gap-3 md:gap-5  justify-center";
-    break;
-
-  default:
-    // Single column (stacked cards)
-    containerClass =
-      "flex flex-col md:flex-row md:flex-wrap gap-3 md:gap-5";
-    break;
+    case "3":
+      // Grid with 2/3/4 columns
+      containerClass =
+        // "grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-5";
+        "flex flex-col md:flex-row md:flex-wrap gap-3 md:gap-5  justify-center";
+      break;
+    case "4":
+      // Horizontal cards
+      containerClass =
+        //"grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-5";
+        "grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3";
+      break;
+    case "5":
+      // Horizontal cards
+      containerClass =
+        //"grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-5";
+        "grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 ";
+      break;
+    case "6":
+      containerClass = "flex flex-col md:flex-row md:flex-wrap gap-3 md:gap-5";
+      break;
+    default:
+      // Single column (stacked cards)
+      containerClass = "flex flex-col md:flex-row md:flex-wrap gap-3 md:gap-5";
+      break;
 }
 
 
