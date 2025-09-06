@@ -125,7 +125,7 @@ export default function ProdcutCardHorizontical({
             alt={product.name}
             width={400}
             height={300}
-            className="rounded-full w-[230px] h-max-[230px] -mt-[90px] object-cover"
+            className="rounded-full w-[100px] max-h-[230px] -mt-[90px] object-cover"
           />
         )}
       </div>

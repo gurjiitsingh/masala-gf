@@ -209,64 +209,25 @@ button:disabled {
   /* bg-gradient-to-r from-[#555555] to-[#111111] */
 }
 
-/* === Toast Styles === */
-.toast-default {
-  @apply bg-slate-800 text-slate-50;
+/* cart */
+.cart-bg {
+  @apply bg-[#A2AF9B]
 }
-
-.toast-success {
-  @apply bg-emerald-500 text-white;
-}
-
-.toast-error {
-  @apply bg-red-500 text-white;
-}
-
-.toast-loading {
-  @apply bg-amber-500 text-white;
-}
-
-
-/* === Title Component Styles === */
-
-.text-brand-heading {
-  @apply text-[#496208];
-}
-
-.text-brand-subheading {
-  @apply text-xl text-[#496208]; 
-}
-
-
-/* === Hero Text === */
-.hero-heading {
-  @apply text-3xl w-fit my-2 text-emerald-900;
-}
-
-.hero-subtext {
-  @apply text-xl;
-}
-
-.hero-delivery-note {
-  @apply p-2 bg-amber-200 text-sky-600 w-fit h-fit font-semibold rounded-xl mb-2;
-}
-
-.hero-disclaimer {
-  @apply text-sm text-slate-500;
-}
-
-
-
 
 /* Nav bar */
 
 .header-bg {
-  @apply bg-[#64870d];
+  @apply 
+  /* bg-[#64870d]; */
   /* bg-[#FE8B2E]; */
+    bg-[#E9E9E9]
+   /* bg-[#EDE8DC] */
+  /* bg-[#FE8B2E]; */
+  text-slate-600
 }
 
 .navbar-link-top {
-  @apply text-slate-50;
+  @apply text-slate-500;
 }
 
 .header-shadow {
@@ -334,4 +295,51 @@ button:disabled {
 
 .product-card-add-title-cover-1{
   @apply bg-[#64870d] text-white flex items-center justify-center text-nowrap text-center px-2 py-1  min-w-[180px]  rounded-3xl
+}
+
+
+/* === Title Component Styles === */
+
+.text-brand-heading {
+  @apply text-[#496208];
+}
+
+.text-brand-subheading {
+  @apply text-xl text-[#496208]; 
+}
+
+
+/* === Hero Text === */
+.hero-heading {
+  @apply text-2xl w-fit my-2 text-zinc-400;
+}
+
+.hero-subtext {
+  @apply text-xl;
+}
+
+.hero-delivery-note {
+  @apply p-1 text-slate-600 border border-slate-200 w-fit h-fit font-semibold rounded-xl mb-1;
+}
+
+.hero-disclaimer {
+  @apply text-sm text-slate-500;
+}
+
+
+/* === Toast Styles === */
+.toast-default {
+  @apply bg-slate-800 text-slate-50;
+}
+
+.toast-success {
+  @apply bg-emerald-500 text-white;
+}
+
+.toast-error {
+  @apply bg-red-500 text-white;
+}
+
+.toast-loading {
+  @apply bg-amber-500 text-white;
 }

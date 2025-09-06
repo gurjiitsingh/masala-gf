@@ -108,7 +108,7 @@ export default function CategorySliderSm2() {
   };
 
   return (
-    <div className="relative z-10 mt-5 mb-7 container mx-auto ">
+    <div className="relative z-10 mt-1 mb-1 container mx-auto ">
       <div className="mx-auto max-w-[1700px] min-h-[100px]     p-1">
         {categoryData.length > 0 && (
           <Slider {...sliderSettings}>

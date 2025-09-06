@@ -10,7 +10,7 @@ const CartBottom = () => {
   return (
     <button 
       onClick={() => sideBarToggle(false)} 
-      className="bg-red-500 hover:bg-red-600 text-white rounded-full shadow-lg transition duration-300 p-3 cursor-pointer"
+      className="cart-bg hover:bg-red-400 text-white rounded-full shadow-lg transition duration-300 p-3 cursor-pointer"
     >
       <div className="flex items-center gap-2">
         <IoCartOutline size={28} />
