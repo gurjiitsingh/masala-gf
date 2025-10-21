@@ -12,11 +12,11 @@ export default function Hero() {
               <div>
                <Title />
                 <div className="flex items-center gap-2 w-full">
-                  <SearchForm />
+                  {/* <SearchForm /> */}
                 </div>
               </div>
               <div>
-                <HeroText />
+                {/* <HeroText /> */}
               </div>
             </div>
    </>

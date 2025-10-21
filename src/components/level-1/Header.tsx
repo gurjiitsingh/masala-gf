@@ -42,7 +42,7 @@ const Header = () => {
         {/* Right Side */}
         <div className="flex items-center gap-3">
           <LanguageSwitcher />
-          <Login />
+          {/* <Login /> */}
         </div>
       </div>
     </header>
