@@ -6,6 +6,7 @@ import "aos/dist/aos.css";
 import HeroImage from "@/components/HeroImage";
 import MasalaFlyer from "@/components/MasalaFlyer";
 import { useEffect } from "react";
+import FlyerBuffet from "@/components/FlyerBuffet";
 
 
 
@@ -27,7 +28,8 @@ export default function Page() {
 
      <HeroImage />
       {/* <About /> */}
-      <MasalaFlyer />
+      {/* <MasalaFlyer /> */}
+      <FlyerBuffet />
       {/* <MenuPreview /> */}
       {/* <Contact />
       <Footer /> */}
