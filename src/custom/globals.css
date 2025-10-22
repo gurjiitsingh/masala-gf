@@ -253,7 +253,7 @@ button:disabled {
 
 /* Footer background colors */
 .footer-bg-primary {
-  @apply bg-slate-500 text-slate-50;; /*bg-[#FADB5E]; /* Original: #FADB5E */
+  @apply bg-[#563419] text-slate-50;; /*bg-[#FADB5E]; /* Original: #FADB5E */
 }
 
 .footer-bg-bottom {

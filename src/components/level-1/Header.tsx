@@ -23,8 +23,8 @@ const Header = () => {
   if (!hasMounted) return null;
 
   return (
-    <header className="header-bg header-opacity header-shadow w-full px-3 mx-auto header-rounded mt-3 z-50">
-      <div className="flex items-center justify-between min-h-[40px] md:min-h-[53px]">
+  <header className="w-full fixed top-0 z-50   bg-white shadow-sm">
+      <div className="max-w-7xl mx-auto py-3 px-6 flex items-center justify-between">
         {/* Left Side */}
         <div className="flex items-center gap-4">
           <button

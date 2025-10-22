@@ -3,7 +3,7 @@ import { Toaster } from "react-hot-toast";
 import type { Metadata } from "next";
 //import { getSeoMetadata } from "@/utils/getSeoMetadata";
 import CartBottom from "@/components/CartBottom/CartBottom";
-import "@/css/style.css";
+
 import UTMInitializer from "../UTMInitializer";
 import { Providers } from "../Providers";
 import SafeSideCart from "./SafeSideCart";
@@ -13,7 +13,7 @@ import Modal from "@/components/level-1/Modal";
 import Header from "@/components/level-1/Header";
 import Footer from "@/components/level-1/Footer";
 import { SEO } from "@/config/languages";
-import LogoCircle from "@/components/LogoCircle";
+
 
 // ✅ Dynamic SEO fallback logic here
 //export const metadata: Metadata = getSeoMetadata();
@@ -31,33 +31,30 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="de" translate="no">
-      <head>
-          <link
-          href="https://fonts.googleapis.com/css2?family=Days+One&family=Dosis&family=Quicksand&display=swap"
-          rel="stylesheet"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Dosis:wght@600&display=swap"
-          rel="stylesheet"
-        />
-      </head>
       <body>
-        <div className="bg-[#EFEDE5]">
         <div translate="no">
           <UTMInitializer />
           <Providers>
             <BargerMenu />
             <Modal />
 
-            <div className="flex flex-col gap-0 my-0 ">
+            <div
+              className="layout-bg relative w-full h-screen overflow-x-hidden bg-cover  m-0 p-0"
+              style={{ backgroundImage: "url('/hero-bg.jpg')" }}
+            >
+              <div
+                className="absolute top-0 inset-0 z-0 bg-cover bg-center bg-no-repeat"
+                style={{ backgroundImage: "url('/hero-bg.jpg')" }}
+              ></div>
+
               <div className="z-50">
                 <SafeSideCart />
               </div>
 
-              {/* <div className="container mx-auto top-0 px-2 md:px-0 inset-0 z-50"> */}
-              <Header />
-              {/* </div> */}
-              <LogoCircle />
+              <div className="container mx-auto top-0 px-2 md:px-0 inset-0 z-50">
+                <Header />
+              </div>
+
               {children}
 
               <Footer />
@@ -83,7 +80,6 @@ export default function RootLayout({
             }}
             reverseOrder={false}
           />
-        </div>
         </div>
       </body>
     </html>
