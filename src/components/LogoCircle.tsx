@@ -3,13 +3,13 @@ import React from "react";
 
 export default function LogoCircle() {
   return (
-    <div className="flex flex-col items-center justify-center mt-[60px]  pt-15 pb-3">
+    <div className="flex flex-col items-center justify-center mt-[60px]  pt-15 pb-3 my-2 md:my-0">
       <div className="flex rounded-bl-full rounded-tl-full rounded-br-xl rounded-tr-2xl   p-3 border-3 border-[#563419]">
-        <div className="w-40 h-40 rounded-full bg-[#563419] flex items-center justify-center shadow-lg" data-aos="fade-right">
+        <div className="w-35 h-35 rounded-full bg-[#563419] flex items-center justify-center shadow-lg" data-aos="fade-right">
           <img
             src="/logo-10.webp"
             alt="Logo"
-            className="w-30 h-30 object-contain"
+            className="w-28 h-28 object-contain"
           />
         </div>
 
@@ -31,12 +31,12 @@ export default function LogoCircle() {
               rel="noopener noreferrer"
               className="w-full inline-block bg-slate-300 text-white font-semibold text-md md:text-lg px-3 py-1 rounded-lg shadow-md hover:bg-slate-400 transition-all duration-200"
             >
-              Buffet & Fingerfood
+              Buffet 
             </Link>
           </div>
         </div>
       </div>
-      <h1 className="text-md w-full text-right ">Masala Taste Of India</h1>
+      <h1 className="text-md w-full h-5 text-right pt-1 ">Masala Taste Of India</h1>
     </div>
   );
 }
