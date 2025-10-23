@@ -3,7 +3,7 @@ import React from "react";
 
 export default function LogoCircle() {
   return (
-    <div className="flex items-center justify-center mt-[60px]  pt-15 pb-12">
+    <div className="flex flex-col items-center justify-center mt-[60px]  pt-15 pb-3">
       <div className="flex rounded-bl-full rounded-tl-full rounded-br-xl rounded-tr-2xl   p-3 border-3 border-[#563419]">
         <div className="w-40 h-40 rounded-full bg-[#563419] flex items-center justify-center shadow-lg" data-aos="fade-right">
           <img
@@ -29,13 +29,14 @@ export default function LogoCircle() {
               href="/#bf"
               // target="_blank"
               rel="noopener noreferrer"
-              className="w-full inline-block bg-[#563419] text-white font-semibold text-md md:text-lg px-3 py-1 rounded-lg shadow-md hover:bg-slate-300 transition-all duration-200"
+              className="w-full inline-block bg-slate-300 text-white font-semibold text-md md:text-lg px-3 py-1 rounded-lg shadow-md hover:bg-slate-400 transition-all duration-200"
             >
               Buffet & Fingerfood
             </Link>
           </div>
         </div>
       </div>
+      <h1 className="text-md w-full text-right ">Masala Taste Of India</h1>
     </div>
   );
 }

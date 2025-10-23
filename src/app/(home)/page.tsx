@@ -7,6 +7,7 @@ import HeroImage from "@/components/HeroImage";
 import MasalaFlyer from "@/components/MasalaFlyer";
 import { useEffect } from "react";
 import FlyerBuffet from "@/components/FlyerBuffet";
+import FlavorLine from "@/components/FlavorLine";
 
 
 
@@ -24,8 +25,9 @@ export default function Page() {
 
   return (
     <main className=" text-gray-900 font-sans">
-     
 
+
+<FlavorLine />
      <HeroImage />
       {/* <About /> */}
       {/* <MasalaFlyer /> */}

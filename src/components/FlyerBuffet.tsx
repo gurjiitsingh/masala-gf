@@ -9,25 +9,25 @@ export default function FlyerBuffet() {
             <h1 className="text-3xl md:text-4xl font-bold " data-aos="fade-top">
               MASALA – Taste of India
             </h1>
-            <h2 className="text-2xl font-bold ">Indisches Buffet</h2>
+            <h2 className="text-2xl font-bold text-center md:text-left">Indisches Buffet</h2>
 
-            <h3 className="text-xl font-semibold ">
+            <h3 className="text-xl font-semibold text-center md:text-left">
               + Alkoholfreies Getränk{" "}
               <span className="text-sm font-normal">(1× – 0,4 L)</span>
             </h3>
 
             <div className="text-lg text-gray-800 mt-4">
-              <p className="font-semibold ">Pro Person 19,99€</p>
-              <p className="font-semibold ">Kinder bis 7 Jahre 9,99€</p>
-              <p className=" underline mt-2">Angebot bis 31.12.2025</p>
+              <p className="font-semibold text-center md:text-left">Pro Person 19,99€</p>
+              <p className="font-semibold text-center md:text-left">Kinder bis 7 Jahre 9,99€</p>
+              <p className=" underline mt-2 text-center md:text-left">Angebot bis 31.12.2025</p>
             </div>
 
             <div className="text-gray-700 mt-4">
-              <p className="font-medium">Freitag, Samstag, Sonntag</p>
-              <p>Von 17:00 bis 21:00 Uhr</p>
+              <p className="font-medium text-center md:text-left">Freitag, Samstag, Sonntag</p>
+              <p className="text-center md:text-left">Von 17:00 bis 21:00 Uhr</p>
             </div>
 
-            <div className="text-sm text-gray-600 mt-4 space-y-1">
+            <div className="text-sm text-gray-600 mt-4 space-y-1 text-center md:text-left">
               <p>Braunschweigerstr. 93, 38518 Gifhorn</p>
               <p> 05371 62 66 291 | masala-gf.de</p>
             </div>
