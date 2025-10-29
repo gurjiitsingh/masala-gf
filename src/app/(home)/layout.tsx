@@ -15,6 +15,15 @@ import Footer from "@/components/level-1/Footer";
 import { SEO } from "@/config/languages";
 import LogoCircle from "@/components/LogoCircle";
 
+import { Playfair_Display } from "next/font/google";
+
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  display: "swap",
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-playfair",
+});
+
 // ✅ Dynamic SEO fallback logic here
 //export const metadata: Metadata = getSeoMetadata();
 
@@ -41,13 +50,14 @@ export default function RootLayout({
           rel="stylesheet"
         />
 
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet"></link>
 
-<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Smythe&display=swap" rel="stylesheet"></link>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Smythe&display=swap" rel="stylesheet" />
 <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
 <link href="https://fonts.googleapis.com/css2?family=Yeseva+One&display=swap" rel="stylesheet"></link>
       </head>
-      <body>
-        <div className="bg-[#EFEDE5]">
+      <body className={`${playfair.variable} font-playfair bg-[#EFEDE5] text-[#2B2E4A]`}>
+        <div className=" bg-[#EFEDE5] text-[#2B2E4A]">
         <div translate="no">
           <UTMInitializer />
           <Providers>

@@ -43,7 +43,7 @@ switch (cardType) {
   default:
     Card = dynamic(() => import("../level-2/ProductCard-h1")); // vertical
 }
-export default function Products() {
+export default function ProductsMenu() {
   const { productCategoryIdG, settings, setAllProduct, productToSearchQuery } =
     UseSiteContext();
 
@@ -78,10 +78,12 @@ export default function Products() {
         setAllProductsC(sorted);
         setAllProduct(sorted);
 
-        if (categoryId) {
-          const filtered = sorted.filter((p) => p.categoryId === categoryId);
-          setProducts(filtered);
-        }
+      //  setProducts(sorted);
+
+        // if (categoryId) {
+        //   const filtered = sorted.filter((p) => p.categoryId === categoryId);
+        //   setProducts(filtered);
+        // }
       } catch (error) {
         console.error("Error fetching products:", error);
       }
@@ -91,8 +93,10 @@ export default function Products() {
 
   // Update on category change
   useEffect(() => {
-    if (!categoryId || allProducts.length === 0) return;
-    setProducts(allProducts.filter((p) => p.categoryId === categoryId));
+    // if (!categoryId || allProducts.length === 0) return;
+    // setProducts(allProducts.filter((p) => p.categoryId === categoryId));
+      if (!categoryId || allProducts.length === 0) return;
+    setProducts(allProducts);
   }, [allProducts, categoryId]);
 
   // Search

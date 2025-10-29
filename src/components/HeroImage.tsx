@@ -5,7 +5,7 @@ import Image from "next/image";
 export default function HeroImage() {
   return (
     <div className="w-full flex justify-center items-center px-2">
-      <div className="relative container mx-auto ">
+      <div className="relative max-w-7xl mx-auto mx-auto ">
         <Image
           src="/images/hero-3.jpg"
           alt="Lakeside Außenansicht"

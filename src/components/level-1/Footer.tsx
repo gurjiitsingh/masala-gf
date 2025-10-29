@@ -78,9 +78,9 @@ export default function Footer() {
       },
     },
   };
-
+// 2B2E4A     navi dark color   d24a0f  orange
   return (
-    <footer className="relative pt-12 -mb-20 footer-bg-primary">
+    <footer className="relative pt-12 -mb-20 bg-[#d24a0f] text-white">
       <div className="container mx-auto">
         <div className="flex flex-col md:flex-row justify-between gap-8 md:gap-1">
           {/* Logo + Brand */}

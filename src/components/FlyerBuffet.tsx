@@ -1,74 +1,79 @@
+// components/FlyerBuffet.tsx
 import Image from "next/image";
 
 export default function FlyerBuffet() {
   return (
-    <div id="bf" className=" text-gray-800  flex justify-center py-12 px-2">
-      <div className="container mx-auto w-full bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100">
-        <div className="flex flex-col md:flex-row md:justify-between">
-          <div className="p-12">
-            <h1 className="text-3xl md:text-4xl font-bold " data-aos="fade-top">
-              MASALA – Taste of India
-            </h1>
-            <h2 className="text-2xl font-bold text-center md:text-left">Indisches Buffet</h2>
+    <section id="bf" className="bg-white text-[#2b2e4a]  px-4">
+      <div className="max-w-7xl mx-auto w-full flex flex-col md:flex-row items-start md:items-center gap-12">
+        {/* Left side: Image */}
+        <div className="w-full md:w-1/2 flex-shrink-0">
+          <Image
+            src="/images/buffet-1.jpg"
+            alt="Indian Buffet"
+            width={800}
+            height={600}
+            className="object-cover w-full h-auto"
+          />
+        </div>
 
-            <h3 className="text-xl font-semibold text-center md:text-left">
-              + Alkoholfreies Getränk{" "}
-              <span className="text-sm font-normal">(1× – 0,4 L)</span>
+        {/* Right side: Text + QR integrated */}
+        <div className="w-full md:w-1/2 flex flex-col space-y-6">
+          <div>
+            <h2 className="w-full  playfair-display-400 text-left text-[#2B2E4A] text-3xl md:text-4xl font-bold mb-2">MASALA  <span className="text-[#d24a0f]">– Taste of India</span></h2>
+            <h2 className="text-2xl font-bold mb-2">Indisches Buffet</h2>
+            <h3 className="text-xl font-semibold mb-4">
+              + Alkoholfreies Getränk <span className="text-sm font-normal">(1× – 0,4 L)</span>
             </h3>
 
-            <div className="text-lg text-gray-800 mt-4">
-              <p className="font-semibold text-center md:text-left">Pro Person 19,99€</p>
-              <p className="font-semibold text-center md:text-left">Kinder bis 7 Jahre 9,99€</p>
-              <p className=" underline mt-2 text-center md:text-left">Angebot bis 31.12.2025</p>
+            <div className="text-lg text-[#2b2e4a] space-y-1 mb-6">
+              <p className="font-semibold">Pro Person 19,99 €</p>
+              <p className="font-semibold">Kinder bis 7 Jahre 9,99 €</p>
+              <p className="underline mt-2">Angebot bis 31.12.2025</p>
             </div>
 
-            <div className="text-gray-700 mt-4">
-              <p className="font-medium text-center md:text-left">Freitag, Samstag, Sonntag</p>
-              <p className="text-center md:text-left">Von 17:00 bis 21:00 Uhr</p>
+            <div className="text-[#2b2e4a] space-y-1 mb-6">
+              <p className="font-medium">Freitag, Samstag, Sonntag</p>
+              <p>Von 17:00 bis 21:00 Uhr</p>
             </div>
 
-            <div className="text-sm text-gray-600 mt-4 space-y-1 text-center md:text-left">
+            <div className="text-sm text-gray-700 space-y-1">
               <p>Braunschweigerstr. 93, 38518 Gifhorn</p>
-              <p> 05371 62 66 291 | masala-gf.de</p>
+              <p>05371 62 66 291 | masala-gf.de</p>
             </div>
+          </div>
 
-            <div className="flex flex-col md:flex-row items-center justify-between bg-gray-100 rounded-2xl shadow-md p-2 md:p-3 max-w-4xl mx-auto mt-6">
-              {/* Left Side: Text */}
-              <div className="text-center md:text-left mb-8 md:mb-0 md:w-1/2">
-                <h2 className="text-3xl md:text-4xl font-semibold text-gray-800">
-                  Hier scannen und Tisch reservieren
-                </h2>
-                <p className="text-gray-600 mt-3">
-                  Einfach QR-Code scannen, in wenigen
-                  Sekunden reservieren.
-                </p>
-              </div>
-
-              {/* Right Side: QR Code Image */}
-              <div className="flex justify-center md:justify-end md:w-1/2">
-                <div className="bg-gray-200 rounded-full p-6 flex items-center justify-center shadow-lg">
-                  <Image
-                    src="/images/code.png" // place your QR image in public/qr-code.png
-                    alt="QR Code to reserve a table"
-                    width={180}
-                    height={180}
-                    className="rounded-xl"
-                  />
-                </div>
+<button
+  className="bg-[#d24a0f] text-white w-fit font-semibold px-6 py-3 hover:bg-slate-500 transition mb-5"
+  onClick={() => {
+    window.location.href = "https://www.google.com/maps/reserve/v/dine/c/6JTgdCnqFvM?source=pa&opi=89978449&hl=en-IN&gei=tyL_aJLxDNCL4-EP4_HqqQQ&sourceurl=https://www.google.com/search?q%3Dmasala%2Btaste%2Bof%2Bindia%2Bbraunschweig%26rlz%3D1C1UEAD_enIN1131IN1131%26oq%3Dmasala%2Btaste%2Bof%2Bindia%2B%26gs_lcrp%3DEgZjaHJvbWUqBwgBEAAYgAQyBggAEEUYOTIHCAEQABiABDIHCAIQABiABDIGCAMQRRg9MgYIBBBFGDwyBggFEEUYPTIGCAYQRRhBMgYIBxBFGEHSAQg5NzUwajFqN6gCCLACAfEF8AkcktHNSkY%26sourceid%3Dchrome%26ie%3DUTF-8"
+  }}
+>
+  Tischreservierung
+</button>
+         {/* QR + call to action row */}
+          {/* <div className="flex flex-col md:flex-row items-center gap-6 mt-4">
+            <div className="flex-1 text-center md:text-left">
+              <h2 className="text-3xl md:text-4xl font-semibold text-[#2b2e4a] mb-2">
+                Hier scannen und Tisch reservieren
+              </h2>
+              <p className="text-gray-700">
+                Einfach QR-Code scannen – in wenigen Sekunden reservieren.
+              </p>
+            </div>
+            <div className="flex-1 flex justify-center md:justify-end">
+              <div className="bg-transparent p-0">
+                <Image
+                  src="/images/code.png"
+                  alt="QR Code to reserve a table"
+                  width={180}
+                  height={180}
+                />
               </div>
             </div>
-
-          
-          </div>
-          <div className="md:w-1/4">
-            <img
-              src="/images/buffet.jpg" // <-- replace with your actual image
-              alt="Indian Buffet"
-              className="rounded-xl shadow-md object-cover w-full h-full"
-            />
-          </div>
+          </div> */}
         </div>
+
       </div>
-    </div>
+    </section>
   );
 }
