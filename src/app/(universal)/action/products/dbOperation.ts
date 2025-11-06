@@ -15,14 +15,7 @@ import { deleteImage, upload } from "@/lib/cloudinary";
 // import { Weight } from "lucide-react";
 // import { revalidatePath } from "next/cache";
 
-import {
-  addDoc,
-  collection,
 
-  getDocs,
- 
-
-} from "@firebase/firestore"; //doc, getDoc,
 
 
 
@@ -35,50 +28,10 @@ import fs from 'fs';
 import { randomUUID } from 'crypto';
 
 
-export async function addNewProduct1(formData: FormData) {
-  const featured_img = formData.get("isFeatured") === "true";
 
-  const receivedData = {
-    name: formData.get("name"),
-    price: formData.get("price"),
-    productCat: formData.get("productCat"),
-    productDesc: formData.get("productDesc"),
-    image: formData.get("image"),
-    isFeatured: featured_img,
-  };
-
-  const result = newPorductSchema.safeParse(receivedData);
-  if (!result.success) {
-    const zodErrors = Object.fromEntries(result.error.issues.map(issue => [issue.path[0], issue.message]));
-    return { errors: zodErrors };
-  }
-
-  let imageUrl;
-  try {
-    imageUrl = await upload(receivedData.image);
-  } catch (error) {
-    console.error("Image upload failed:", error);
-    return { errors: "Image could not be uploaded" };
-  }
-
-  const data = {
-    ...result.data,
-    price: formatPriceStringToNumber(result.data.price),
-    image: imageUrl,
-  };
-
-  try {
-    const docRef = await adminDb.collection("product").add(data);
-    console.log("Document written with ID:", docRef.id);
-    return { message: "Product saved" };
-  } catch (e) {
-    console.error("Error adding document:", e);
-    return { errors: "Failed to save product" };
-  }
-}
 
 export async function deleteProduct(id: string, oldImageUrl: string) {
-console.log("this---------------",id)
+
   const docRef = adminDb.collection("products").doc(id);
 
   try {
@@ -103,64 +56,9 @@ console.log("this---------------",id)
   }
 }
 
-export async function editProduct1(formData: FormData) {
-  const id = formData.get("id") as string;
-  const image = formData.get("image");
-  const oldImgageUrl = formData.get("oldImgageUrl") as string;
-  const featured_img = formData.get("isFeatured") === "true";
 
-  const receivedData = {
-    name: formData.get("name"),
-    price: formData.get("price"),
-    productCat: formData.get("productCat"),
-    productDesc: formData.get("productDesc"),
-    image,
-    isFeatured: featured_img,
-  };
 
-  const result = editPorductSchema.safeParse(receivedData);
-  if (!result.success) {
-    const zodErrors = Object.fromEntries(result.error.issues.map(issue => [issue.path[0], issue.message]));
-    return { errors: zodErrors };
-  }
 
-  let imageUrl: string;
-  if (!image || image === "undefined") {
-    imageUrl = oldImgageUrl;
-  } else {
-    try {
-      imageUrl = await upload(image);
-    } catch (error) {
-      console.error("Image upload failed:", error);
-      return { errors: "Image could not be uploaded" };
-    }
-  }
-
-  const updatedData = {
-    ...result.data,
-    price: formatPriceStringToNumber(result.data.price),
-    image: imageUrl,
-  };
-
-  try {
-    await adminDb.collection("product").doc(id).set(updatedData);
-    return { message: "Product updated" };
-  } catch (error) {
-    console.error("Error updating product:", error);
-    return { errors: "Failed to update product." };
-  }
-}
-
-export async function fetchProductById1(id: string): Promise<ProductType> {
-  const docRef = adminDb.collection("product").doc(id);
-  const docSnap = await docRef.get();
-
-  if (!docSnap.exists) {
-    throw new Error("Product not found");
-  }
-
-  return { id: docSnap.id, ...docSnap.data() } as ProductType;
-}
 
 
 
@@ -239,7 +137,90 @@ export async function uploadImage(formData: FormData) {
 }
 
 
+
 export async function addNewProduct(formData: FormData) {
+  try {
+    const featured_img = formData.get("isFeatured") === "true";
+    const name = formData.get("name") as string;
+    const price = formData.get("price") as string;
+    const discountPrice = formData.get("discountPrice") as string;
+    const sortOrder = formData.get("sortOrder") as string;
+    const categoryId = formData.get("categoryId") as string;
+    const productDesc = formData.get("productDesc") as string;
+    const image = formData.get("image"); // optional
+    const status = formData.get("status") as "published" | "draft" | "out_of_stock";
+    const stockQtyRaw = formData.get("stockQty") as string | null;
+
+    const stockQty = stockQtyRaw ? parseInt(stockQtyRaw, 10) : null; // optional
+    const priceF = parseFloat(price.replace(/,/g, ".")) || 0;
+    const discountPriceF = parseFloat(discountPrice.replace(/,/g, ".")) || 0;
+    const sortOrderN = parseInt(sortOrder || "0", 10);
+
+    const receivedData = {
+      name,
+      price: priceF,
+      discountPrice: discountPriceF,
+      stockQty,
+      sortOrder: sortOrderN,
+      categoryId,
+      productDesc,
+      image,
+      isFeatured: featured_img,
+      status,
+    };
+
+    const result = newPorductSchema.safeParse(receivedData);
+    if (!result.success) {
+      const zodErrors: Record<string, string> = {};
+      result.error.issues.forEach((issue) => {
+        zodErrors[issue.path[0]] = issue.message;
+      });
+      return { errors: zodErrors };
+    }
+
+    // Only upload image if exists
+    let imageUrl = "/com.jpg";
+    if (image && image !== "0") {
+      try {
+        imageUrl = await upload(image);
+      } catch (error) {
+        console.error("❌ Image upload failed:", error);
+        return { errors: { image: "Image upload failed" } };
+      }
+    }
+
+    const data = {
+      name,
+      price: priceF,
+      discountPrice: discountPriceF,
+      stockQty,       // ✅ optional
+      sortOrder: sortOrderN,
+      categoryId,
+      productDesc,
+      image: image ? imageUrl : null, // ✅ optional
+      isFeatured: featured_img,
+      flavors: false,
+      status,
+      baseProductId: "",
+      purchaseSession: null,
+      quantity: null,
+      productCat: categoryId || null,
+    };
+
+    const docRef = await adminDb.collection("products").add(data);
+    return { success: true, message: "Product saved successfully", id: docRef.id };
+  } catch (error) {
+    console.error("❌ Firestore add failed:", error);
+    return { errors: { general: "Could not save product" } };
+  }
+}
+
+
+
+
+
+const stockQtyS = "4";
+export async function addNewProduct_oldworking(formData: FormData) {
   console.log("formdata-----", formData);
 
   const featured_img = formData.get("isFeatured") === "ture";
@@ -304,6 +285,7 @@ export async function addNewProduct(formData: FormData) {
     name,
     price: priceF,
     discountPrice: discountPriceValueF,
+    stockQty:stockQtyS,
     flavors: false,
     sortOrder: sortOrderN,
     categoryId,
@@ -326,54 +308,30 @@ export async function addNewProduct(formData: FormData) {
 
 
 
-export async function deleteProduct1(id: string, oldImgageUrl: string) {
-  // Use Firestore Admin SDK to delete the document
-  await adminDb.collection("products").doc(id).delete();
 
-  // Parse the public image ID from the URL
-  const imageUrlArray = oldImgageUrl.split("/");
-  const imageName =
-    imageUrlArray[imageUrlArray.length - 2] +
-    "/" +
-    imageUrlArray[imageUrlArray.length - 1];
-  const image_public_id = imageName.split(".")[0];
 
-  console.log("Deleting image:", image_public_id);
-
-  // Attempt to delete the image from storage (e.g. Cloudinary or other service)
-  try {
-    const deleteResult = await deleteImage(image_public_id);
-    console.log("image delete data", deleteResult);
-  } catch (error) {
-    console.log(error);
-    return {
-      errors: "Something went wrong, cannot delete product picture",
-    };
-  }
-
-  return {
-    message: { success: "Deleted product" },
-  };
-}
+import { fetchCategories } from "@/app/(universal)/action/category/dbOperations";
 
 export async function editProduct(formData: FormData) {
   const id = formData.get("id") as string;
   const name = formData.get("name");
   const priceRaw = formData.get("price") as string;
   const discountPriceRaw = formData.get("discountPrice") as string;
+  const stockQtyS = formData.get("stockQty") as string;
   const sortOrderRaw = formData.get("sortOrder") as string;
-  const categoryId = formData.get("categoryId");
+  let categoryId = formData.get("categoryId") as string;
   const productDesc = formData.get("productDesc");
   const oldImageUrl = formData.get("oldImgageUrl") as string;
   const image = formData.get("image");
   const status = formData.get("status") || "published";
+  const isFeatured = false; // static default
 
-  const isFeatured = false; // static as in original code
-
+  // ✅ Validate received data with Zod
   const receivedData = {
     name,
     price: priceRaw,
     discountPrice: discountPriceRaw,
+    stockQty: stockQtyS,
     sortOrder: sortOrderRaw,
     categoryId,
     productDesc,
@@ -383,7 +341,6 @@ export async function editProduct(formData: FormData) {
   };
 
   const result = editPorductSchema.safeParse(receivedData);
-
   if (!result.success) {
     const zodErrors: Record<string, string> = {};
     result.error.issues.forEach((issue) => {
@@ -392,37 +349,53 @@ export async function editProduct(formData: FormData) {
     return { errors: zodErrors };
   }
 
-  // Handle image update
-  let imageUrl = oldImageUrl;
+  // 🔹 Fetch existing product
+  const productRef = adminDb.collection("products").doc(id);
+  const productSnap = await productRef.get();
+  if (!productSnap.exists) {
+    return { errors: "Product not found" };
+  }
 
+  const existingProduct = productSnap.data();
+
+  // 🔸 Handle image
+
+
+  
+
+  let imageUrl = oldImageUrl;
+  // if (image && typeof image !== "string" && image !== "undefined") {
   if (image && image !== "undefined") {
     try {
       imageUrl = await upload(image);
-      console.log("Uploaded new image URL:", imageUrl);
-
-      // Optionally delete old image (set `true` to enable)
-      const DELETE_OLD_IMAGE = false;
-      if (DELETE_OLD_IMAGE && oldImageUrl) {
-        const parts = oldImageUrl.split("/");
-        const imageName =
-          parts[parts.length - 2] + "/" + parts[parts.length - 1];
-        const imagePublicId = imageName.split(".")[0];
-        try {
-          const deleteResult = await deleteImage(imagePublicId);
-          console.log("Old image deleted:", deleteResult);
-        } catch (error) {
-          console.warn("Failed to delete old image:", error);
-        }
-      }
     } catch (error) {
       console.error("Image upload failed:", error);
       return { errors: "Image could not be uploaded" };
     }
+  } else {
+    imageUrl = existingProduct?.image || oldImageUrl;
   }
 
-  // Handle price parsing
+  // 🔸 Handle category ID (keep existing if not changed)
+  if (categoryId === "0" || !categoryId) {
+    categoryId = existingProduct?.categoryId || "";
+  }
+
+  // 🔹 Fetch all categories and match name
+  let productCat = "Uncategorized";
+  try {
+    const categories = await fetchCategories();
+    const matchedCategory = categories.find((cat) => cat.id === categoryId);
+    if (matchedCategory) {
+      productCat = matchedCategory.name;
+    }
+  } catch (error) {
+    console.error("Error fetching categories:", error);
+  }
+
+  // 🔸 Format price fields
   const formatPrice = (val: string): string =>
-    new Number(parseFloat(val.replace(/,/g, ".")).toFixed(2)).toFixed(2);
+    Number(parseFloat(val.replace(/,/g, ".")).toFixed(2)).toFixed(2);
 
   const price = formatPrice(priceRaw);
   let discountPrice = "0.00";
@@ -432,27 +405,39 @@ export async function editProduct(formData: FormData) {
 
   const sortOrder = parseInt(sortOrderRaw);
 
+  // ✅ Final product object
   const productData = {
     name,
     price,
     discountPrice,
-    flavors: false,
+    stockQty: Number(stockQtyS),
+    flavors: existingProduct?.flavors ?? false,
     sortOrder,
     categoryId,
+    productCat, // ✅ auto-added field
     productDesc,
     image: imageUrl,
     isFeatured,
     status,
+    updatedAt: new Date().toISOString(), // ✅ Safe timestamp
   };
 
+  console.log("productData----------------------------", productData)
+
   try {
-    await adminDb.collection("products").doc(id).set(productData);
+    await productRef.update(productData);
     return { message: "Product updated successfully" };
   } catch (error) {
     console.error("Failed to update product:", error);
     return { errors: "Failed to update product" };
   }
 }
+
+
+
+
+
+
 
 
 export async function fetchProductById(id: string): Promise<ProductType | null> {
@@ -473,8 +458,8 @@ export async function fetchProductById(id: string): Promise<ProductType | null> 
 }
 
 
+
 export async function fetchProducts(): Promise<ProductType[]> {
-  
   try {
     const snapshot = await adminDb.collection("products").get();
 
@@ -483,18 +468,100 @@ export async function fetchProducts(): Promise<ProductType[]> {
       return [];
     }
 
-    const products: ProductType[] = snapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    })) as ProductType[];
+    const products: ProductType[] = snapshot.docs.map((doc) => {
+      const data = doc.data() as Partial<ProductType> & { updatedAt?: any };
 
-   
+      // ✅ Normalize updatedAt (handle Firestore Timestamp or string)
+      let updatedAt: string | null = null;
+      if (data.updatedAt) {
+        if (typeof data.updatedAt.toDate === "function") {
+          updatedAt = data.updatedAt.toDate().toISOString();
+        } else if (typeof data.updatedAt === "string") {
+          updatedAt = data.updatedAt;
+        }
+      }
+
+      return {
+        id: doc.id, // Firestore ID is always a string
+        name: data.name ?? "",
+        price: data.price ?? 0,
+        stockQty: data.stockQty ?? 0,
+        discountPrice: data.discountPrice ?? 0,
+        categoryId: data.categoryId ?? "",
+        productCat: data.productCat ?? "",
+        flavors: data.flavors ?? false,
+        status: data.status ?? "draft",
+        baseProductId: data.baseProductId ?? "",
+        productDesc: data.productDesc ?? "",
+        sortOrder: data.sortOrder ?? 0,
+        image: data.image ?? "",
+        isFeatured: data.isFeatured ?? false,
+        purchaseSession: data.purchaseSession ?? null,
+        quantity: data.quantity ?? null,
+        updatedAt, // ✅ always string or null, safe for client
+      };
+    });
+
     return products;
   } catch (error) {
     console.error("Failed to fetch products:", error);
     throw new Error("Error retrieving product list");
   }
 }
+
+
+
+export async function fetchProducts_old(): Promise<ProductType[]> {
+  try {
+    const snapshot = await adminDb.collection("products").get();
+
+    if (snapshot.empty) {
+      console.warn("No products found in the database.");
+      return [];
+    }
+
+    const products: ProductType[] = snapshot.docs.map((doc) => {
+      const data = doc.data() as Partial<ProductType> & { updatedAt?: any };
+
+      // ✅ Normalize updatedAt (handle Firestore Timestamp or string)
+      let updatedAt: string | null = null;
+      if (data.updatedAt) {
+        if (typeof data.updatedAt.toDate === "function") {
+          updatedAt = data.updatedAt.toDate().toISOString();
+        } else if (typeof data.updatedAt === "string") {
+          updatedAt = data.updatedAt;
+        }
+      }
+
+      return {
+        id: doc.id,
+        name: data.name ?? "",
+        price: data.price ?? 0,
+        stockQty: data.stockQty ?? 0,
+        discountPrice: data.discountPrice ?? 0,
+        categoryId: data.categoryId ?? "",
+        productCat: data.productCat ?? "",
+        flavors: data.flavors ?? false,
+        status: data.status ?? "draft",
+        baseProductId: data.baseProductId ?? "",
+        productDesc: data.productDesc ?? "",
+        sortOrder: data.sortOrder ?? 0,
+        image: data.image ?? "",
+        isFeatured: data.isFeatured ?? false,
+        purchaseSession: data.purchaseSession ?? null,
+        quantity: data.quantity ?? null,
+        updatedAt, // ✅ always string or null, safe for client
+      };
+    });
+
+    return products;
+  } catch (error) {
+    console.error("Failed to fetch products:", error);
+    throw new Error("Error retrieving product list");
+  }
+}
+
+
 
 export async function fetchProductByCategoryId(id: string): Promise<ProductType[]> {
  
@@ -533,6 +600,35 @@ export async function fetchProductsForExport(): Promise<ProductType[]> {
   return data;
 }
 
+
+export async function fetchProductsForBestOfMonth(): Promise<ProductType[]> {
+  const snapshot = await adminDb.collection("product").get();
+
+  const data: ProductType[] = snapshot.docs.map((doc) => ({
+    id: doc.id,
+    ...doc.data(),
+  })) as ProductType[];
+
+  return data.filter((p) => p.isFeatured === true);
+}
+
+/**
+ * Toggle the 'isFeatured' field on a product document.
+ * Works with Firebase Admin SDK for secure, server-side updates.
+ */
+export async function toggleFeatured(productId: string, isFeatured: boolean) {
+  try {
+    const productRef = adminDb.collection("products").doc(productId);
+    await productRef.update({ isFeatured });
+
+    return { success: true, message: `Product ${isFeatured ? "featured" : "unfeatured"} successfully.` };
+  } catch (error) {
+    console.error("Error toggling featured status:", error);
+    return { success: false, error: (error as Error).message };
+  }
+}
+
+
 /**
  * Upload a product to Firestore from CSV data
  */
@@ -548,6 +644,7 @@ export async function uploadProductFromCSV(data: Partial<ProductType>) {
     price: Number(data.price),
     discountPrice:
       data.discountPrice !== undefined ? Number(data.discountPrice) : 0,
+    stockQty: data.stockQty ?? 0,
     categoryId: data.categoryId ?? "",
     productCat: data.productCat ?? "",
     baseProductId: data.baseProductId ?? "",
@@ -572,66 +669,4 @@ export async function uploadProductFromCSV(data: Partial<ProductType>) {
   };
 
   await adminDb.collection("products").add(productData);
-}
-
-
-
-
-/**
- * Copy all docs from "product" collection to "products" collection.
- * Keeps the same document IDs.
- */
-export async function duplicateProducts(): Promise<void> {
-  try {
-    const snapshot = await adminDb.collection("product").get();
-
-    if (snapshot.empty) {
-      console.warn("No products found in 'product' collection.");
-      return;
-    }
-
-    const batch = adminDb.batch();
-
-    snapshot.docs.forEach((doc) => {
-      const data = doc.data();
-      const targetRef = adminDb.collection("products").doc(doc.id); // same ID
-      batch.set(targetRef, data, { merge: true });
-    });
-
-    await batch.commit();
-    console.log("Successfully copied all products to 'products' collection.");
-  } catch (error) {
-    console.error("Failed to duplicate products:", error);
-    throw new Error("Error duplicating products collection");
-  }
-}
-
-
-
-/**
- * Ensure all docs in "products" collection have status = "published".
- * Creates/updates the field for every doc.
- */
-export async function publishAllProducts(): Promise<void> {
-  try {
-    const snapshot = await adminDb.collection("products").get();
-
-    if (snapshot.empty) {
-      console.warn("No products found in 'products' collection.");
-      return;
-    }
-
-    const batch = adminDb.batch();
-
-    snapshot.docs.forEach((doc) => {
-      const ref = adminDb.collection("products").doc(doc.id);
-      batch.set(ref, { status: "published" }, { merge: true });
-    });
-
-    await batch.commit();
-    console.log("✅ All products marked as published.");
-  } catch (error) {
-    console.error("❌ Failed to publish products:", error);
-    throw new Error("Error updating product statuses");
-  }
 }

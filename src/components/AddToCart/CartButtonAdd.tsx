@@ -29,36 +29,61 @@ const CartButtonAdd = ({ cartProduct }: { cartProduct: cartProductType }) => {
   return (
     <>
      
-        <div className=" w-full my-2 x-2">
+        <div className="flex justify-end w-[100px] rounded-lg ">
          
             {quantity > 0 ? (
-              <div className="flex justify-between rounded-lg gap-2 w-full bg-slate-50 px-1 py-2">
-                <button
+              <div className="flex justify-between rounded-lg gap-2 w-full  px-1 py-2">
+              
+              <div className="bg-[#F3F2F0] px-[3px] pt-[1px] pb-[3px]  rounded-lg">
+                  <button
                   onClick={removeFromCartL}
-                  className="px-1 py-1 rounded-lg bg-slate-400 leading-none flex items-center justify-center"
+                  className="px-2 py-2 rounded-lg bg-white leading-none flex items-center justify-center"
                 >
                   {/* flex items-center justify-center w-7 h-7 rounded-full bg-slate-400 */}
-                  <IoMdRemove size={16} className="text-white" />
+                  <IoMdRemove size={16} className="text-[#373535]" />
                 </button>
+                </div>
                 {quantity > 0 ? (
-                  <div className="text-slate-900">{quantity}</div>
+                  <div className="flex items-center  text-gray-600">{quantity}</div>
                 ) : (
                   <>0</>
                 )}
-                <button
+                  <div className="bg-[#F3F2F0] px-[2px] pt-[1px] pb-[2px]  rounded-lg">
+                    {quantity<cartProduct.stockQty! ? <>
+                      
+                     <button
                   onClick={addToCartL}
-                  className="leading-none px-1 py-1 rounded-lg bg-slate-500  flex items-center justify-center"
+                  className="px-2 py-2 rounded-lg bg-white  flex items-center justify-center"
                 >
-                  <IoMdAdd size={16} className="text-white" />
+                  <IoMdAdd size={16} className="text-[#373535]" />
+                </button>  
+                      
+                      </> :<>
+                       <button
+                 onClick={()=>{ alert("Only " + cartProduct.stockQty + " items available");
+  return;}}
+                  className="px-2 py-2 rounded-lg bg-white  flex items-center justify-center"
+                >
+                  {/* <IoMdAdd size={16} className="text-white" /> */} +
                 </button>
+                      
+                      
+                      </>}
+               
+                </div>
               </div>
-            ) : (
+            ) : (<>
+               {cartProduct.stockQty! >0 ? <>
+               <div className="bg-[#F3F2F0] px-[3px] pt-[1px] pb-[3px]  rounded-lg">
+          
               <button
                 onClick={addToCartL}
-                className=" w-full px-1 py-2 rounded-lg bg-slate-50 text-slate-600  flex items-center justify-center"
+                className=" w-[70px] px-1 py-1 rounded-lg bg-white font-bold text-gray-400  flex items-center justify-center"
               >
                 Add
               </button>
+              </div>
+              </>:<></>}</>
             )}
          
 

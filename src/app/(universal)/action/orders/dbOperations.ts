@@ -10,6 +10,7 @@ import { orderProductsT } from "@/lib/types/orderType";
 import { orderDataType, purchaseDataT } from "@/lib/types/cartDataType";
 import { ProductType } from "@/lib/types/productType";
 import admin from 'firebase-admin';
+import { checkStockAvailability } from "@/lib/firestore/checkStockAvailability";
 
 type orderMasterDataSafeT = Omit<orderMasterDataT, "createdAt"> & {
   createdAt: string; // ISO string
@@ -122,6 +123,15 @@ export async function createNewOrder(purchaseData: orderDataType) {
 
     //end new validation code
 
+
+  // Step 1: Check stock before order
+  const stockCheck = await checkStockAvailability(cartData);
+
+  if (!stockCheck.success) {
+    return { success: false, message: stockCheck.message };
+  }
+
+
   const nowUTC = new Date().toISOString(); // UTC ISO string (e.g. "2025-07-24T06:07:32.123Z")
   
   const nowGerman = new Date().toLocaleString("en-DE", {
@@ -210,7 +220,8 @@ export async function createNewOrder(purchaseData: orderDataType) {
     }
   }
 
-  return orderMasterId;
+ // return orderMasterId;
+ return { success: true, message: "Order created", orderId: orderMasterId };
 }
 
 /**
@@ -509,6 +520,202 @@ export async function fetchOrderProductsByOrderMasterId(OrderMasterId: string) {
 
   return data;
 }
+
+
+/*********************** stock decrease ******************************* */
+
+
+/**
+ * Decrease stock quantities after payment confirmation.
+ * 
+ * 
+ * How it works
+
+Also reads from orderProducts.
+
+Fetches each product individually.
+
+Checks for insufficient stock before decrementing.
+
+Also updates product status → "out_of_stock" when stockQty = 0.
+
+Returns detailed error messages per product.
+
+🟢 Use this when:
+
+You want extra validation and safety.
+
+You’re updating stock during checkout or pre-payment, and you must ensure items are still available.
+
+You want human-readable messages for the admin or logs.
+
+⚠️ Limitations
+
+Slightly slower (per-item reads).
+
+Not 100% atomic if the process crashes mid-loop (though batch helps at commit stage).
+
+Requires the product to exist with an id that matches Firestore doc.id.
+ * 
+ * 
+ */
+export async function decreaseProductStock(orderMasterId: string) {
+  try {
+    // 🔹 Get ordered products from Firestore
+    const orderProductsSnap = await adminDb
+      .collection("orderProducts")
+      .where("orderMasterId", "==", orderMasterId)
+      .get();
+
+    if (orderProductsSnap.empty) {
+      console.log("No orderProducts found for order:", orderMasterId);
+      return { success: false, message: "No products found for this order." };
+    }
+
+    const batch = adminDb.batch();
+    const insufficientStock: string[] = [];
+
+    // 🔹 Loop through ordered items
+    for (const doc of orderProductsSnap.docs) {
+      const item = doc.data();
+      const productRef = adminDb.collection("products").doc(item.id);
+      const productSnap = await productRef.get();
+
+      if (!productSnap.exists) {
+        insufficientStock.push(`${item.id} (not found)`);
+        continue;
+      }
+
+      const product = productSnap.data() as ProductType;
+      const currentStock = product.stockQty ?? 0;
+      const quantityOrdered = item.quantity ?? 0;
+
+      // ✅ Check stock
+      if (currentStock < quantityOrdered) {
+        insufficientStock.push(`${product.name} (only ${currentStock} left)`);
+        continue;
+      }
+
+      const newStock = currentStock - quantityOrdered;
+
+      // ✅ Add to batch
+      batch.update(productRef, {
+        stockQty: newStock,
+        status: newStock === 0 ? "out_of_stock" : product.status,
+      });
+    }
+
+    if (insufficientStock.length > 0) {
+      return {
+        success: false,
+        message: "Insufficient stock for some products.",
+        details: insufficientStock,
+      };
+    }
+
+    await batch.commit();
+    console.log("✅ Stock updated successfully for order:", orderMasterId);
+    return { success: true, message: "Stock updated successfully." };
+  } catch (error) {
+    console.error("❌ Error decreasing product stock:", error);
+    return { success: false, message: "Error updating stock." };
+  }
+}
+
+
+
+
+/**
+ * Decrease product stock quantities after successful payment.
+ * Uses the product Firestore ID (item.id) from `orderProducts`.
+ 
+
+How it works
+
+Reads orderProducts documents from Firestore.
+
+Looks for productId or fallback id.
+
+Uses Firestore’s batch writes for atomic updates.
+
+Doesn’t check stock availability (just decrements).
+
+Prioritizes simplicity and performance.
+
+🟢 Use this when:
+
+You trust your order creation logic to prevent overselling.
+
+You want the fastest, most atomic stock update.
+
+You want reliability even if the order has dozens of items.
+
+Example: after confirmed payment or order status = “paid”.
+
+⚠️ Limitations
+
+Doesn’t check if stock is sufficient (may allow negative values if something went wrong earlier).
+
+Less verbose reporting.
+*/
+export async function decreaseProductStockFromOrder(orderMasterId: string) {
+  try {
+    console.log("🔹 Updating stock for order:", orderMasterId);
+
+    // 1️⃣ Get all orderProducts for this order
+    const orderProductsSnapshot = await adminDb
+      .collection("orderProducts")
+      .where("orderMasterId", "==", orderMasterId)
+      .get();
+
+    if (orderProductsSnapshot.empty) {
+      console.warn("⚠️ No orderProducts found for order:", orderMasterId);
+      return { success: false, message: "No products found for this order." };
+    }
+
+    // 2️⃣ Start Firestore batch
+    const batch = adminDb.batch();
+
+    // 3️⃣ Loop through all ordered items
+    for (const doc of orderProductsSnapshot.docs) {
+      const orderItem = doc.data();
+      const productId = orderItem.id; // ✅ Firestore document ID of the product
+      const orderQty = orderItem.quantity ?? 0;
+
+      if (!productId || orderQty <= 0) continue;
+
+      const productRef = adminDb.collection("products").doc(productId);
+      const productSnap = await productRef.get();
+
+      if (!productSnap.exists) {
+        console.warn(`⚠️ Product ${productId} not found in Firestore`);
+        continue;
+      }
+
+      const productData = productSnap.data();
+      const currentStock = productData?.stockQty ?? 0;
+      const newStock = Math.max(currentStock - orderQty, 0);
+
+      batch.update(productRef, {
+        stockQty: newStock,
+        status: newStock === 0 ? "out_of_stock" : productData?.status ?? "published",
+      });
+
+      console.log(`✅ ${productData?.name ?? productId}: ${currentStock} → ${newStock}`);
+    }
+
+    // 4️⃣ Commit batch
+    await batch.commit();
+
+    console.log("🎉 Stock updated successfully for order:", orderMasterId);
+    return { success: true, message: "Stock updated successfully." };
+  } catch (error) {
+    console.error("❌ Error updating stock:", error);
+    return { success: false, message: "Error updating stock." };
+  }
+}
+
+
 
 
 

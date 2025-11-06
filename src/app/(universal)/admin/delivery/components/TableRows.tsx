@@ -9,7 +9,11 @@ import { deliveryType } from "@/lib/types/deliveryType";
 import { deletedelivery } from "@/app/(universal)/action/delivery/dbOperation";
 import { useLanguage } from "@/store/LanguageContext";
 
+import { formatCurrencyNumber } from "@/utils/formatCurrency";
+import { UseSiteContext } from "@/SiteContext/SiteContext";
+
 function TableRows({ delivery }: { delivery: deliveryType }) {
+    const { settings } = UseSiteContext();
   const { TEXT } = useLanguage();
 
   async function handleDelete(delivery: deliveryType) {
@@ -20,11 +24,23 @@ function TableRows({ delivery }: { delivery: deliveryType }) {
     }
   }
 
+  const delivery_price = formatCurrencyNumber(
+      Number(delivery.price) ?? 0,
+      settings.currency as string,
+      settings.locale as string
+    );
+
+      const delivery_minSpend = formatCurrencyNumber(
+      Number(delivery.minSpend) ?? 0,
+      settings.currency as string,
+      settings.locale as string
+    );
+
   return (
     <TableRow className="whitespace-nowrap hover:bg-green-50 dark:hover:bg-zinc-800 transition rounded-xl">
       <TableCell className="font-medium">{delivery.name}</TableCell>
-      <TableCell>€{delivery.price}</TableCell>
-      <TableCell>€{delivery.minSpend}</TableCell>
+      <TableCell>{delivery_price}</TableCell>
+      <TableCell>{delivery_minSpend}</TableCell>
       <TableCell>{delivery.deliveryDistance}</TableCell>
       <TableCell>{delivery.deliveryDesc}</TableCell>
       <TableCell className="text-right">

@@ -16,7 +16,6 @@ import { formatCurrencyNumber } from "@/utils/formatCurrency";
 import SetDeliveryType from "./SetDeliveryType";
 
 export default function CartLeft() {
-
   const { TEXT } = useLanguage();
   const {
     couponDisc,
@@ -28,8 +27,6 @@ export default function CartLeft() {
     disablePickupCatDiscountIds,
     settings,
   } = UseSiteContext();
-
-  
 
   const router = useRouter();
 
@@ -43,7 +40,7 @@ export default function CartLeft() {
   const [calCouponDiscount, setCalCouponDisscount] = useState(0);
   const [flatCouponDiscount, setFlatCouponDisscount] = useState(0);
   const [couponDiscountPercentL, setcouponDiscountPercentL] = useState(0);
-  
+
   const [orderAmountIsLowForDelivery, seOrderAmountIsLowForDelivery] =
     useState(false);
   const [noOffers, setNoOffers] = useState(false);
@@ -90,8 +87,8 @@ export default function CartLeft() {
 
     const roundedTotalCU = formatCurrencyNumber(
       roundedTotal ?? 0,
-      (settings.currency || "EUR") as string,
-      (settings.locale || "de-DE") as string
+      (settings.currency ) as string,
+      (settings.locale ) as string
     );
 
     //setitemTotalComa(roundedTotal.toFixed(2).replace(".", ","));
@@ -218,8 +215,8 @@ export default function CartLeft() {
 
     const netPayCU = formatCurrencyNumber(
       Number(netPay) ?? 0,
-      (settings.currency || "EUR") as string,
-      (settings.locale || "de-DE") as string
+      (settings.currency) as string,
+      (settings.locale ) as string
     );
 
     setEndTotalComma(netPayCU);
@@ -234,8 +231,6 @@ export default function CartLeft() {
     pickUpDiscountPercentL,
     calculatedPickUpDiscountL,
   ]);
-
- 
 
   useEffect(() => {
     if (deliveryType === "delivery") {
@@ -256,6 +251,8 @@ export default function CartLeft() {
     }
   }, [deliveryType, deliveryDis?.minSpend, itemTotal, deliveryDis?.price]);
 
+  
+
   async function proceedToOrder() {
     setIsLoading(true);
     try {
@@ -265,7 +262,7 @@ export default function CartLeft() {
 
       if (paymentType === "" || paymentType === undefined) {
         canCompleteOrder = true;
-       toast.error(TEXT.error_select_payment_type);
+        toast.error(TEXT.error_select_payment_type);
 
         allReadyAlerted = true;
         return;
@@ -277,48 +274,43 @@ export default function CartLeft() {
         return;
       }
 
-     
-  
-// if (deliveryType === "delivery") {
-//    if (
-//     !deliveryDis || 
-//     typeof deliveryDis.price !== "number" || 
-//     isNaN(deliveryDis.price)
-//   ) {
-//     console.log("deliveryDis.price-------",typeof(deliveryDis!.price))
-//     setIsLoading(false);
-//     toast.error(TEXT.error_address_not_deliverable);
-//     return; // ⛔ stop
-//   }
+      // if (deliveryType === "delivery") {
+      //    if (
+      //     !deliveryDis ||
+      //     typeof deliveryDis.price !== "number" ||
+      //     isNaN(deliveryDis.price)
+      //   ) {
+      //     console.log("deliveryDis.price-------",typeof(deliveryDis!.price))
+      //     setIsLoading(false);
+      //     toast.error(TEXT.error_address_not_deliverable);
+      //     return; // ⛔ stop
+      //   }
 
-//  }
+      //  }
 
+      if (deliveryType === "delivery") {
+        if (!deliveryDis || deliveryDis.price === null) {
+          setIsLoading(false);
+          toast.error(TEXT.error_address_not_deliverable);
+          return; // ⛔ stop
+        }
 
-if (deliveryType === "delivery") {
-  if (!deliveryDis || deliveryDis.price === null) {
-    setIsLoading(false);
-    toast.error(TEXT.error_address_not_deliverable);
-    return; // ⛔ stop
-  }
+        // convert to number
+        const price = Number(deliveryDis.price);
 
-  // convert to number
-  const price = Number(deliveryDis.price);
-
-  if (isNaN(price)) {
-    setIsLoading(false);
-    toast.error(TEXT.error_address_not_deliverable);
-    return;
-  }
-
-
-}
-
-     
+        if (isNaN(price)) {
+          setIsLoading(false);
+          toast.error(TEXT.error_address_not_deliverable);
+          return;
+        }
+      }
 
       if (couponDisc?.minSpend && itemTotal < couponDisc.minSpend) {
         canCompleteOrder = true;
         if (!allReadyAlerted) {
-          toast.error(`${TEXT.error_min_purchase_coupon} : ${couponDisc?.minSpend} ${TEXT.error_min_purchase_suffix}`);
+          toast.error(
+            `${TEXT.error_min_purchase_coupon} : ${couponDisc?.minSpend} ${TEXT.error_min_purchase_suffix}`
+          );
 
           allReadyAlerted = true;
         }
@@ -328,7 +320,9 @@ if (deliveryType === "delivery") {
       if (orderAmountIsLowForDelivery && deliveryType !== "pickup") {
         canCompleteOrder = true;
         if (!allReadyAlerted) {
-          toast.error(`${TEXT.error_min_order_delivery} € ${deliveryDis?.minSpend}`);
+          toast.error(
+            `${TEXT.error_min_order_delivery} € ${deliveryDis?.minSpend}`
+          );
 
           allReadyAlerted = true;
         }
@@ -358,7 +352,7 @@ if (deliveryType === "delivery") {
       const couponCode = "KJKKS"; // couponDisc?.code?.trim() ? couponDisc.code : "NA";
 
       if (typeof deliveryCost !== "number" || Number.isNaN(deliveryCost)) {
-       toast.error(TEXT.error_unexpected_total);
+        toast.error(TEXT.error_unexpected_total);
 
         return;
       }
@@ -391,7 +385,23 @@ if (deliveryType === "delivery") {
 
       if (cartData.length !== 0) {
         //  toast.error(`cart length is more than 0,order started, ${cartData.length}`)
-        const orderMasterId = await createNewOrder(purchaseData);
+        //    const orderMasterId = await createNewOrder(purchaseData);
+
+        const orderResult = await createNewOrder(purchaseData);
+
+        if (!orderResult.success) {
+          // 🚫 Stock not available or failed validation
+          toast.error(orderResult.message || "Unable to create order.");
+          setIsLoading(false);
+          return; // stop further actions
+        }
+
+        const orderMasterId = orderResult.orderId;
+        if (!orderMasterId) {
+          toast.error("Unexpected error: missing order ID.");
+          setIsLoading(false);
+          return;
+        }
 
         if (paymentType === "stripe") {
           router.push(
@@ -407,8 +417,7 @@ if (deliveryType === "delivery") {
           );
         }
       } else {
-       toast.error(TEXT.error_empty_cart);
-
+        toast.error(TEXT.error_empty_cart);
       }
     } catch (error) {
       console.error("Order submission error:", error);
@@ -455,7 +464,7 @@ if (deliveryType === "delivery") {
             </div>
           </div>
 
-         <SetDeliveryType />
+          <SetDeliveryType />
 
           <DeliveryCost />
 
@@ -542,6 +551,4 @@ if (deliveryType === "delivery") {
       </div>
     </div>
   );
-
-  
 }

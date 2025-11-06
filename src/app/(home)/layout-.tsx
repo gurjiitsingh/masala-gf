@@ -10,8 +10,8 @@ import SafeSideCart from "./SafeSideCart";
 
 import { BargerMenu } from "@/components/Bargermenu/Menu";
 import Modal from "@/components/level-1/Modal";
-import Header from "@/components/level-1/Header";
-import Footer from "@/components/level-1/Footer";
+import Header from "@/custom/cus-components/Header";
+import Footer from "@/custom/cus-components/Footer";
 import { SEO } from "@/config/languages";
 
 

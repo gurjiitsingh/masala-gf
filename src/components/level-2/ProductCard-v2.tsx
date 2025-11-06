@@ -104,6 +104,7 @@ export default function ProdcutCardHorizontical({
     id: product.id,
     quantity: 1,
     price: priceTarget,
+      stockQty: null,
     name: product.name,
     image: product.image,
     categoryId: product.categoryId,

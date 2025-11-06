@@ -1,12 +1,12 @@
   h1 {
     /*  font-family: "DaysOne-Regular" !important;*/
-    font-family: 'Days One', sans-serif;
+  
     }
     h2, h3, h5 {
     /* font-family: Raleway-Regular !important;
      font-family: 'Dosis', sans-serif;
    */
-    font-family: 'Quicksand', sans-serif;
+   
    
   }
   
@@ -14,7 +14,7 @@
     /* font-family: Raleway-Regular !important;
       font-family: 'Dosis', sans-serif;
     */
-    font-family: 'Days One', sans-serif; 
+   
   }
 
   .libre-baskerville-bold {
@@ -56,13 +56,15 @@
 }
 
   h1 {
-    text-transform: uppercase;
-    text-align: center;
    
-    padding-bottom: 2%;
+   
+   
+ 
   
     font-weight: bold;
     /* color: #3c5858; */
-    color: #aaa;
+   
     /* color: #0bd3b5; */
 }
+
+

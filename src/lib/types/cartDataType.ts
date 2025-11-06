@@ -4,6 +4,7 @@ export  type cartProductType = {
   id: string | undefined;
   price: number;
   quantity:number;
+  stockQty:number | null;
   categoryId: string;
   productCat:string;
   name: string;

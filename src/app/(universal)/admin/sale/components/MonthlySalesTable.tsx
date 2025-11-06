@@ -19,12 +19,16 @@ import {
   ResponsiveContainer,
   CartesianGrid
 } from 'recharts';
+import TableRows from './TableRows';
+
+
 
 type MonthlySales = {
   month: string;
   totalSales: number;
   orderCount: number;
 };
+ 
 
 export default function MonthlySalesTable() {
   const [monthlySales, setMonthlySales] = useState<MonthlySales[]>([]);
@@ -78,6 +82,8 @@ export default function MonthlySalesTable() {
     setLoading(false);
   };
 
+ 
+
   return (
     <div className="p-4 w-full mx-auto">
       <h1 className="text-2xl font-bold mb-6">Monthly Sales Summary</h1>
@@ -109,13 +115,10 @@ export default function MonthlySalesTable() {
               </tr>
             </thead>
             <tbody>
-              {monthlySales.map((row) => (
-                <tr key={row.month} className="hover:bg-gray-50">
-                  <td className="border px-4 py-2">{row.month}</td>
-                  <td className="border px-4 py-2">{row.orderCount}</td>
-                  <td className="border px-4 py-2">€{row.totalSales.toFixed(2)}</td>
-                </tr>
-              ))}
+             
+                {monthlySales.map((row,i) => (
+              <TableRows key={i} row={row} />
+            ))}
             </tbody>
           </table>
         </>

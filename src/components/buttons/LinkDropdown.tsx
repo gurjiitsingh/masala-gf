@@ -36,7 +36,7 @@ const LinkDropdown = () => {
 
   return (<>
   {typeof window !== 'undefined' && <DropdownMenu>
-      <DropdownMenuTrigger className="flex items-center text-white hover:text-red-600 transition">
+      <DropdownMenuTrigger className="flex items-center text-slate-400 hover:text-red-600 transition">
         {FaRegUser && <FaRegUser className="text-xl" />}
       </DropdownMenuTrigger>
 

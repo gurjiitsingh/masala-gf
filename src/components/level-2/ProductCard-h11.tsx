@@ -7,12 +7,8 @@ import React, { useEffect, useState } from "react";
 import { cartProductType } from "@/lib/types/cartDataType";
 import { ProductType } from "@/lib/types/productType";
 import { addOnType } from "@/lib/types/addOnType";
-import { IoMdAdd } from "react-icons/io";
-import toast from "react-hot-toast";
-import CartButton from "../AddToCart/CartButton";
-import AddOn from "../level-1/AddOn";
 import { formatCurrencyNumber } from "@/utils/formatCurrency";
-import CartButtonAdd from "../AddToCart/CartButtonAdd";
+
 import { Cinzel, Lato, Roboto, Abel } from "next/font/google";
 const cinzel = Cinzel({ subsets: ["latin"], weight: ["400", "600", "700"] });
 const lato = Lato({ subsets: ["latin"], weight: ["400", "700"] });
@@ -89,6 +85,7 @@ export default function ProdcutCardHorizontical({
     id: product.id,
     quantity: 1,
     price: priceTarget,
+    stockQty: null,
     name: product.name,
     image: product.image,
     categoryId: product.categoryId,

@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { signOut } from 'next-auth/react';
-import { usePathname } from 'next/navigation';
-import { useEffect, useState, JSX } from 'react';
-import { useLanguage } from '@/store/LanguageContext';
+import Link from "next/link";
+import { signOut } from "next-auth/react";
+import { usePathname } from "next/navigation";
+import { useEffect, useState, JSX } from "react";
+import { useLanguage } from "@/store/LanguageContext";
 
-import { GoHome } from 'react-icons/go';
+import { GoHome } from "react-icons/go";
 import {
   MdDashboard,
   MdCategory,
@@ -16,64 +16,120 @@ import {
   MdSettings,
   MdOutlineCrisisAlert,
   MdOutlineBackup,
-} from 'react-icons/md';
-import { FaUsers } from 'react-icons/fa';
-import { BsCardList } from 'react-icons/bs';
-import { TbTruckDelivery } from 'react-icons/tb';
-import { IoIosLogOut } from 'react-icons/io';
-import { IoClose } from 'react-icons/io5';
+} from "react-icons/md";
+import { FaUsers } from "react-icons/fa";
+import { BsCardList } from "react-icons/bs";
+import { TbTruckDelivery } from "react-icons/tb";
+import { IoIosLogOut } from "react-icons/io";
+import { IoClose } from "react-icons/io5";
+import { FaClipboardList } from "react-icons/fa6";
 
-import { UseSiteContext } from '@/SiteContext/SiteContext';
-import { FaClipboardList } from 'react-icons/fa6';
-
-const fallbackText = {
-  sidebar: {
-    home: "Home",
-    orders: "Orders",
-    orders_realtime: "Orders Realtime",
-    sale: "Sale",
-    reservations: "Reservations",
-    categories: "Categories",
-    pickup_discount: "Pickup Discount",
-    products: "Products",
-    variants: "Variants",
-    coupon: "Coupon",
-    delivery: "Delivery",
-    users: "Users",
-    setting: "Setting",
-    data_backup: "Data Backup",
-    logout: "Logout",
-  },
-};
+import { UseSiteContext } from "@/SiteContext/SiteContext";
 
 type Titem = {
+  key: string; // env suffix (without NEXT_PUBLIC_)
   name: string;
   link: string;
   icon: JSX.Element;
 };
 
 
-const Sidebar = () => {
+export const sidebarFlags = {
+  SHOW_HOME: process.env.NEXT_PUBLIC_SHOW_HOME === "1",
+  SHOW_ORDERS: process.env.NEXT_PUBLIC_SHOW_ORDERS === "1",
+  SHOW_ORDERS_REALTIME: process.env.NEXT_PUBLIC_SHOW_ORDERS_REALTIME === "1",
+  SHOW_SALE: process.env.NEXT_PUBLIC_SHOW_SALE === "1",
+  SHOW_RESERVATIONS: process.env.NEXT_PUBLIC_SHOW_RESERVATIONS === "1",
+  SHOW_CATEGORIES: process.env.NEXT_PUBLIC_SHOW_CATEGORIES === "1",
+  SHOW_PICKUP_DISCOUNT: process.env.NEXT_PUBLIC_SHOW_PICKUP_DISCOUNT === "1",
+  SHOW_PRODUCTS: process.env.NEXT_PUBLIC_SHOW_PRODUCTS === "1",
+  SHOW_VARIANTS: process.env.NEXT_PUBLIC_SHOW_VARIANTS === "1",
+  SHOW_COUPON: process.env.NEXT_PUBLIC_SHOW_COUPON === "1",
+  SHOW_DELIVERY: process.env.NEXT_PUBLIC_SHOW_DELIVERY === "1",
+  SHOW_USERS: process.env.NEXT_PUBLIC_SHOW_USERS === "1",
+  SHOW_SETTING: process.env.NEXT_PUBLIC_SHOW_SETTING === "1",
+  SHOW_DATA_BACKUP: process.env.NEXT_PUBLIC_SHOW_DATA_BACKUP === "1",
+};
 
-const { TEXT, BRANDING } = useLanguage() || { BRANDING: fallbackText };
-const menuList: Titem[] = [
-  { name: BRANDING.sidebar.home, link: '/', icon: <GoHome /> },
-  { name: BRANDING.sidebar.orders, link: '/admin', icon: <MdDashboard /> },
-  { name: BRANDING.sidebar.orders_realtime, link: '/admin/order-realtime', icon: <MdOutlineCrisisAlert /> },
-  { name: BRANDING.sidebar.sale, link: '/admin/sale', icon: <FaClipboardList /> },
-  { name: BRANDING.sidebar.reservations, link: '/admin/reservations', icon: <BsCardList /> },
-  { name: BRANDING.sidebar.categories, link: '/admin/categories', icon: <MdCategory /> },
-  { name: BRANDING.sidebar.pickup_discount, link: '/admin/pickupdiscount/pickup-discount', icon: <MdLocalOffer /> },
-  { name: BRANDING.sidebar.products, link: '/admin/productsbase', icon: <MdInventory /> },
-  { name: BRANDING.sidebar.variants, link: '/admin/flavorsProductG', icon: <MdRestaurantMenu /> },
-  { name: BRANDING.sidebar.coupon, link: '/admin/coupon', icon: <MdLocalOffer /> },
-  { name: BRANDING.sidebar.delivery, link: '/admin/delivery', icon: <TbTruckDelivery /> },
-  { name: BRANDING.sidebar.users, link: '/admin/users', icon: <FaUsers /> },
-  { name: BRANDING.sidebar.setting, link: '/admin/setting', icon: <MdSettings /> },
-  { name: BRANDING.sidebar.data_backup, link: '/admin/data-backup', icon: <MdOutlineBackup /> },
-];
+const Sidebar = () => {
+  const { TEXT, BRANDING } = useLanguage() || {
+    BRANDING: {
+      sidebar: {
+        home: "Home",
+        orders: "Orders",
+        orders_realtime: "Orders Realtime",
+        sale: "Sale",
+        reservations: "Reservations",
+        categories: "Categories",
+        pickup_discount: "Pickup Discount",
+        products: "Products",
+        variants: "Variants",
+        coupon: "Coupon",
+        delivery: "Delivery",
+        users: "Users",
+        setting: "Setting",
+        data_backup: "Data Backup",
+        logout: "Logout",
+      },
+    },
+  };
 
   const { setAdminSideBarToggleG } = UseSiteContext();
+
+  const menuList: Titem[] = [
+    { key: "SHOW_HOME", name: BRANDING.sidebar.home, link: "/", icon: <GoHome /> },
+    { key: "SHOW_ORDERS", name: BRANDING.sidebar.orders, link: "/admin", icon: <MdDashboard /> },
+    {
+      key: "SHOW_ORDERS_REALTIME",
+      name: BRANDING.sidebar.orders_realtime,
+      link: "/admin/order-realtime",
+      icon: <MdOutlineCrisisAlert />,
+    },
+    { key: "SHOW_SALE", name: BRANDING.sidebar.sale, link: "/admin/sale", icon: <FaClipboardList /> },
+    {
+      key: "SHOW_RESERVATIONS",
+      name: BRANDING.sidebar.reservations,
+      link: "/admin/reservations",
+      icon: <BsCardList />,
+    },
+    { key: "SHOW_CATEGORIES", name: BRANDING.sidebar.categories, link: "/admin/categories", icon: <MdCategory /> },
+    {
+      key: "SHOW_PICKUP_DISCOUNT",
+      name: BRANDING.sidebar.pickup_discount,
+      link: "/admin/pickupdiscount/pickup-discount",
+      icon: <MdLocalOffer />,
+    },
+    { key: "SHOW_PRODUCTS", name: BRANDING.sidebar.products, link: "/admin/products", icon: <MdInventory /> },
+    {
+      key: "SHOW_VARIANTS",
+      name: BRANDING.sidebar.variants,
+      link: "/admin/flavorsProductG",
+      icon: <MdRestaurantMenu />,
+    },
+    { key: "SHOW_COUPON", name: BRANDING.sidebar.coupon, link: "/admin/coupon", icon: <MdLocalOffer /> },
+    { key: "SHOW_DELIVERY", name: BRANDING.sidebar.delivery, link: "/admin/delivery", icon: <TbTruckDelivery /> },
+    { key: "SHOW_USERS", name: BRANDING.sidebar.users, link: "/admin/users", icon: <FaUsers /> },
+    { key: "SHOW_SETTING", name: BRANDING.sidebar.setting, link: "/admin/setting", icon: <MdSettings /> },
+    { key: "SHOW_DATA_BACKUP", name: BRANDING.sidebar.data_backup, link: "/admin/data-backup", icon: <MdOutlineBackup /> },
+  ];
+
+  // Filter logic:
+  // - If NEXT_PUBLIC_<KEY> === "0" -> hide
+  // - Otherwise (undefined or "1" or any other) -> show (default visible)
+
+const filteredMenu = menuList.filter((item) => {
+  return sidebarFlags[item.key];
+});
+
+  // debug (optional) — remove in production
+  useEffect(() => {
+  
+      menuList.reduce((acc, it) => {
+        acc[it.key] = process.env[`NEXT_PUBLIC_${it.key}`];
+        return acc;
+      }, {} as Record<string, string | undefined>)
+    
+  }, []);
 
   return (
     <>
@@ -93,8 +149,8 @@ const menuList: Titem[] = [
       <div className="pt-6 h-screen w-[260px] flex flex-col justify-between px-3 py-6 sb-bg shadow-md">
         {/* Navigation */}
         <ul className="flex flex-col gap-1">
-          {menuList.map((item) => (
-            <Tab key={item.name} item={item} />
+          {filteredMenu.map((item) => (
+            <Tab key={item.link} item={item} />
           ))}
         </ul>
 
@@ -105,7 +161,7 @@ const menuList: Titem[] = [
             className="flex items-center gap-3 px-4 py-2 w-full text-sm font-medium rounded-md bg-amber-600 text-white hover:bg-rose-700 transition"
           >
             <IoIosLogOut size={20} />
-             {BRANDING.sidebar.logout}
+            {BRANDING.sidebar.logout}
           </button>
         </div>
       </div>
@@ -117,14 +173,12 @@ function Tab({ item }: { item: Titem }) {
   const pathname = usePathname();
   const [isMounted, setIsMounted] = useState(false);
 
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
+  useEffect(() => setIsMounted(true), []);
 
   if (!isMounted) return null;
 
   const isSelected = pathname === item.link;
-  const baseClasses = isSelected ? 'sb-tab-active' : 'sb-tab';
+  const baseClasses = isSelected ? "sb-tab-active" : "sb-tab";
 
   return (
     <Link

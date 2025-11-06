@@ -10,6 +10,7 @@ export default function InsertData({baseProductName,addOnData}:{baseProductName:
           id:addOnData.id,
           quantity:1,
           price:addOnData.price,
+          stockQty:null,
           name:ProductName,
           image:addOnData.image,
           categoryId:"",

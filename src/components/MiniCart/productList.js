@@ -1,117 +1,104 @@
 "use client";
 import React, { useContext } from "react";
 import CartContext from "@/store/CartContext";
-import { IoMdAdd } from "react-icons/io";
-import { IoMdRemove } from "react-icons/io";
-import { formatCurrencyNumber } from '@/utils/formatCurrency';
+import { IoMdAdd, IoMdRemove } from "react-icons/io";
+import { formatCurrencyNumber } from "@/utils/formatCurrency";
 import { UseSiteContext } from "@/SiteContext/SiteContext";
-
+import Image from "next/image";
 
 const ProductList = ({ item }) => {
   const { addProductToCart, decCartProduct, removeCartProduct } =
     useContext(CartContext);
-const  { settings } = UseSiteContext();
-        
-   //   console.log("cart item", item)
+  const { settings } = UseSiteContext();
 
   function addProductToCartNew() {
-    //console.log("llll")
     const newProductToAdd = { ...item, quantity: 1 };
     addProductToCart(newProductToAdd);
   }
 
+  const total = item.quantity * parseFloat(item.price);
+  const totalFormatted = formatCurrencyNumber(
+    total ?? 0,
+    settings.currency,
+    settings.locale
+  );
 
-  let total = parseInt(item.quantity) * parseFloat(item.price);
-  total = total.toFixed(2);
-  //let totalS = total.toString;
- // const totalSComma = total.replace(/\./g, ",");
-
-     const totalSComma = formatCurrencyNumber(
-      total ?? 0,
-      (settings.currency || 'EUR'),
-      (settings.locale || 'de-DE')
-    );
-
-  //  const price = item.price.replace(/\./g, ',')
-
-  const priceFloat = parseFloat(item.price).toFixed(2);
-
- // const priceS = priceFloat.replace(/\./g, ",");
-
-     const priceS = formatCurrencyNumber(
-      priceFloat ?? 0,
-      (settings.currency || 'EUR'),
-      (settings.locale || 'de-DE')
-    );
+  const priceFormatted = formatCurrencyNumber(
+    parseFloat(item.price) ?? 0,
+    settings.currency,
+    settings.locale
+  );
 
   return (
-    <div className="flex flex-row gap-2 bg-amber-300   justify-between  mt-2 rounded-2xl ">
-      {/* <div className="min-w-[20%]">
-        <div className="w-[100px]">
-        
+    <div className="flex items-start gap-3 bg-white border border-gray-100 rounded-2xl p-3 shadow-sm hover:shadow-md transition-all duration-300">
+      {/* Product image */}
+      {item.image ? (
+        <div className="relative w-20 h-20 flex-shrink-0 rounded-xl overflow-hidden border border-gray-100">
           <Image
             src={item.image}
-            width="0"
-            height="0"
-            sizes="100vw"
-            loading="eager" 
-            priority={true}
-            className="w-full h-[100px] rounded-tl-xl rounded-bl-xl"
             alt={item.name}
+            fill
+            className="object-cover"
+            sizes="100px"
           />
         </div>
-      </div> */}
-      <div className="w-full flex flex-col justify-between gap-2 p-2 ">
-        <div className="flex flex-row gap-3  items-start ">
-          <div className="text-md w-[87%] flex items-start ">
-            {item.name} {item.productDesc}
-          </div>
+      ) : (
+        <div className="w-20 h-20 flex-shrink-0 rounded-xl bg-gray-100 flex items-center justify-center text-gray-400 text-sm">
+          No image
+        </div>
+      )}
 
-          <div className="text-[1rem] w-[13%] flex items-start justify-end ">
-            &euro;{priceS}
+      {/* Product details */}
+      <div className="flex flex-col flex-1 gap-2">
+        {/* Title + Price */}
+        <div className="flex justify-between items-start">
+          <div className="font-medium text-gray-800 leading-tight">
+            {item.name}
+            {item.productDesc ? (
+              <p className="text-sm text-gray-500">{item.productDesc}</p>
+            ) : null}
+          </div>
+          <div className="text-sm font-semibold text-gray-700">
+            {priceFormatted}
           </div>
         </div>
-        {/* <div className="text-sm"> {item.productDesc} </div> */}
 
-        <div className="flex flex-row justify-between w-full">
-          <div className="flex justify-between items-center gap-2 w-full">
-            <div className="flex w-full justify-center items-center gap-4 ">
-              <div className=" p-1 text-sm bg-red-600 rounded-full">
-                <button
-                  onClick={removeCartProduct.bind(null, item)}
-                  className=" rounded-sm text-white p-1"
-                >
-                  Remove
-                </button>
-              </div>
+        {/* Quantity & Actions */}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2 bg-gray-100 rounded-full px-2 py-1">
+            <button
+              onClick={decCartProduct.bind(null, item)}
+              className="p-1 bg-white rounded-full shadow-sm hover:bg-gray-200 transition"
+              aria-label="Decrease quantity"
+            >
+              <IoMdRemove size={18} className="text-gray-700" />
+            </button>
 
-              <div className="flex justify-center items-center gap-4 ">
-                <button
-                  className=" p-2 bg-slate-500 text-sm  rounded-full text-white"
-                  onClick={decCartProduct.bind(null, item)}
-                >
-                  <IoMdRemove size={20} />
-                </button>
-                <div className="text-amber-950 px-3 py-1  shadow-lg rounded-full">
-                
-                  {item.quantity}
-                </div>
-                <button
-                  //onClick={addProductToCart.bind(null, item)}
-                  onClick={addProductToCartNew}
-                  className="bg-slate-500 p-2 text-sm  rounded-full text-white"
-                >
-                  <IoMdAdd size={20} />
-                </button>
-              </div>
+            <span className="min-w-[24px] text-center font-semibold text-gray-800">
+              {item.quantity}
+            </span>
 
-              <div className="w-full flex justify-end   text-sm ">
-                &euro;{totalSComma}
-              </div>
+            <button
+              onClick={addProductToCartNew}
+              className="p-1 bg-white rounded-full shadow-sm hover:bg-gray-200 transition"
+              aria-label="Increase quantity"
+            >
+              <IoMdAdd size={18} className="text-gray-700" />
+            </button>
+          </div>
 
-            </div>
+          <div className="font-semibold text-rose-600 text-sm">
+            {totalFormatted}
           </div>
         </div>
+
+        {/* Remove button */}
+        <button
+          onClick={removeCartProduct.bind(null, item)}
+          className="text-xs text-gray-500 hover:text-rose-600 transition self-start mt-1"
+        >
+          Remove
+        </button>
       </div>
     </div>
   );
