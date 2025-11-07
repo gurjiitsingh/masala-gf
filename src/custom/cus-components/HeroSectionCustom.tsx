@@ -59,11 +59,11 @@ export default function HeroSectionCustom() {
             <ul className="space-y-2 text-base text-[12px] text-center md:text-left">
               <li className="flex items-center justify-center md:justify-start gap-2 text-[#c36b1e]  md:text-white">
                 <FaThumbsUp className="text-[#c36b1e]  md:text-white   " />
-                No platform fees
+                Keine Plattformgebühren
               </li>
               <li className="flex items-center justify-center md:justify-start gap-2 text-center md:text-left text-[#c36b1e]  md:text-white">
                 <FaShieldAlt className="text-[#c36b1e]  md:text-white  " />
-                No payment fees
+                Keine Zahlungsgebühren
               </li>
               <li className="flex items-center justify-center md:justify-start gap-2 text-center md:text-left text-[#c36b1e]  md:text-white">
                 <FaSmile className="text-[#c36b1e]  md:text-white  " />
@@ -72,7 +72,7 @@ export default function HeroSectionCustom() {
                   href="#"
                   className="underline text-[#c36b1e]  md:text-white hover:text-green-400 "
                 >
-                  Guest Recommendations
+                   Empfehlungen von Gästen
                 </a>
               </li>
             </ul>
