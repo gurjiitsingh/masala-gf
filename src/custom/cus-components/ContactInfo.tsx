@@ -6,7 +6,7 @@ import { FaMapMarkedAlt, FaPhoneAlt, FaEnvelope, FaCalendarAlt } from "react-ico
 
 export default function ContactInfo() {
   return (
-    <section className="bg-[#f4efdf] text-[#2b2e4a] py-16 md:py-36 px-6">
+    <section className="bg-[#f4efdf]  bg-[#ffe5d2] text-[#2b2e4a] py-16 md:py-36 px-6">
       <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-12 text-center">
         {/* Standort */}
         <div>
@@ -39,10 +39,11 @@ export default function ContactInfo() {
           <FaCalendarAlt className="w-8 h-8 mx-auto mb-4 text-[#2b2e4a]" />
           <h3 className="uppercase text-sm tracking-wider font-semibold mb-2">Öffnungszeiten</h3>
           <div className="text-sm space-y-1">
-            <p>Montag: Ruhetag</p>
-            <p>Dienstag bis Freitag:<br />12 bis 22 Uhr</p>
-            <p>Samstag: 16 - 22 Uhr</p>
-            <p>Sonntag: 12 bis 21 Uhr</p>
+          
+            <p>Täglich geöffnet:</p>
+            <p>11:00 bis 15:00 Uhr</p>
+            <p>und 17:00 bis 22:00 Uhr</p>
+         
           </div>
         </div>
       </div>
