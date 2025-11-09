@@ -21,26 +21,14 @@ const lato = Lato({
   display: "swap",
 });
 
-import {
- 
-  Info,
-  Flame,
-  Utensils,
-  Leaf,
-  CircleHelp,
-} from "lucide-react";
+import { Info, Flame, Utensils, Leaf, CircleHelp } from "lucide-react";
 
 export default function ProductCardForSlider({
   product,
- 
 }: {
   product: ProductType;
-  
 }) {
- 
-  const {  settings } = UseSiteContext();
- 
-
+  const { settings } = UseSiteContext();
 
   //common code start
 
@@ -52,11 +40,11 @@ export default function ProductCardForSlider({
   // );
 
   const priceRegular = formatCurrencyNumber(
-  product.price ?? 0,       // numeric value
-  "GBP",                    // UK currency
-  "en-GB"                   // English (United Kingdom) locale
-);
-console.log("settings.currency---------------",settings.currency)
+    product.price ?? 0, // numeric value
+    settings.currency as string,
+    settings.locale as string
+  );
+  
   let priceDiscounted;
   let priceTarget = product.price ?? 0;
   if (product.discountPrice && product.discountPrice > 0) {
@@ -64,21 +52,20 @@ console.log("settings.currency---------------",settings.currency)
     // priceDiscounted = product.discountPrice.toString().replace (/\./g, ",");
     priceDiscounted = formatCurrencyNumber(
       product.discountPrice,
-      (settings.currency || "GBP") as string,
-      (settings.locale || "en-GB") as string
+      settings.currency as string,
+      settings.locale as string
     );
   }
 
   const cartProduct: cartProductType = {
     id: product.id,
     quantity: 1,
-    stockQty :product.stockQty,
+    stockQty: product.stockQty,
     price: priceTarget,
     name: product.name,
     image: product.image,
     categoryId: product.categoryId,
     productCat: product.productCat!,
-    
   };
 
   const isCartDisabled = (() => {
@@ -92,12 +79,12 @@ console.log("settings.currency---------------",settings.currency)
 
   //common code end
   return (
- <div
-            key={product.id}
-            className="min-w-[250px] bg-white rounded-3xl border border-[#f3e6dc] shadow-[0_2px_4px_rgba(0,0,0,0.05)] hover:shadow-md transition-all flex-shrink-0 p-5"
-          >
-            {/* Product Header (Optional Image Removed) */}
-            {/* <div className="w-full h-32 rounded-xl overflow-hidden bg-gray-100 mb-3">
+    <div
+      key={product.id}
+      className="min-w-[250px] bg-white rounded-3xl border border-[#f3e6dc] shadow-[0_2px_4px_rgba(0,0,0,0.05)] hover:shadow-md transition-all flex-shrink-0 p-5"
+    >
+      {/* Product Header (Optional Image Removed) */}
+      {/* <div className="w-full h-32 rounded-xl overflow-hidden bg-gray-100 mb-3">
               {product.image ? (
                 <Image
                   src={product.image}
@@ -111,33 +98,33 @@ console.log("settings.currency---------------",settings.currency)
               )}
             </div> */}
 
-            {/* Product Name */}
-            <h3
-              className={`${lato.className} font-bold text-[#000000] text-[18px] leading-tight tracking-wide`}
-              style={{
-                fontFamily: `'Lato', sans-serif`,
-              }}
-            >
-              {product.name}
-            </h3>
+      {/* Product Name */}
+      <h3
+        className={`${lato.className} font-bold text-[#000000] text-[18px] leading-tight tracking-wide`}
+        style={{
+          fontFamily: `'Lato', sans-serif`,
+        }}
+      >
+        {product.name}
+      </h3>
 
-            {/* Icons Row (Visual Feature Line) */}
-            <div className="flex items-center gap-2 mt-2 text-gray-600 text-sm">
-              <CircleHelp size={16} />
-              <Flame size={16} />
-              <Utensils size={16} />
-              <Leaf size={16} />
-            </div>
+      {/* Icons Row (Visual Feature Line) */}
+      <div className="flex items-center gap-2 mt-2 text-gray-600 text-sm">
+        <CircleHelp size={16} />
+        <Flame size={16} />
+        <Utensils size={16} />
+        <Leaf size={16} />
+      </div>
 
-            {/* Description */}
-            <p className="text-sm text-gray-600 mt-1 italic line-clamp-2 max-w-[250px]">
-              {product.productDesc || "Leckeres Gericht mit frischen Zutaten"}
-            </p>
+      {/* Description */}
+      <p className="text-sm text-gray-600 mt-1 italic line-clamp-2 max-w-[250px]">
+        {product.productDesc || "Leckeres Gericht mit frischen Zutaten"}
+      </p>
 
-            {/* Price Row */}
-            <div className="mt-3 flex items-center justify-between">
-              <div className="text-base font-bold text-[#d24a0f] flex items-center gap-1">
-                {/* {product.discountPrice ? (
+      {/* Price Row */}
+      <div className="mt-3 flex items-center justify-between">
+        <div className="text-base font-bold text-[#d24a0f] flex items-center gap-1">
+          {/* {product.discountPrice ? (
                   <>
                     <span className="line-through text-gray-400 text-sm">
                       {product.price}€
@@ -148,28 +135,27 @@ console.log("settings.currency---------------",settings.currency)
                   `${product.price}€`
                 )} */}
 
-
-  {product.discountPrice !== undefined &&
-              product.discountPrice > 0 ? (
-                <div className="text-base font-bold text-[#d24a0f] flex items-center gap-1">
-                  {" "}
-                  <div className="line-through text-gray-400 text-sm">{priceRegular}</div>
-                  <div className="text-md font-bold ">{priceDiscounted}</div>
-                  
-                  {" "}
-                  </div>
-              ) : (
-                <div className="text-base font-bold text-[#d24a0f] flex items-center gap-1">{priceRegular}</div>
-              )}
-
+          {product.discountPrice !== undefined && product.discountPrice > 0 ? (
+            <div className="text-base font-bold text-[#d24a0f] flex items-center gap-1">
+              {" "}
+              <div className="line-through text-gray-400 text-sm">
+                {priceRegular}
               </div>
-
-              <Info
-                size={18}
-                className="text-gray-400 hover:text-[#d24a0f] cursor-pointer transition"
-              />
+              <div className="text-md font-bold ">{priceDiscounted}</div>{" "}
             </div>
-          </div>
+          ) : (
+            <div className="text-base font-bold text-[#d24a0f] flex items-center gap-1">
+              {priceRegular}
+            </div>
+          )}
+        </div>
+
+        <Info
+          size={18}
+          className="text-gray-400 hover:text-[#d24a0f] cursor-pointer transition"
+        />
+      </div>
+    </div>
   );
 }
 
